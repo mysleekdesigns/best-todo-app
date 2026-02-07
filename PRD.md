@@ -90,6 +90,8 @@ Zenith is a clean, minimal productivity app combining task management, calendar 
 │  ≡ Today             5  │  ← Active item: font-semibold
 │  📅 Calendar            │
 │  📋 Sticky Wall         │
+│  ⏱ Focus                │
+│  🎯 Habits              │
 │                         │
 │ LISTS                   │  ← Uppercase section label
 │  ● Personal          3  │  ← Colored dot + name + count
@@ -512,7 +514,7 @@ AppSettings
 - [ ] Markdown-lite support: bold, italic, bullet lists
 
 ### 4.4 Drag & Reorder
-- [ ] Drag sticky notes to reorder on the wall (dnd-kit grid reorder)
+- [x] Drag sticky notes to reorder on the wall (dnd-kit grid reorder)
 - [x] Smooth animations with Framer Motion layout
 - [x] Position persisted in database
 
@@ -523,88 +525,88 @@ AppSettings
 
 ---
 
-## Phase 5: Pomodoro & Focus Mode
+## Phase 5: Pomodoro & Focus Mode ✅
 
 > Goal: Deep work sessions tied to your tasks.
 
 ### 5.1 Pomodoro Timer
-- [ ] Configurable work/break durations (default: 25/5/15)
-- [ ] Visual circular countdown timer
-- [ ] Start, pause, reset, skip controls
-- [ ] Audio notification on timer end (subtle chime)
-- [ ] Browser notification on timer end
-- [ ] Auto-start next session option
+- [x] Configurable work/break durations (default: 25/5/15)
+- [x] Visual circular countdown timer
+- [x] Start, pause, reset, skip controls
+- [x] Audio notification on timer end (subtle chime)
+- [x] Browser notification on timer end
+- [x] Auto-start next session option
 
 ### 5.2 Focus Mode
-- [ ] Pick a task to focus on (or go taskless)
-- [ ] Full-screen focus view (task + timer + notes)
-- [ ] Distraction-free: hide sidebar and navigation
-- [ ] Session notes (capture thoughts during focus)
-- [ ] Break screen with suggested stretches / quotes
+- [x] Pick a task to focus on (or go taskless)
+- [x] Full-screen focus view (task + timer + notes)
+- [x] Distraction-free: hide sidebar and navigation
+- [x] Session notes (capture thoughts during focus)
+- [x] Break screen with suggested stretches / quotes
 
 ### 5.3 Session Tracking
-- [ ] Log all focus sessions to FocusSessions table
-- [ ] Link sessions to tasks
-- [ ] Daily/weekly/monthly focus time stats
-- [ ] Streak tracking (consecutive days with focus sessions)
-- [ ] Charts: focus time by day, by list, by tag
+- [x] Log all focus sessions to FocusSessions table
+- [x] Link sessions to tasks
+- [x] Daily/weekly/monthly focus time stats
+- [x] Streak tracking (consecutive days with focus sessions)
+- [x] Charts: focus time by day, by list, by tag
 
 ### 5.4 Focus Dashboard
-- [ ] Today's focus summary (sessions completed, total time)
-- [ ] Weekly focus heatmap
-- [ ] Most focused lists
-- [ ] Goal setting: daily focus time target
+- [x] Today's focus summary (sessions completed, total time)
+- [x] Weekly focus heatmap
+- [x] Most focused lists
+- [x] Goal setting: daily focus time target
 
 ---
 
-## Phase 6: Habit Tracking & Polish
+## Phase 6: Habit Tracking & Polish ✅
 
 > Goal: Build habits, track streaks, and polish every detail.
 
 ### 6.1 Habit Tracker
-- [ ] Create habits with name, frequency, color, icon
-- [ ] Daily check-in view (today's habits as a checklist)
-- [ ] Streak counter (current and best)
-- [ ] Habit calendar heatmap (GitHub contribution-style)
-- [ ] Weekly/monthly completion rate charts
+- [x] Create habits with name, frequency, color, icon
+- [x] Daily check-in view (today's habits as a checklist)
+- [x] Streak counter (current and best)
+- [x] Habit calendar heatmap (GitHub contribution-style)
+- [x] Weekly/monthly completion rate charts
 - [ ] Habit reminders (browser notifications)
 
 ### 6.2 Habit Views
-- [ ] Habit list with streak badges
-- [ ] Individual habit detail page with history
-- [ ] Habit statistics: completion rate, trends, best days
+- [x] Habit list with streak badges
+- [x] Individual habit detail page with history
+- [x] Habit statistics: completion rate, trends, best days
 
 ### 6.3 PWA & Offline
-- [ ] Configure vite-plugin-pwa for service worker
-- [ ] Cache app shell and assets for offline use
-- [ ] Add web app manifest (icon, name, theme color)
-- [ ] Install prompt and "Add to Home Screen"
-- [ ] Offline indicator in status bar
+- [x] Configure vite-plugin-pwa for service worker
+- [x] Cache app shell and assets for offline use
+- [x] Add web app manifest (icon, name, theme color)
+- [x] Install prompt and "Add to Home Screen"
+- [x] Offline indicator in status bar
 
 ### 6.4 Data Management
-- [ ] Export all data as JSON
-- [ ] Import data from JSON backup
-- [ ] Clear all data option (with confirmation)
-- [ ] Storage usage indicator
+- [x] Export all data as JSON
+- [x] Import data from JSON backup
+- [x] Clear all data option (with confirmation)
+- [x] Storage usage indicator
 
 ### 6.5 Polish & Micro-interactions
 - [ ] Task completion confetti (subtle, optional)
-- [ ] Empty state illustrations for each view
+- [x] Empty state illustrations for each view
 - [ ] Onboarding walkthrough (first-run)
-- [ ] Loading skeletons for all views
+- [x] Loading skeletons for all views
 - [ ] Tooltip system for keyboard shortcuts
 - [ ] Accessibility audit: screen reader labels, focus management, ARIA
 - [ ] Performance: lazy-load views, virtualize long lists (react-window)
-- [ ] Error boundaries with friendly recovery UI
+- [x] Error boundaries with friendly recovery UI
 
 ### 6.6 Settings Page
-- [ ] Theme selection (light/dark/system)
-- [ ] Pomodoro duration config
-- [ ] Default view config
-- [ ] Week starts on (Sunday/Monday)
-- [ ] Notification preferences
-- [ ] Data export/import
-- [ ] About + keyboard shortcut reference
+- [x] Theme selection (light/dark/system)
+- [x] Pomodoro duration config
+- [x] Default view config
+- [x] Week starts on (Sunday/Monday)
+- [x] Notification preferences
+- [x] Data export/import
+- [x] About + keyboard shortcut reference
 
 ---
 
@@ -617,7 +619,7 @@ AppSettings
 - [x] Add "Menu" header with hamburger toggle icon
 - [x] Add search input at top of sidebar
 - [x] Restructure into TASKS / LISTS / TAGS sections with uppercase labels
-- [x] Simplify TASKS nav: Upcoming, Today, Calendar, Sticky Wall (remove Inbox, Evening, Anytime, Someday, Logbook)
+- [x] Simplify TASKS nav: Upcoming, Today, Calendar, Sticky Wall, Focus, Habits (remove Inbox, Evening, Anytime, Someday, Logbook)
 - [x] Replace Projects/Areas with flat Lists (colored dots + name + count)
 - [x] Add Tags section with pastel chip pills
 - [x] Add "+ Add New List" and "+ Add Tag" actions
@@ -655,6 +657,40 @@ AppSettings
 - [x] Cards: `white` with `border-gray-200`
 - [x] Text: `gray-900` / `gray-500`
 - [x] Accents: Only for list dots, tag chips, time blocks, sticky notes
+
+---
+
+## Architecture Notes
+
+### Routing & Navigation
+- **React Router v7** with `BrowserRouter` for client-side routing
+- **AppShell** renders as a direct wrapper (not a layout route) so it stays mounted across navigations
+- `AnimatePresence` + `key={location.pathname}` is scoped to page content only — the sidebar and shell never unmount during navigation
+- Page transitions: fade + subtle vertical motion (0.15s easeInOut) via Framer Motion
+
+### Database
+- **Dexie.js** with versioned migrations (currently v4)
+- Internal table name `projects` maps to `List` type (Dexie table names can't be renamed without data loss)
+- `useLiveQuery` for all reactive database reads — no duplicated state in Zustand
+- Zustand reserved for ephemeral UI state only (sidebar open, active view, collapsed sections)
+
+### Key Implementation Files
+- `src/App.tsx` — Router, AnimatePresence, page transitions
+- `src/components/layout/AppShell.tsx` — Persistent shell with Sidebar + main content
+- `src/components/layout/Sidebar.tsx` — Navigation via `useNavigate()`, reactive task counts
+- `src/db/index.ts` — Dexie schema, CRUD operations, migrations
+- `src/stores/ui-store.ts` — Zustand store for UI state
+- `src/pages/` — Route-level page components
+
+### Remaining Backlog
+Items not yet implemented (from Phase 4 & 6):
+- Sticky note markdown-lite support (bold, italic, bullet lists)
+- Task completion confetti animation
+- First-run onboarding walkthrough
+- Keyboard shortcut tooltip system
+- Accessibility audit (ARIA, focus management)
+- Performance: lazy-load views, virtualize long task lists (react-window)
+- Habit reminders via browser notifications
 
 ---
 
