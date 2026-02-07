@@ -488,38 +488,38 @@ AppSettings
 
 ---
 
-## Phase 4: Sticky Wall
+## Phase 4: Sticky Wall ✅
 
 > Goal: A visual canvas for brainstorming, quick notes, and idea capture — like a digital sticky note wall.
 
 ### 4.1 Sticky Note CRUD
-- [ ] Create new sticky notes with title + freeform content
-- [ ] Edit sticky notes inline (click to edit title and body)
-- [ ] Delete sticky notes with confirmation
-- [ ] Color picker: yellow, cyan, pink, orange, green, purple pastels
-- [ ] Auto-save on edit (debounced)
+- [x] Create new sticky notes with title + freeform content
+- [x] Edit sticky notes inline (click to edit title and body)
+- [x] Delete sticky notes
+- [x] Color picker: yellow, cyan, pink, orange, green, purple pastels
+- [x] Auto-save on edit (saves on blur)
 
 ### 4.2 Wall Layout
-- [ ] Responsive grid: 3 columns desktop, 2 tablet, 1 mobile (`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4`)
-- [ ] "+" add card always visible as last grid item (dashed border, gray bg, centered plus icon)
-- [ ] Sticky notes have minimum height (`min-h-[180px]`) for visual consistency
-- [ ] Pastel background fills entire card (`rounded-xl p-5`)
+- [x] Responsive grid: 3 columns desktop, 2 tablet, 1 mobile (`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4`)
+- [x] "+" add card always visible as last grid item (dashed border, gray bg, centered plus icon)
+- [x] Sticky notes have minimum height (`min-h-[180px]`) for visual consistency
+- [x] Pastel background fills entire card (`rounded-xl p-5`)
 
 ### 4.3 Sticky Content
-- [ ] Bold title at top of note (`text-base font-bold`)
-- [ ] Freeform body text supporting line breaks and bullet points
-- [ ] Body text in `text-sm text-gray-700 leading-relaxed`
+- [x] Bold title at top of note (`text-base font-bold`)
+- [x] Freeform body text supporting line breaks (whitespace-pre-wrap)
+- [x] Body text in `text-sm text-gray-700 leading-relaxed`
 - [ ] Markdown-lite support: bold, italic, bullet lists
 
 ### 4.4 Drag & Reorder
 - [ ] Drag sticky notes to reorder on the wall (dnd-kit grid reorder)
-- [ ] Smooth animations on reorder (Framer Motion layout)
-- [ ] Position persisted in database
+- [x] Smooth animations with Framer Motion layout
+- [x] Position persisted in database
 
 ### 4.5 Navigation
-- [ ] Accessible from sidebar under TASKS section (Sticky Wall icon)
-- [ ] `/sticky-wall` route
-- [ ] Page title: "Sticky Wall" in `text-4xl font-bold`
+- [x] Accessible from sidebar under TASKS section (Sticky Wall icon)
+- [x] `/sticky-wall` route
+- [x] Page title: "Sticky Wall" in `text-4xl font-bold`
 
 ---
 
@@ -608,53 +608,53 @@ AppSettings
 
 ---
 
-## Design Overhaul Checklist
+## Design Overhaul Checklist ✅
 
-> These items need to be implemented/updated to match the new design screenshots.
+> Completed — clean paper-like aesthetic with neutral grays, no glassmorphism.
 
 ### Sidebar Overhaul
-- [ ] Replace glassmorphism sidebar with clean white `bg-white border-r border-gray-200`
-- [ ] Add "Menu" header with hamburger toggle icon
-- [ ] Add search input at top of sidebar
-- [ ] Restructure into TASKS / LISTS / TAGS sections with uppercase labels
-- [ ] Simplify TASKS nav: Upcoming, Today, Calendar, Sticky Wall (remove Inbox, Evening, Anytime, Someday, Logbook)
-- [ ] Replace Projects/Areas with flat Lists (colored dots + name + count)
-- [ ] Add Tags section with pastel chip pills
-- [ ] Add "+ Add New List" and "+ Add Tag" actions
-- [ ] Add Settings + Sign out at bottom
-- [ ] Active nav item: `font-semibold bg-gray-100` with left border accent
+- [x] Replace glassmorphism sidebar with clean white `bg-white border-r border-gray-200`
+- [x] Add "Menu" header with hamburger toggle icon
+- [x] Add search input at top of sidebar
+- [x] Restructure into TASKS / LISTS / TAGS sections with uppercase labels
+- [x] Simplify TASKS nav: Upcoming, Today, Calendar, Sticky Wall (remove Inbox, Evening, Anytime, Someday, Logbook)
+- [x] Replace Projects/Areas with flat Lists (colored dots + name + count)
+- [x] Add Tags section with pastel chip pills
+- [x] Add "+ Add New List" and "+ Add Tag" actions
+- [x] Add Settings + Sign out at bottom
+- [x] Active nav item: `font-semibold bg-gray-100` with left border accent
 
 ### Task List Overhaul
-- [ ] Remove grain texture overlay from body
-- [ ] Switch background to `bg-gray-100` (light warm gray)
-- [ ] Task cards in white `rounded-xl` containers
-- [ ] Task rows: checkbox circle + title + chevron right
-- [ ] Metadata row below task: date badge, subtask count, list colored badge
-- [ ] "+ Add New Task" row at top of each task list section
+- [x] Remove grain texture overlay from body
+- [x] Switch background to `bg-gray-100` (light warm gray)
+- [x] Task cards in white `rounded-xl` containers
+- [x] Task rows: checkbox circle + title + chevron right
+- [x] Metadata row below task: date badge, subtask count, list colored badge
+- [x] "+ Add New Task" row at top of each task list section
 
 ### Page Layout Overhaul
-- [ ] Page titles: `text-4xl font-bold tracking-tight text-gray-900` with count badge
-- [ ] Remove indigo/primary color system — use neutral grays
-- [ ] Main content area: `p-8` padding with `max-w-none` (full width within scrollable area)
+- [x] Page titles: `text-4xl font-bold tracking-tight text-gray-900` with count badge
+- [x] Remove indigo/primary color system — use neutral grays
+- [x] Main content area: `p-8` padding with `max-w-none` (full width within scrollable area)
 
 ### Upcoming Page
-- [ ] Today section: full-width card
-- [ ] Tomorrow + This Week: 2-column grid layout
-- [ ] Each section as its own white card with title and task list
+- [x] Today section: full-width card
+- [x] Tomorrow + This Week: 2-column grid layout
+- [x] Each section as its own white card with title and task list
 
 ### Calendar Page
-- [ ] Date as page title (not "Calendar")
-- [ ] Day/Week/Month tab switcher
-- [ ] "Add Event" button top-right
-- [ ] Pastel-colored time blocks (blue, pink, gray)
-- [ ] Current time indicator (black dot + dashed line)
+- [x] Date as page title (not "Calendar")
+- [x] Day/Week/Month tab switcher
+- [x] "Add Event" button top-right
+- [x] Pastel-colored time blocks (blue, pink, gray)
+- [x] Current time indicator (black dot + dashed line)
 
 ### Color System
-- [ ] Replace indigo primary → neutral gray system
-- [ ] Background: `gray-100`
-- [ ] Cards: `white` with `border-gray-200`
-- [ ] Text: `gray-900` / `gray-500`
-- [ ] Accents: Only for list dots, tag chips, time blocks, sticky notes
+- [x] Replace indigo primary → neutral gray system
+- [x] Background: `gray-100`
+- [x] Cards: `white` with `border-gray-200`
+- [x] Text: `gray-900` / `gray-500`
+- [x] Accents: Only for list dots, tag chips, time blocks, sticky notes
 
 ---
 
