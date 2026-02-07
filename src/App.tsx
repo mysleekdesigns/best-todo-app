@@ -26,84 +26,23 @@ function AnimatedRoutes() {
   const location = useLocation()
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route element={<AppShell />}>
-          <Route
-            path="/"
-            element={
-              <AnimatedPage>
-                <UpcomingPage />
-              </AnimatedPage>
-            }
-          />
-          <Route
-            path="/upcoming"
-            element={
-              <AnimatedPage>
-                <UpcomingPage />
-              </AnimatedPage>
-            }
-          />
-          <Route
-            path="/today"
-            element={
-              <AnimatedPage>
-                <TodayPage />
-              </AnimatedPage>
-            }
-          />
-          <Route
-            path="/calendar"
-            element={
-              <AnimatedPage>
-                <CalendarPage />
-              </AnimatedPage>
-            }
-          />
-          <Route
-            path="/sticky-wall"
-            element={
-              <AnimatedPage>
-                <StickyWallPage />
-              </AnimatedPage>
-            }
-          />
-          <Route
-            path="/focus"
-            element={
-              <AnimatedPage>
-                <FocusPage />
-              </AnimatedPage>
-            }
-          />
-          <Route
-            path="/habits"
-            element={
-              <AnimatedPage>
-                <HabitsPage />
-              </AnimatedPage>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <AnimatedPage>
-                <SettingsPage />
-              </AnimatedPage>
-            }
-          />
-          <Route
-            path="/list/:id"
-            element={
-              <AnimatedPage>
-                <ListPage />
-              </AnimatedPage>
-            }
-          />
-        </Route>
-      </Routes>
-    </AnimatePresence>
+    <AppShell>
+      <AnimatePresence mode="wait">
+        <AnimatedPage key={location.pathname}>
+          <Routes location={location}>
+            <Route path="/" element={<UpcomingPage />} />
+            <Route path="/upcoming" element={<UpcomingPage />} />
+            <Route path="/today" element={<TodayPage />} />
+            <Route path="/calendar" element={<CalendarPage />} />
+            <Route path="/sticky-wall" element={<StickyWallPage />} />
+            <Route path="/focus" element={<FocusPage />} />
+            <Route path="/habits" element={<HabitsPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/list/:id" element={<ListPage />} />
+          </Routes>
+        </AnimatedPage>
+      </AnimatePresence>
+    </AppShell>
   )
 }
 

@@ -1,10 +1,9 @@
-import { Outlet } from 'react-router-dom'
 import { Menu } from 'lucide-react'
 import { Sidebar } from './Sidebar'
 import { OfflineBanner } from './OfflineBanner'
 import { useUIStore } from '@/stores/ui-store'
 
-export function AppShell() {
+export function AppShell({ children }: { children: React.ReactNode }) {
   const sidebarOpen = useUIStore((s) => s.sidebarOpen)
   const toggleSidebar = useUIStore((s) => s.toggleSidebar)
 
@@ -26,7 +25,7 @@ export function AppShell() {
 
         {/* Page content */}
         <main className="flex-1 overflow-y-auto">
-          <Outlet />
+          {children}
         </main>
       </div>
 
