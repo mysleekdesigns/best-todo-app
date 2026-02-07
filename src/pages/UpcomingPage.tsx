@@ -1,11 +1,15 @@
-import { Calendar } from 'lucide-react'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { format, parseISO, addDays } from 'date-fns'
+import { format, addDays, endOfWeek } from 'date-fns'
 import { db } from '@/db'
-import type { Task } from '@/types'
+import { TaskList } from '@/components/tasks/TaskList'
+import { QuickAdd } from '@/components/tasks/QuickAdd'
 
 export function UpcomingPage() {
   const today = new Date().toISOString().split('T')[0]
+  const tomorrowDate = addDays(new Date(), 1).toISOString().split('T')[0]
+  const endOfThisWeek = format(endOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd')
 
   const tasks = useLiveQuery(() => {
     return db.tasks
@@ -15,70 +19,78 @@ export function UpcomingPage() {
       .sortBy('dueDate')
   })
 
-  // Group tasks by date
-  const grouped: Map<string, Task[]> = new Map()
-  if (tasks) {
-    for (const task of tasks) {
-      const date = task.dueDate!
-      if (!grouped.has(date)) grouped.set(date, [])
-      grouped.get(date)!.push(task)
-    }
-  }
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
+
+  const todayTasks = tasks?.filter((t) => t.dueDate === today) ?? []
+  const tomorrowTasks = tasks?.filter((t) => t.dueDate === tomorrowDate) ?? []
+  const thisWeekTasks = tasks?.filter(
+    (t) => t.dueDate! > tomorrowDate && t.dueDate! <= endOfThisWeek,
+  ) ?? []
+
+  const totalCount = (todayTasks.length + tomorrowTasks.length + thisWeekTasks.length)
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-8">
-      <div className="flex items-center gap-3 pb-6">
-        <Calendar size={22} className="text-rose-500" />
-        <h2 className="text-2xl font-bold tracking-tight text-foreground">Upcoming</h2>
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const }}
+      className="mx-auto max-w-4xl p-8"
+    >
+      <div className="mb-6 flex items-center gap-3">
+        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Upcoming</h1>
+        {totalCount > 0 && (
+          <span className="rounded-full bg-gray-200 px-2.5 py-0.5 text-sm font-medium text-gray-600">
+            {totalCount}
+          </span>
+        )}
       </div>
 
       {tasks === undefined ? (
         <div className="space-y-3">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-12 animate-pulse rounded-lg bg-muted" />
+            <div key={i} className="h-12 animate-pulse rounded-xl bg-gray-200" />
           ))}
         </div>
-      ) : grouped.size === 0 ? (
-        <div className="py-16 text-center">
-          <Calendar size={48} className="mx-auto mb-4 text-muted-foreground/30" />
-          <p className="text-lg font-medium text-muted-foreground">Nothing upcoming</p>
-          <p className="mt-1 text-sm text-muted-foreground/70">
-            Tasks with due dates will be grouped here by day.
-          </p>
-        </div>
       ) : (
-        <div className="space-y-6">
-          {[...grouped.entries()].map(([date, dateTasks]) => {
-            const parsedDate = parseISO(date)
-            const isToday = date === today
-            const isTomorrow = date === addDays(new Date(), 1).toISOString().split('T')[0]
-            const dateLabel = isToday
-              ? 'Today'
-              : isTomorrow
-                ? 'Tomorrow'
-                : format(parsedDate, 'EEEE, MMMM d')
+        <div className="space-y-4">
+          {/* Today — full width */}
+          <div className="bg-white rounded-xl border border-gray-200 p-4">
+            <h2 className="text-lg font-semibold text-gray-900 mb-3">Today</h2>
+            <QuickAdd />
+            <TaskList
+              tasks={todayTasks}
+              selectedTaskId={selectedTaskId}
+              onSelectTask={setSelectedTaskId}
+              emptyMessage="No tasks today"
+            />
+          </div>
 
-            return (
-              <div key={date}>
-                <h3 className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {dateLabel}
-                </h3>
-                <div className="space-y-1">
-                  {dateTasks.map((task) => (
-                    <div
-                      key={task.id}
-                      className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-accent"
-                    >
-                      <div className="h-5 w-5 shrink-0 rounded-full border-2 border-muted-foreground/30" />
-                      <span className="text-sm font-medium text-foreground">{task.title}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )
-          })}
+          {/* Tomorrow + This Week — 2 col grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white rounded-xl border border-gray-200 p-4">
+              <h2 className="text-lg font-semibold text-gray-900 mb-3">Tomorrow</h2>
+              <QuickAdd />
+              <TaskList
+                tasks={tomorrowTasks}
+                selectedTaskId={selectedTaskId}
+                onSelectTask={setSelectedTaskId}
+                emptyMessage="No tasks tomorrow"
+              />
+            </div>
+
+            <div className="bg-white rounded-xl border border-gray-200 p-4">
+              <h2 className="text-lg font-semibold text-gray-900 mb-3">This Week</h2>
+              <QuickAdd />
+              <TaskList
+                tasks={thisWeekTasks}
+                selectedTaskId={selectedTaskId}
+                onSelectTask={setSelectedTaskId}
+                emptyMessage="No tasks this week"
+              />
+            </div>
+          </div>
         </div>
       )}
-    </div>
+    </motion.div>
   )
 }

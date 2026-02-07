@@ -1,4 +1,5 @@
-import { AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
+import { CircleCheckBig } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Task } from '@/types'
 import { TaskItem } from './TaskItem'
@@ -23,9 +24,21 @@ export function TaskList({
 
   if (!tasks) {
     return (
-      <div className={cn('space-y-2 px-2', className)}>
+      <div className={cn('space-y-2 p-4', className)}>
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-12 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
+          <motion.div
+            key={i}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: i * 0.1 }}
+            className="flex items-start gap-3 px-4 py-3.5"
+          >
+            <div className="h-5 w-5 shrink-0 animate-pulse rounded-full bg-gray-200" />
+            <div className="flex-1 space-y-2">
+              <div className="h-4 w-3/4 animate-pulse rounded-md bg-gray-200" />
+              <div className="h-3 w-1/3 animate-pulse rounded-md bg-gray-200" />
+            </div>
+          </motion.div>
         ))}
       </div>
     )
@@ -33,13 +46,13 @@ export function TaskList({
 
   if (tasks.length === 0) {
     return (
-      <div className={cn('flex flex-col items-center justify-center py-16 text-gray-400', className)}>
-        <p className="text-sm">{emptyMessage}</p>
+      <div className={cn('flex flex-col items-center justify-center py-12', className)}>
+        <CircleCheckBig className="mb-3 h-8 w-8 text-gray-300" />
+        <p className="text-sm text-gray-400">{emptyMessage}</p>
       </div>
     )
   }
 
-  // Separate top-level tasks from subtasks
   const topLevelTasks = tasks.filter((t) => !t.parentId)
 
   return (

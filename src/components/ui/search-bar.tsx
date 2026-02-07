@@ -19,8 +19,8 @@ export function SearchBar({ className }: { className?: string }) {
   const navigate = useNavigate()
 
   const tasks = useSearchTasks(query) ?? []
-  const projects = useLiveQuery(() => db.projects.toArray(), []) ?? []
-  const results = buildSearchResults(query, tasks, projects)
+  const lists = useLiveQuery(() => db.projects.toArray(), []) ?? []
+  const results = buildSearchResults(query, tasks, lists)
 
   // Reset selection when results change
   useEffect(() => {
@@ -55,8 +55,8 @@ export function SearchBar({ className }: { className?: string }) {
     (result: SearchResult) => {
       setIsOpen(false)
       setQuery('')
-      if (result.type === 'project') {
-        navigate(`/project/${result.id}`)
+      if (result.type === 'list') {
+        navigate(`/list/${result.id}`)
       } else {
         // Dispatch event for task selection — the task-ui components will handle
         window.dispatchEvent(
@@ -144,7 +144,7 @@ export function SearchBar({ className }: { className?: string }) {
                       : 'text-foreground hover:bg-accent/50',
                   )}
                 >
-                  {result.type === 'project' ? (
+                  {result.type === 'list' ? (
                     <FolderOpen className="text-muted-foreground size-4 shrink-0" />
                   ) : (
                     <FileText className="text-muted-foreground size-4 shrink-0" />

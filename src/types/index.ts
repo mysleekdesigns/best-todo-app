@@ -1,4 +1,4 @@
-export type TaskStatus = 'inbox' | 'active' | 'completed' | 'cancelled'
+export type TaskStatus = 'active' | 'completed' | 'cancelled'
 export type Priority = 0 | 1 | 2 | 3 // none, low, medium, high
 
 export interface ChecklistItem {
@@ -19,31 +19,20 @@ export interface Task {
   completedAt: string | null
   createdAt: string
   updatedAt: string
-  projectId: string | null
-  areaId: string | null
+  listId: string | null
   parentId: string | null
   position: number
   tags: string[]
   checklist: ChecklistItem[]
-  isEvening: boolean
   recurringRule: string | null
-  kanbanColumn: string | null
   duration: number | null
+  timeBlockColor: string | null
 }
 
-export interface Project {
+export interface List {
   id: string
   name: string
   color: string
-  emoji: string
-  areaId: string | null
-  position: number
-  createdAt: string
-}
-
-export interface Area {
-  id: string
-  name: string
   position: number
   createdAt: string
 }
@@ -52,6 +41,18 @@ export interface Tag {
   id: string
   name: string
   color: string
+}
+
+export type StickyNoteColor = 'yellow' | 'cyan' | 'pink' | 'orange' | 'green' | 'purple'
+
+export interface StickyNote {
+  id: string
+  title: string
+  content: string
+  color: StickyNoteColor
+  position: number
+  createdAt: string
+  updatedAt: string
 }
 
 export type FocusSessionType = 'work' | 'short_break' | 'long_break'
@@ -89,11 +90,11 @@ export interface Habit {
   entries: HabitEntry[]
 }
 
-// --- Project Headings (section dividers within projects) ---
+// --- List Headings (section dividers within lists) ---
 
-export interface ProjectHeading {
+export interface ListHeading {
   id: string
-  projectId: string
+  listId: string
   title: string
   position: number
   createdAt: string
@@ -105,12 +106,10 @@ export interface TaskFilter {
   status?: TaskStatus[]
   priority?: Priority[]
   tags?: string[]
-  projectId?: string | null
-  areaId?: string | null
+  listId?: string | null
   dueDateFrom?: string | null
   dueDateTo?: string | null
   hasDate?: boolean
-  isEvening?: boolean
   searchQuery?: string
 }
 

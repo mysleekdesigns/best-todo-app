@@ -1,16 +1,11 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { AppShell } from '@/components/layout/AppShell'
-import { InboxPage } from '@/pages/InboxPage'
 import { TodayPage } from '@/pages/TodayPage'
-import { EveningPage } from '@/pages/EveningPage'
 import { UpcomingPage } from '@/pages/UpcomingPage'
-import { AnytimePage } from '@/pages/AnytimePage'
-import { SomedayPage } from '@/pages/SomedayPage'
-import { LogbookPage } from '@/pages/LogbookPage'
-import { ProjectPage } from '@/pages/ProjectPage'
-import { AreaPage } from '@/pages/AreaPage'
 import { CalendarPage } from '@/pages/CalendarPage'
+import { StickyWallPage } from '@/pages/StickyWallPage'
+import { ListPage } from '@/pages/ListPage'
 
 const pageTransition = {
   initial: { opacity: 0, y: 8 },
@@ -34,31 +29,7 @@ function AnimatedRoutes() {
             path="/"
             element={
               <AnimatedPage>
-                <InboxPage />
-              </AnimatedPage>
-            }
-          />
-          <Route
-            path="/inbox"
-            element={
-              <AnimatedPage>
-                <InboxPage />
-              </AnimatedPage>
-            }
-          />
-          <Route
-            path="/today"
-            element={
-              <AnimatedPage>
-                <TodayPage />
-              </AnimatedPage>
-            }
-          />
-          <Route
-            path="/evening"
-            element={
-              <AnimatedPage>
-                <EveningPage />
+                <UpcomingPage />
               </AnimatedPage>
             }
           />
@@ -71,34 +42,10 @@ function AnimatedRoutes() {
             }
           />
           <Route
-            path="/anytime"
+            path="/today"
             element={
               <AnimatedPage>
-                <AnytimePage />
-              </AnimatedPage>
-            }
-          />
-          <Route
-            path="/someday"
-            element={
-              <AnimatedPage>
-                <SomedayPage />
-              </AnimatedPage>
-            }
-          />
-          <Route
-            path="/logbook"
-            element={
-              <AnimatedPage>
-                <LogbookPage />
-              </AnimatedPage>
-            }
-          />
-          <Route
-            path="/project/:id"
-            element={
-              <AnimatedPage>
-                <ProjectPage />
+                <TodayPage />
               </AnimatedPage>
             }
           />
@@ -111,10 +58,18 @@ function AnimatedRoutes() {
             }
           />
           <Route
-            path="/area/:id"
+            path="/sticky-wall"
             element={
               <AnimatedPage>
-                <AreaPage />
+                <StickyWallPage />
+              </AnimatedPage>
+            }
+          />
+          <Route
+            path="/list/:id"
+            element={
+              <AnimatedPage>
+                <ListPage />
               </AnimatedPage>
             }
           />

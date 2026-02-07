@@ -1,7 +1,7 @@
-import type { Task, Project } from '@/types'
+import type { Task, List } from '@/types'
 
 export interface SearchResult {
-  type: 'task' | 'project'
+  type: 'task' | 'list'
   id: string
   title: string
   subtitle: string
@@ -59,25 +59,25 @@ export function splitByHighlights(
 }
 
 /**
- * Build search results from tasks and projects matching a query.
+ * Build search results from tasks and lists matching a query.
  */
 export function buildSearchResults(
   query: string,
   tasks: Task[],
-  projects: Project[],
+  lists: List[],
 ): SearchResult[] {
   if (!query.trim()) return []
   const lowerQ = query.toLowerCase()
   const results: SearchResult[] = []
 
-  for (const project of projects) {
-    if (project.name.toLowerCase().includes(lowerQ)) {
+  for (const list of lists) {
+    if (list.name.toLowerCase().includes(lowerQ)) {
       results.push({
-        type: 'project',
-        id: project.id,
-        title: project.name,
-        subtitle: 'Project',
-        highlights: findHighlights(project.name, query),
+        type: 'list',
+        id: list.id,
+        title: list.name,
+        subtitle: 'List',
+        highlights: findHighlights(list.name, query),
       })
     }
   }
@@ -103,7 +103,6 @@ export function buildSearchResults(
 
 function statusLabel(status: string): string {
   switch (status) {
-    case 'inbox': return 'Inbox'
     case 'active': return 'Active'
     case 'completed': return 'Completed'
     case 'cancelled': return 'Cancelled'

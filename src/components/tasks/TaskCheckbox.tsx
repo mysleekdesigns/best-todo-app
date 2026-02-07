@@ -4,16 +4,16 @@ import { cn } from '@/lib/utils'
 import type { Priority } from '@/types'
 
 const priorityColors: Record<Priority, string> = {
-  0: 'border-gray-300 dark:border-gray-600',
+  0: 'border-gray-300',
   1: 'border-blue-400',
-  2: 'border-yellow-400',
+  2: 'border-amber-400',
   3: 'border-red-400',
 }
 
 const priorityBg: Record<Priority, string> = {
-  0: 'bg-gray-300 dark:bg-gray-600',
+  0: 'bg-gray-400',
   1: 'bg-blue-400',
-  2: 'bg-yellow-400',
+  2: 'bg-amber-400',
   3: 'bg-red-400',
 }
 
@@ -43,17 +43,30 @@ export function TaskCheckbox({ checked, priority, onToggle, className }: TaskChe
         'relative flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-200',
         checked
           ? `${priorityBg[priority]} border-transparent`
-          : `${priorityColors[priority]} hover:bg-gray-100 dark:hover:bg-gray-800`,
+          : `${priorityColors[priority]} hover:bg-gray-100`,
         className,
       )}
       aria-label={checked ? 'Mark task as incomplete' : 'Mark task as complete'}
       aria-pressed={checked}
     >
+      {/* Radial flash effect on completion */}
+      <AnimatePresence>
+        {isAnimating && (
+          <motion.span
+            initial={{ scale: 0.5, opacity: 0.6 }}
+            animate={{ scale: 2, opacity: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className={cn('absolute inset-0 rounded-full', priorityBg[priority])}
+          />
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {(checked || isAnimating) && (
           <motion.svg
             initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
+            animate={{ scale: [1, 1.15, 1], opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
             className="h-3 w-3 text-white"

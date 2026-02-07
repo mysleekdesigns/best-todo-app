@@ -26,17 +26,13 @@ export const SHORTCUTS: ShortcutDef[] = [
   { key: 'Backspace', meta: true, description: 'Delete task', group: 'tasks', action: 'delete-task' },
   { key: 'ArrowUp', description: 'Previous task', group: 'tasks', action: 'prev-task' },
   { key: 'ArrowDown', description: 'Next task', group: 'tasks', action: 'next-task' },
-  { key: 'e', description: 'Toggle evening', group: 'tasks', action: 'toggle-evening' },
   { key: 't', description: 'Schedule today', group: 'tasks', action: 'schedule-today' },
-  { key: 's', description: 'Set someday', group: 'tasks', action: 'set-someday' },
 
-  // Navigation (Cmd+1-7)
-  { key: '1', meta: true, description: 'Inbox', group: 'navigation', action: 'nav-inbox' },
+  // Navigation (Cmd+1-4)
+  { key: '1', meta: true, description: 'Upcoming', group: 'navigation', action: 'nav-upcoming' },
   { key: '2', meta: true, description: 'Today', group: 'navigation', action: 'nav-today' },
-  { key: '3', meta: true, description: 'Upcoming', group: 'navigation', action: 'nav-upcoming' },
-  { key: '4', meta: true, description: 'Anytime', group: 'navigation', action: 'nav-anytime' },
-  { key: '5', meta: true, description: 'Someday', group: 'navigation', action: 'nav-someday' },
-  { key: '6', meta: true, description: 'Logbook', group: 'navigation', action: 'nav-logbook' },
+  { key: '3', meta: true, description: 'Calendar', group: 'navigation', action: 'nav-calendar' },
+  { key: '4', meta: true, description: 'Sticky Wall', group: 'navigation', action: 'nav-sticky-wall' },
 ]
 
 export function matchesShortcut(

@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
-  Inbox,
-  Sun,
   Calendar,
-  Circle,
-  Cloud,
-  BookOpen,
+  CalendarDays,
+  Sun,
+  StickyNote,
   Plus,
   Palette,
   FileText,
@@ -36,14 +34,14 @@ export function CommandPalette() {
 
   const debouncedSearch = useDebounce(search, 150)
   const searchResults = useSearchTasks(debouncedSearch) ?? []
-  const projects = useLiveQuery(() => db.projects.toArray(), []) ?? []
+  const lists = useLiveQuery(() => db.projects.toArray(), []) ?? []
 
   const hasSearch = debouncedSearch.trim().length > 0
 
-  // Filter projects by search query
-  const matchingProjects = hasSearch
-    ? projects.filter((p) =>
-        p.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
+  // Filter lists by search query
+  const matchingLists = hasSearch
+    ? lists.filter((l) =>
+        l.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
       )
     : []
 
@@ -82,7 +80,7 @@ export function CommandPalette() {
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
 
-        {/* Search results — tasks */}
+        {/* Search results -- tasks */}
         {hasSearch && searchResults.length > 0 && (
           <>
             <CommandGroup heading="Tasks">
@@ -102,7 +100,7 @@ export function CommandPalette() {
                 >
                   <FileText className="size-4" />
                   <span className="flex-1 truncate">{task.title}</span>
-                  <span className="text-muted-foreground text-xs capitalize">
+                  <span className="text-xs capitalize text-muted-foreground">
                     {task.status}
                   </span>
                 </CommandItem>
@@ -112,22 +110,20 @@ export function CommandPalette() {
           </>
         )}
 
-        {/* Search results — projects */}
-        {hasSearch && matchingProjects.length > 0 && (
+        {/* Search results -- lists */}
+        {hasSearch && matchingLists.length > 0 && (
           <>
-            <CommandGroup heading="Projects">
-              {matchingProjects.map((project) => (
+            <CommandGroup heading="Lists">
+              {matchingLists.map((list) => (
                 <CommandItem
-                  key={project.id}
-                  value={`project-${project.id}-${project.name}`}
+                  key={list.id}
+                  value={`list-${list.id}-${list.name}`}
                   onSelect={() =>
-                    runAction(() => navigate(`/project/${project.id}`))
+                    runAction(() => navigate(`/list/${list.id}`))
                   }
                 >
                   <FolderOpen className="size-4" />
-                  <span>
-                    {project.emoji} {project.name}
-                  </span>
+                  <span>{list.name}</span>
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -136,9 +132,9 @@ export function CommandPalette() {
         )}
 
         <CommandGroup heading="Navigation">
-          <CommandItem onSelect={() => runAction(() => navigate('/inbox'))}>
-            <Inbox className="size-4" />
-            <span>Inbox</span>
+          <CommandItem onSelect={() => runAction(() => navigate('/upcoming'))}>
+            <Calendar className="size-4" />
+            <span>Upcoming</span>
             <CommandShortcut>{MOD_LABEL}1</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => runAction(() => navigate('/today'))}>
@@ -146,25 +142,15 @@ export function CommandPalette() {
             <span>Today</span>
             <CommandShortcut>{MOD_LABEL}2</CommandShortcut>
           </CommandItem>
-          <CommandItem onSelect={() => runAction(() => navigate('/upcoming'))}>
-            <Calendar className="size-4" />
-            <span>Upcoming</span>
+          <CommandItem onSelect={() => runAction(() => navigate('/calendar'))}>
+            <CalendarDays className="size-4" />
+            <span>Calendar</span>
             <CommandShortcut>{MOD_LABEL}3</CommandShortcut>
           </CommandItem>
-          <CommandItem onSelect={() => runAction(() => navigate('/anytime'))}>
-            <Circle className="size-4" />
-            <span>Anytime</span>
+          <CommandItem onSelect={() => runAction(() => navigate('/sticky-wall'))}>
+            <StickyNote className="size-4" />
+            <span>Sticky Wall</span>
             <CommandShortcut>{MOD_LABEL}4</CommandShortcut>
-          </CommandItem>
-          <CommandItem onSelect={() => runAction(() => navigate('/someday'))}>
-            <Cloud className="size-4" />
-            <span>Someday</span>
-            <CommandShortcut>{MOD_LABEL}5</CommandShortcut>
-          </CommandItem>
-          <CommandItem onSelect={() => runAction(() => navigate('/logbook'))}>
-            <BookOpen className="size-4" />
-            <span>Logbook</span>
-            <CommandShortcut>{MOD_LABEL}6</CommandShortcut>
           </CommandItem>
         </CommandGroup>
 

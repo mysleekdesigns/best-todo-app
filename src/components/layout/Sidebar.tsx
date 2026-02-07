@@ -1,65 +1,51 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  DndContext,
-  closestCenter,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-} from '@dnd-kit/core'
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-  useSortable,
-} from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import {
-  Inbox,
-  Sun,
-  Moon,
   Calendar,
   CalendarDays,
-  Layers,
-  Archive,
-  BookOpen,
+  Sun,
+  StickyNote,
+  Menu,
+  Search,
+  Plus,
+  Settings,
+  LogOut,
   ChevronDown,
   ChevronRight,
-  FolderOpen,
-  PanelLeftClose,
-  Plus,
-  MoreHorizontal,
-  Pencil,
-  GripVertical,
 } from 'lucide-react'
-import { db, updateProject } from '@/db'
-import { useProjects, useAreas } from '@/db/hooks'
+import { db, createTag } from '@/db'
+import { useLists, useTags } from '@/db/hooks'
 import { useUIStore } from '@/stores/ui-store'
 import { cn } from '@/lib/utils'
-import { ProjectDialog } from './ProjectDialog'
-import { AreaDialog } from './AreaDialog'
-import type { ReactNode } from 'react'
-import type { Project, Area } from '@/types'
+import { ListDialog } from './ListDialog'
+import type { List } from '@/types'
 
 // --- Nav items ---
 
 interface NavItem {
   id: string
   label: string
-  icon: ReactNode
+  icon: React.ReactNode
   path: string
   countQuery?: () => Promise<number>
 }
 
-const mainNavItems: NavItem[] = [
+const navItems: NavItem[] = [
   {
-    id: 'inbox',
-    label: 'Inbox',
-    icon: <Inbox size={18} />,
-    path: '/inbox',
-    countQuery: () => db.tasks.where('status').equals('inbox').count(),
+    id: 'upcoming',
+    label: 'Upcoming',
+    icon: <Calendar size={18} />,
+    path: '/upcoming',
+    countQuery: () => {
+      const today = new Date().toISOString().split('T')[0]
+      return db.tasks
+        .where('status')
+        .equals('active')
+        .filter((t) => t.dueDate !== null && t.dueDate >= today)
+        .count()
+    },
   },
   {
     id: 'today',
@@ -71,64 +57,9 @@ const mainNavItems: NavItem[] = [
       return db.tasks
         .where('status')
         .equals('active')
-        .filter((t) => (t.dueDate === today || t.scheduledDate === today) && !t.isEvening)
+        .filter((t) => t.dueDate === today || t.scheduledDate === today)
         .count()
     },
-  },
-  {
-    id: 'evening',
-    label: 'This Evening',
-    icon: <Moon size={18} />,
-    path: '/evening',
-    countQuery: () => {
-      const today = new Date().toISOString().split('T')[0]
-      return db.tasks
-        .where('status')
-        .anyOf(['inbox', 'active'])
-        .filter(
-          (t) =>
-            t.isEvening &&
-            (t.dueDate === today || t.scheduledDate === today || (!t.dueDate && !t.scheduledDate)),
-        )
-        .count()
-    },
-  },
-  {
-    id: 'upcoming',
-    label: 'Upcoming',
-    icon: <Calendar size={18} />,
-    path: '/upcoming',
-    countQuery: () => {
-      const today = new Date().toISOString().split('T')[0]
-      return db.tasks
-        .where('status')
-        .equals('active')
-        .filter((t) => t.dueDate !== null && t.dueDate > today)
-        .count()
-    },
-  },
-  {
-    id: 'anytime',
-    label: 'Anytime',
-    icon: <Layers size={18} />,
-    path: '/anytime',
-    countQuery: () =>
-      db.tasks
-        .where('status')
-        .equals('active')
-        .count(),
-  },
-  {
-    id: 'someday',
-    label: 'Someday',
-    icon: <Archive size={18} />,
-    path: '/someday',
-  },
-  {
-    id: 'logbook',
-    label: 'Logbook',
-    icon: <BookOpen size={18} />,
-    path: '/logbook',
   },
   {
     id: 'calendar',
@@ -136,442 +67,38 @@ const mainNavItems: NavItem[] = [
     icon: <CalendarDays size={18} />,
     path: '/calendar',
   },
+  {
+    id: 'sticky-wall',
+    label: 'Sticky Wall',
+    icon: <StickyNote size={18} />,
+    path: '/sticky-wall',
+  },
 ]
 
-// --- Badge ---
+// --- Count Badge ---
 
-function NavItemBadge({ query }: { query: () => Promise<number> }) {
+function CountBadge({ query }: { query: () => Promise<number> }) {
   const count = useLiveQuery(query)
   if (!count) return null
   return (
-    <span className="ml-auto text-xs font-medium text-muted-foreground tabular-nums">
+    <span className="ml-auto rounded-md bg-gray-200 px-2 py-0.5 text-xs font-medium tabular-nums text-gray-600">
       {count}
     </span>
   )
 }
 
-// --- Nav item ---
+// --- List task count ---
 
-function SidebarNavItem({ item }: { item: NavItem }) {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const setActiveView = useUIStore((s) => s.setActiveView)
-  const setSidebarOpen = useUIStore((s) => s.setSidebarOpen)
-
-  const isActive = location.pathname === item.path || (item.path === '/inbox' && location.pathname === '/')
-
-  function handleClick() {
-    navigate(item.path)
-    setActiveView(item.id as Parameters<typeof setActiveView>[0])
-    if (window.innerWidth < 768) {
-      setSidebarOpen(false)
-    }
-  }
-
+function ListCount({ listId }: { listId: string }) {
+  const count = useLiveQuery(
+    () => db.tasks.where('listId').equals(listId).filter((t) => t.status === 'active').count(),
+    [listId],
+  )
+  if (!count) return null
   return (
-    <button
-      onClick={handleClick}
-      className={cn(
-        'group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-        isActive
-          ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-          : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground',
-      )}
-    >
-      <span
-        className={cn(
-          'shrink-0 transition-colors',
-          isActive ? 'text-sidebar-primary' : 'text-sidebar-foreground/50 group-hover:text-sidebar-foreground/70',
-        )}
-      >
-        {item.icon}
-      </span>
-      <span className="truncate">{item.label}</span>
-      {item.countQuery && <NavItemBadge query={item.countQuery} />}
-    </button>
-  )
-}
-
-// --- Sortable project item ---
-
-function SortableProjectItem({
-  project,
-  isActive,
-  onClick,
-  onEdit,
-}: {
-  project: Project
-  isActive: boolean
-  onClick: () => void
-  onEdit: () => void
-}) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: project.id })
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  }
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={cn(
-        'group flex w-full items-center rounded-lg text-sm font-medium transition-colors',
-        isDragging && 'z-50 opacity-80 shadow-lg',
-        isActive
-          ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-          : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground',
-      )}
-    >
-      <button
-        {...attributes}
-        {...listeners}
-        className="shrink-0 cursor-grab touch-none px-1 py-2 text-sidebar-foreground/20 opacity-0 transition-opacity group-hover:opacity-100"
-        aria-label="Drag to reorder"
-      >
-        <GripVertical size={14} />
-      </button>
-      <button
-        onClick={onClick}
-        className="flex min-w-0 flex-1 items-center gap-3 py-2 pr-1"
-      >
-        <span
-          className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded text-xs"
-          style={{ backgroundColor: project.color + '20', color: project.color }}
-        >
-          {project.emoji || <FolderOpen size={14} />}
-        </span>
-        <span className="truncate">{project.name}</span>
-      </button>
-      <button
-        onClick={(e) => {
-          e.stopPropagation()
-          onEdit()
-        }}
-        className="shrink-0 rounded p-1 text-sidebar-foreground/30 opacity-0 transition-opacity hover:text-sidebar-foreground group-hover:opacity-100"
-        aria-label={`Edit ${project.name}`}
-      >
-        <MoreHorizontal size={14} />
-      </button>
-    </div>
-  )
-}
-
-// --- Area section ---
-
-function AreaSection({
-  area,
-  projects,
-  onEditArea,
-  onEditProject,
-  onNewProject,
-}: {
-  area: Area
-  projects: Project[]
-  onEditArea: (area: Area) => void
-  onEditProject: (project: Project) => void
-  onNewProject: (areaId: string) => void
-}) {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const setSidebarOpen = useUIStore((s) => s.setSidebarOpen)
-  const collapsed = useUIStore((s) => s.collapsedAreas[area.id] ?? false)
-  const toggleCollapsed = useUIStore((s) => s.toggleAreaCollapsed)
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-  )
-
-  const projectIds = useMemo(() => projects.map((p) => p.id), [projects])
-
-  const handleDragEnd = useCallback(
-    async (event: DragEndEvent) => {
-      const { active, over } = event
-      if (!over || active.id === over.id) return
-
-      const oldIndex = projects.findIndex((p) => p.id === active.id)
-      const newIndex = projects.findIndex((p) => p.id === over.id)
-      if (oldIndex === -1 || newIndex === -1) return
-
-      // Reorder positions
-      const reordered = [...projects]
-      const [moved] = reordered.splice(oldIndex, 1)
-      reordered.splice(newIndex, 0, moved)
-
-      await Promise.all(
-        reordered.map((p, i) => updateProject(p.id, { position: i })),
-      )
-    },
-    [projects],
-  )
-
-  return (
-    <div className="mt-2">
-      <div className="group flex items-center gap-1 px-1 pb-1">
-        <button
-          onClick={() => toggleCollapsed(area.id)}
-          className="flex items-center gap-1.5 rounded px-1.5 py-1 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/40 transition-colors hover:text-sidebar-foreground/60"
-        >
-          {collapsed ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
-          {area.name}
-        </button>
-        <div className="ml-auto flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
-          <button
-            onClick={() => onNewProject(area.id)}
-            className="rounded p-1 text-sidebar-foreground/30 transition-colors hover:text-sidebar-foreground"
-            aria-label={`Add project to ${area.name}`}
-          >
-            <Plus size={12} />
-          </button>
-          <button
-            onClick={() => onEditArea(area)}
-            className="rounded p-1 text-sidebar-foreground/30 transition-colors hover:text-sidebar-foreground"
-            aria-label={`Edit ${area.name}`}
-          >
-            <Pencil size={12} />
-          </button>
-        </div>
-      </div>
-
-      <AnimatePresence initial={false}>
-        {!collapsed && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: 'easeInOut' }}
-            className="overflow-hidden"
-          >
-            {projects.length === 0 ? (
-              <p className="px-4 py-2 text-xs text-sidebar-foreground/30">
-                No projects
-              </p>
-            ) : (
-              <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragEnd={handleDragEnd}
-              >
-                <SortableContext items={projectIds} strategy={verticalListSortingStrategy}>
-                  <div className="space-y-0.5 pl-1">
-                    {projects.map((project) => (
-                      <SortableProjectItem
-                        key={project.id}
-                        project={project}
-                        isActive={location.pathname === `/project/${project.id}`}
-                        onClick={() => {
-                          navigate(`/project/${project.id}`)
-                          if (window.innerWidth < 768) setSidebarOpen(false)
-                        }}
-                        onEdit={() => onEditProject(project)}
-                      />
-                    ))}
-                  </div>
-                </SortableContext>
-              </DndContext>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  )
-}
-
-// --- Unassigned projects section ---
-
-function UnassignedProjectsSection({
-  projects,
-  onEditProject,
-}: {
-  projects: Project[]
-  onEditProject: (project: Project) => void
-}) {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const setSidebarOpen = useUIStore((s) => s.setSidebarOpen)
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-  )
-
-  const projectIds = useMemo(() => projects.map((p) => p.id), [projects])
-
-  const handleDragEnd = useCallback(
-    async (event: DragEndEvent) => {
-      const { active, over } = event
-      if (!over || active.id === over.id) return
-
-      const oldIndex = projects.findIndex((p) => p.id === active.id)
-      const newIndex = projects.findIndex((p) => p.id === over.id)
-      if (oldIndex === -1 || newIndex === -1) return
-
-      const reordered = [...projects]
-      const [moved] = reordered.splice(oldIndex, 1)
-      reordered.splice(newIndex, 0, moved)
-
-      await Promise.all(
-        reordered.map((p, i) => updateProject(p.id, { position: i })),
-      )
-    },
-    [projects],
-  )
-
-  if (projects.length === 0) return null
-
-  return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext items={projectIds} strategy={verticalListSortingStrategy}>
-        <div className="space-y-0.5 pl-1">
-          {projects.map((project) => (
-            <SortableProjectItem
-              key={project.id}
-              project={project}
-              isActive={location.pathname === `/project/${project.id}`}
-              onClick={() => {
-                navigate(`/project/${project.id}`)
-                if (window.innerWidth < 768) setSidebarOpen(false)
-              }}
-              onEdit={() => onEditProject(project)}
-            />
-          ))}
-        </div>
-      </SortableContext>
-    </DndContext>
-  )
-}
-
-// --- Projects & Areas section ---
-
-function ProjectsAndAreasSection() {
-  const projects = useProjects()
-  const areas = useAreas()
-
-  const [projectDialogOpen, setProjectDialogOpen] = useState(false)
-  const [editingProject, setEditingProject] = useState<Project | null>(null)
-  const [areaDialogOpen, setAreaDialogOpen] = useState(false)
-  const [editingArea, setEditingArea] = useState<Area | null>(null)
-  const [newProjectAreaId, setNewProjectAreaId] = useState<string | null>(null)
-
-  // Group projects by area
-  const projectsByArea = useMemo(() => {
-    if (!projects) return new Map<string | null, Project[]>()
-    const map = new Map<string | null, Project[]>()
-    for (const project of projects) {
-      const key = project.areaId
-      if (!map.has(key)) map.set(key, [])
-      map.get(key)!.push(project)
-    }
-    return map
-  }, [projects])
-
-  const unassignedProjects = projectsByArea.get(null) ?? []
-  const hasAnyContent = (projects && projects.length > 0) || (areas && areas.length > 0)
-
-  if (!hasAnyContent) return null
-
-  return (
-    <div className="mt-6">
-      {/* Section header */}
-      <div className="flex items-center justify-between px-3 pb-2">
-        <span className="text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/40">
-          Projects
-        </span>
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => {
-              setEditingArea(null)
-              setAreaDialogOpen(true)
-            }}
-            className="rounded p-1 text-sidebar-foreground/30 transition-colors hover:text-sidebar-foreground"
-            aria-label="New area"
-            title="New area"
-          >
-            <Layers size={13} />
-          </button>
-          <button
-            onClick={() => {
-              setEditingProject(null)
-              setNewProjectAreaId(null)
-              setProjectDialogOpen(true)
-            }}
-            className="rounded p-1 text-sidebar-foreground/30 transition-colors hover:text-sidebar-foreground"
-            aria-label="New project"
-            title="New project"
-          >
-            <Plus size={14} />
-          </button>
-        </div>
-      </div>
-
-      {/* Areas with their projects */}
-      {areas?.map((area) => (
-        <AreaSection
-          key={area.id}
-          area={area}
-          projects={projectsByArea.get(area.id) ?? []}
-          onEditArea={(a) => {
-            setEditingArea(a)
-            setAreaDialogOpen(true)
-          }}
-          onEditProject={(p) => {
-            setEditingProject(p)
-            setProjectDialogOpen(true)
-          }}
-          onNewProject={(areaId) => {
-            setEditingProject(null)
-            setNewProjectAreaId(areaId)
-            setProjectDialogOpen(true)
-          }}
-        />
-      ))}
-
-      {/* Unassigned projects */}
-      {unassignedProjects.length > 0 && (
-        <div className="mt-1">
-          <UnassignedProjectsSection
-            projects={unassignedProjects}
-            onEditProject={(p) => {
-              setEditingProject(p)
-              setProjectDialogOpen(true)
-            }}
-          />
-        </div>
-      )}
-
-      {/* Dialogs */}
-      <ProjectDialog
-        open={projectDialogOpen}
-        onOpenChange={(open) => {
-          setProjectDialogOpen(open)
-          if (!open) {
-            setEditingProject(null)
-            setNewProjectAreaId(null)
-          }
-        }}
-        project={editingProject}
-        defaultAreaId={newProjectAreaId}
-      />
-      <AreaDialog
-        open={areaDialogOpen}
-        onOpenChange={(open) => {
-          setAreaDialogOpen(open)
-          if (!open) setEditingArea(null)
-        }}
-        area={editingArea}
-      />
-    </div>
+    <span className="ml-auto text-xs tabular-nums text-gray-400">
+      {count}
+    </span>
   )
 }
 
@@ -580,6 +107,44 @@ function ProjectsAndAreasSection() {
 export function Sidebar() {
   const sidebarOpen = useUIStore((s) => s.sidebarOpen)
   const toggleSidebar = useUIStore((s) => s.toggleSidebar)
+  const collapsedSections = useUIStore((s) => s.collapsedSections)
+  const toggleSectionCollapsed = useUIStore((s) => s.toggleSectionCollapsed)
+
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const lists = useLists()
+  const tags = useTags()
+
+  const [listDialogOpen, setListDialogOpen] = useState(false)
+  const [editingList, setEditingList] = useState<List | null>(null)
+  const [addingTag, setAddingTag] = useState(false)
+  const [newTagName, setNewTagName] = useState('')
+
+  const listsCollapsed = collapsedSections['lists'] ?? false
+  const tagsCollapsed = collapsedSections['tags'] ?? false
+
+  function handleNavClick(item: NavItem) {
+    navigate(item.path)
+    if (window.innerWidth < 768) {
+      useUIStore.getState().setSidebarOpen(false)
+    }
+  }
+
+  function handleListClick(listId: string) {
+    navigate(`/list/${listId}`)
+    if (window.innerWidth < 768) {
+      useUIStore.getState().setSidebarOpen(false)
+    }
+  }
+
+  async function handleAddTag() {
+    const trimmed = newTagName.trim()
+    if (!trimmed) return
+    await createTag({ name: trimmed, color: '#94a3b8' })
+    setNewTagName('')
+    setAddingTag(false)
+  }
 
   return (
     <>
@@ -591,7 +156,7 @@ export function Sidebar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-black/20 md:hidden"
+            className="fixed inset-0 z-40 bg-black/40 md:hidden"
             onClick={toggleSidebar}
           />
         )}
@@ -602,43 +167,259 @@ export function Sidebar() {
         {sidebarOpen && (
           <motion.aside
             initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 260, opacity: 1 }}
+            animate={{ width: 280, opacity: 1 }}
             exit={{ width: 0, opacity: 0 }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
             className={cn(
-              'fixed inset-y-0 left-0 z-50 flex flex-col overflow-hidden border-r border-sidebar-border bg-sidebar-background',
+              'fixed inset-y-0 left-0 z-50 flex flex-col overflow-hidden border-r border-gray-200 bg-white',
               'md:relative md:z-auto',
             )}
           >
-            <div className="flex w-[260px] flex-col overflow-hidden">
+            <div className="flex w-[280px] flex-col overflow-hidden">
               {/* Header */}
               <div className="flex h-14 shrink-0 items-center justify-between px-4">
-                <h1 className="text-lg font-bold tracking-tight text-sidebar-foreground">
-                  Zenith
-                </h1>
+                <h1 className="text-lg font-bold text-gray-900">Menu</h1>
                 <button
                   onClick={toggleSidebar}
-                  className="rounded-md p-1.5 text-sidebar-foreground/50 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                  className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
                   aria-label="Close sidebar"
                 >
-                  <PanelLeftClose size={18} />
+                  <Menu size={18} />
                 </button>
+              </div>
+
+              {/* Search */}
+              <div className="px-3 pb-3">
+                <div className="relative">
+                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    className="h-9 w-full rounded-lg border border-gray-200 bg-gray-50 pl-9 pr-3 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-gray-300 focus:ring-1 focus:ring-gray-300"
+                    onFocus={() => {
+                      window.dispatchEvent(
+                        new KeyboardEvent('keydown', { key: 'k', metaKey: true }),
+                      )
+                    }}
+                  />
+                </div>
               </div>
 
               {/* Navigation */}
               <nav className="flex-1 overflow-y-auto px-2 pb-4">
+                {/* TASKS section */}
+                <div className="mb-1 px-3 pt-2">
+                  <span className="text-xs font-medium uppercase tracking-wider text-gray-400">
+                    Tasks
+                  </span>
+                </div>
                 <div className="space-y-0.5">
-                  {mainNavItems.map((item) => (
-                    <SidebarNavItem key={item.id} item={item} />
-                  ))}
+                  {navItems.map((item) => {
+                    const isActive =
+                      location.pathname === item.path ||
+                      (item.path === '/upcoming' && location.pathname === '/')
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => handleNavClick(item)}
+                        className={cn(
+                          'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
+                          isActive
+                            ? 'border-l-2 border-gray-900 bg-gray-100 font-semibold text-gray-900'
+                            : 'text-gray-700 hover:bg-gray-100',
+                        )}
+                      >
+                        <span className={cn('shrink-0', isActive ? 'text-gray-900' : 'text-gray-500')}>
+                          {item.icon}
+                        </span>
+                        <span className="truncate">{item.label}</span>
+                        {item.countQuery && <CountBadge query={item.countQuery} />}
+                      </button>
+                    )
+                  })}
                 </div>
 
-                <ProjectsAndAreasSection />
+                {/* Divider */}
+                <div className="my-3 border-t border-gray-100" />
+
+                {/* LISTS section */}
+                <div className="mb-1 flex items-center justify-between px-3">
+                  <button
+                    onClick={() => toggleSectionCollapsed('lists')}
+                    className="flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-gray-400 hover:text-gray-500"
+                  >
+                    {listsCollapsed ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
+                    Lists
+                  </button>
+                  <button
+                    onClick={() => {
+                      setEditingList(null)
+                      setListDialogOpen(true)
+                    }}
+                    className="rounded p-0.5 text-gray-400 transition-colors hover:text-gray-600"
+                    aria-label="Add new list"
+                  >
+                    <Plus size={14} />
+                  </button>
+                </div>
+
+                <AnimatePresence initial={false}>
+                  {!listsCollapsed && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2, ease: 'easeInOut' }}
+                      className="overflow-hidden"
+                    >
+                      <div className="space-y-0.5">
+                        {lists?.map((list) => {
+                          const isActive = location.pathname === `/list/${list.id}`
+                          return (
+                            <button
+                              key={list.id}
+                              onClick={() => handleListClick(list.id)}
+                              onContextMenu={(e) => {
+                                e.preventDefault()
+                                setEditingList(list)
+                                setListDialogOpen(true)
+                              }}
+                              className={cn(
+                                'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
+                                isActive
+                                  ? 'bg-gray-100 font-semibold text-gray-900'
+                                  : 'text-gray-700 hover:bg-gray-100',
+                              )}
+                            >
+                              <span
+                                className="h-3 w-3 shrink-0 rounded-sm"
+                                style={{ backgroundColor: list.color }}
+                              />
+                              <span className="truncate">{list.name}</span>
+                              <ListCount listId={list.id} />
+                            </button>
+                          )
+                        })}
+                        <button
+                          onClick={() => {
+                            setEditingList(null)
+                            setListDialogOpen(true)
+                          }}
+                          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+                        >
+                          <Plus size={14} />
+                          <span>Add New List</span>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Divider */}
+                <div className="my-3 border-t border-gray-100" />
+
+                {/* TAGS section */}
+                <div className="mb-1 flex items-center justify-between px-3">
+                  <button
+                    onClick={() => toggleSectionCollapsed('tags')}
+                    className="flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-gray-400 hover:text-gray-500"
+                  >
+                    {tagsCollapsed ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
+                    Tags
+                  </button>
+                  <button
+                    onClick={() => setAddingTag(true)}
+                    className="rounded p-0.5 text-gray-400 transition-colors hover:text-gray-600"
+                    aria-label="Add tag"
+                  >
+                    <Plus size={14} />
+                  </button>
+                </div>
+
+                <AnimatePresence initial={false}>
+                  {!tagsCollapsed && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2, ease: 'easeInOut' }}
+                      className="overflow-hidden"
+                    >
+                      <div className="flex flex-wrap gap-1.5 px-3 py-1">
+                        {tags?.map((tag) => (
+                          <span
+                            key={tag.id}
+                            className="rounded-full px-3 py-1 text-xs font-medium"
+                            style={{
+                              backgroundColor: tag.color + '20',
+                              color: tag.color,
+                            }}
+                          >
+                            {tag.name}
+                          </span>
+                        ))}
+                        {addingTag ? (
+                          <input
+                            type="text"
+                            value={newTagName}
+                            onChange={(e) => setNewTagName(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleAddTag()
+                              if (e.key === 'Escape') {
+                                setAddingTag(false)
+                                setNewTagName('')
+                              }
+                            }}
+                            onBlur={() => {
+                              if (newTagName.trim()) {
+                                handleAddTag()
+                              } else {
+                                setAddingTag(false)
+                              }
+                            }}
+                            placeholder="Tag name"
+                            autoFocus
+                            className="h-7 w-24 rounded-full border border-gray-200 bg-gray-50 px-3 text-xs outline-none placeholder:text-gray-400 focus:border-gray-300"
+                          />
+                        ) : (
+                          <button
+                            onClick={() => setAddingTag(true)}
+                            className="rounded-full border border-dashed border-gray-300 px-3 py-1 text-xs text-gray-400 transition-colors hover:border-gray-400 hover:text-gray-500"
+                          >
+                            + Add Tag
+                          </button>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </nav>
+
+              {/* Bottom section */}
+              <div className="mt-auto border-t border-gray-100 px-2 py-2">
+                <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700">
+                  <Settings size={16} />
+                  <span>Settings</span>
+                </button>
+                <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700">
+                  <LogOut size={16} />
+                  <span>Sign out</span>
+                </button>
+              </div>
             </div>
           </motion.aside>
         )}
       </AnimatePresence>
+
+      {/* List Dialog */}
+      <ListDialog
+        open={listDialogOpen}
+        onOpenChange={(open) => {
+          setListDialogOpen(open)
+          if (!open) setEditingList(null)
+        }}
+        list={editingList}
+      />
     </>
   )
 }

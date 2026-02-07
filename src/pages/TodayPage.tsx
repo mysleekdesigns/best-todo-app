@@ -1,51 +1,43 @@
-import { Sun } from 'lucide-react'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { useTodayTasks } from '@/db/hooks'
 import { format } from 'date-fns'
+import { TaskList } from '@/components/tasks/TaskList'
+import { QuickAdd } from '@/components/tasks/QuickAdd'
 
 export function TodayPage() {
   const tasks = useTodayTasks()
   const todayLabel = format(new Date(), 'EEEE, MMMM d')
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-8">
-      <div className="pb-6">
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const }}
+      className="mx-auto max-w-4xl p-8"
+    >
+      <div className="mb-6">
         <div className="flex items-center gap-3">
-          <Sun size={22} className="text-amber-500" />
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">Today</h2>
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900">Today</h1>
           {tasks && tasks.length > 0 && (
-            <span className="text-sm text-muted-foreground">{tasks.length}</span>
+            <span className="rounded-full bg-gray-200 px-2.5 py-0.5 text-sm font-medium text-gray-600">
+              {tasks.length}
+            </span>
           )}
         </div>
-        <p className="mt-1 pl-[34px] text-sm text-muted-foreground">{todayLabel}</p>
+        <p className="mt-1 text-sm text-gray-500">{todayLabel}</p>
       </div>
 
-      {tasks === undefined ? (
-        <div className="space-y-3">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-12 animate-pulse rounded-lg bg-muted" />
-          ))}
-        </div>
-      ) : tasks.length === 0 ? (
-        <div className="py-16 text-center">
-          <Sun size={48} className="mx-auto mb-4 text-muted-foreground/30" />
-          <p className="text-lg font-medium text-muted-foreground">Nothing due today</p>
-          <p className="mt-1 text-sm text-muted-foreground/70">
-            Schedule tasks for today or they'll appear when their due date arrives.
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-1">
-          {tasks.map((task) => (
-            <div
-              key={task.id}
-              className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-accent"
-            >
-              <div className="h-5 w-5 shrink-0 rounded-full border-2 border-muted-foreground/30" />
-              <span className="text-sm font-medium text-foreground">{task.title}</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+      <div className="bg-white rounded-xl border border-gray-200">
+        <QuickAdd />
+        <TaskList
+          tasks={tasks}
+          selectedTaskId={selectedTaskId}
+          onSelectTask={setSelectedTaskId}
+          emptyMessage="Nothing due today"
+        />
+      </div>
+    </motion.div>
   )
 }

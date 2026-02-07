@@ -10,9 +10,7 @@ interface ShortcutHandlers {
   onDeleteTask?: () => void
   onPrevTask?: () => void
   onNextTask?: () => void
-  onToggleEvening?: () => void
   onScheduleToday?: () => void
-  onSetSomeday?: () => void
 }
 
 function isEditableTarget(e: KeyboardEvent): boolean {
@@ -27,26 +25,22 @@ export function useKeyboardShortcuts(handlers: ShortcutHandlers = {}) {
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
-      // Command palette is handled by CommandPalette component itself
-      // Skip single-key shortcuts when user is typing in an input
       const editing = isEditableTarget(e)
 
       for (const def of SHORTCUTS) {
         if (!matchesShortcut(e, def)) continue
 
-        // Skip non-meta shortcuts when editing (single keys like q, e, t, s, arrows)
+        // Skip non-meta shortcuts when editing (single keys like q, t, arrows)
         if (!def.meta && editing) continue
 
         e.preventDefault()
 
         switch (def.action) {
           // Navigation
-          case 'nav-inbox': navigate('/inbox'); break
-          case 'nav-today': navigate('/today'); break
           case 'nav-upcoming': navigate('/upcoming'); break
-          case 'nav-anytime': navigate('/anytime'); break
-          case 'nav-someday': navigate('/someday'); break
-          case 'nav-logbook': navigate('/logbook'); break
+          case 'nav-today': navigate('/today'); break
+          case 'nav-calendar': navigate('/calendar'); break
+          case 'nav-sticky-wall': navigate('/sticky-wall'); break
 
           // General
           case 'toggle-sidebar': handlers.onToggleSidebar?.(); break
@@ -64,9 +58,7 @@ export function useKeyboardShortcuts(handlers: ShortcutHandlers = {}) {
           case 'delete-task': handlers.onDeleteTask?.(); break
           case 'prev-task': handlers.onPrevTask?.(); break
           case 'next-task': handlers.onNextTask?.(); break
-          case 'toggle-evening': handlers.onToggleEvening?.(); break
           case 'schedule-today': handlers.onScheduleToday?.(); break
-          case 'set-someday': handlers.onSetSomeday?.(); break
         }
         return
       }

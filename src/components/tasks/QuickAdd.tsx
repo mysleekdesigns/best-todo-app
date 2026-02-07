@@ -5,11 +5,11 @@ import { cn } from '@/lib/utils'
 import { useTaskActions } from '@/hooks/useTaskActions'
 
 interface QuickAddProps {
-  projectId?: string | null
+  listId?: string | null
   className?: string
 }
 
-export function QuickAdd({ projectId, className }: QuickAddProps) {
+export function QuickAdd({ listId, className }: QuickAddProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [value, setValue] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
@@ -17,7 +17,6 @@ export function QuickAdd({ projectId, className }: QuickAddProps) {
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      // Q or Cmd+N to open quick add
       if (
         (e.key === 'q' && !e.metaKey && !e.ctrlKey && !e.altKey && !(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)) ||
         ((e.metaKey || e.ctrlKey) && e.key === 'n')
@@ -41,8 +40,8 @@ export function QuickAdd({ projectId, className }: QuickAddProps) {
     if (!trimmed) return
 
     await addTask(trimmed, {
-      projectId: projectId ?? null,
-      status: 'inbox',
+      listId: listId ?? null,
+      status: 'active',
     })
 
     setValue('')
@@ -60,7 +59,7 @@ export function QuickAdd({ projectId, className }: QuickAddProps) {
   }
 
   return (
-    <div className={cn('', className)}>
+    <div className={cn('border-b border-gray-100', className)}>
       <AnimatePresence>
         {isOpen ? (
           <motion.div
@@ -70,7 +69,7 @@ export function QuickAdd({ projectId, className }: QuickAddProps) {
             transition={{ duration: 0.15 }}
             className="overflow-hidden"
           >
-            <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <div className="flex items-center gap-2 px-4 py-3">
               <Plus className="h-4 w-4 shrink-0 text-gray-400" />
               <input
                 ref={inputRef}
@@ -82,7 +81,7 @@ export function QuickAdd({ projectId, className }: QuickAddProps) {
                   if (!value.trim()) setIsOpen(false)
                 }}
                 placeholder='Add a task... (try "Buy milk tomorrow !2")'
-                className="flex-1 bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none dark:text-gray-100 dark:placeholder-gray-500"
+                className="flex-1 bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none"
               />
               <span className="text-xs text-gray-300">Enter</span>
             </div>
@@ -93,11 +92,10 @@ export function QuickAdd({ projectId, className }: QuickAddProps) {
             animate={{ opacity: 1 }}
             type="button"
             onClick={() => setIsOpen(true)}
-            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-600 dark:hover:bg-gray-900/50 dark:hover:text-gray-300"
+            className="flex w-full items-center gap-2 px-4 py-3 text-sm text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-600"
           >
             <Plus className="h-4 w-4" />
-            Add Task
-            <span className="ml-auto text-xs text-gray-300">Q</span>
+            Add New Task
           </motion.button>
         )}
       </AnimatePresence>

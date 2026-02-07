@@ -7,7 +7,6 @@ import {
   Check,
   Save,
   CalendarDays,
-  Moon,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -19,14 +18,14 @@ import {
   toggleArrayValue,
   EMPTY_FILTER,
 } from '@/lib/filters'
-import type { TaskFilter, Priority, TaskStatus, Tag, Project } from '@/types'
+import type { TaskFilter, Priority, TaskStatus, Tag, List } from '@/types'
 
 interface FilterPanelProps {
   filters: TaskFilter
   onFiltersChange: (filters: TaskFilter) => void
   onSave?: (name: string, filters: TaskFilter) => void
   tags?: Tag[]
-  projects?: Project[]
+  lists?: List[]
   className?: string
 }
 
@@ -35,7 +34,7 @@ export function FilterPanel({
   onFiltersChange,
   onSave,
   tags = [],
-  projects = [],
+  lists = [],
   className,
 }: FilterPanelProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -180,21 +179,22 @@ export function FilterPanel({
                 </FilterSection>
               )}
 
-              {/* Project filter */}
-              {projects.length > 0 && (
-                <FilterSection title="Project">
+              {/* List filter */}
+              {lists.length > 0 && (
+                <FilterSection title="List">
                   <div className="flex flex-wrap gap-1">
-                    {projects.map((project) => {
-                      const active = filters.projectId === project.id
+                    {lists.map((list) => {
+                      const active = filters.listId === list.id
                       return (
                         <FilterChip
-                          key={project.id}
-                          label={`${project.emoji} ${project.name}`.trim()}
+                          key={list.id}
+                          label={list.name}
                           active={active}
+                          color={list.color}
                           onClick={() =>
                             onFiltersChange({
                               ...filters,
-                              projectId: active ? undefined : project.id,
+                              listId: active ? undefined : list.id,
                             })
                           }
                         />
@@ -259,20 +259,6 @@ export function FilterPanel({
                 </div>
               </FilterSection>
 
-              {/* Evening filter */}
-              <FilterSection title="Time of Day">
-                <FilterChip
-                  label="Evening"
-                  icon={<Moon className="size-3" />}
-                  active={filters.isEvening === true}
-                  onClick={() =>
-                    onFiltersChange({
-                      ...filters,
-                      isEvening: filters.isEvening === true ? undefined : true,
-                    })
-                  }
-                />
-              </FilterSection>
             </div>
 
             {/* Save filter */}

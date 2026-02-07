@@ -10,18 +10,18 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import type { Project, Tag as TagType } from '@/types'
+import type { List, Tag as TagType } from '@/types'
 
 type BatchAction = 'move' | 'tag' | 'schedule' | 'delete'
 
 interface BatchToolbarProps {
   selectedCount: number
   onClearSelection: () => void
-  onMove: (projectId: string | null) => void
+  onMove: (listId: string | null) => void
   onTag: (tagIds: string[]) => void
   onSchedule: (date: string | null) => void
   onDelete: () => void
-  projects?: Project[]
+  lists?: List[]
   tags?: TagType[]
   className?: string
 }
@@ -33,7 +33,7 @@ export function BatchToolbar({
   onTag,
   onSchedule,
   onDelete,
-  projects = [],
+  lists = [],
   tags = [],
   className,
 }: BatchToolbarProps) {
@@ -78,17 +78,18 @@ export function BatchToolbar({
                   setActiveAction(null)
                 }}
               >
-                No project
+                No list
               </DropdownItem>
-              {projects.map((p) => (
+              {lists.map((l) => (
                 <DropdownItem
-                  key={p.id}
+                  key={l.id}
                   onClick={() => {
-                    onMove(p.id)
+                    onMove(l.id)
                     setActiveAction(null)
                   }}
                 >
-                  {p.emoji} {p.name}
+                  <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: l.color }} />
+                  {l.name}
                 </DropdownItem>
               ))}
             </ActionDropdown>

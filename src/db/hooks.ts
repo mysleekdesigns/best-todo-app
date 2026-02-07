@@ -11,14 +11,14 @@ import {
 } from './index'
 import type {
   Task,
-  Project,
-  Area,
+  List,
   Tag,
   AppSettings,
   TaskStatus,
-  ProjectHeading,
+  ListHeading,
   SavedFilter,
   TaskFilter,
+  StickyNote,
 } from '@/types'
 
 // --- Task hooks ---
@@ -39,11 +39,11 @@ export function useTask(id: string | null): Task | undefined {
   }, [id])
 }
 
-export function useTasksByProject(projectId: string | null): Task[] | undefined {
+export function useTasksByList(listId: string | null): Task[] | undefined {
   return useLiveQuery(() => {
-    if (!projectId) return []
-    return db.tasks.where('projectId').equals(projectId).sortBy('position')
-  }, [projectId])
+    if (!listId) return []
+    return db.tasks.where('listId').equals(listId).sortBy('position')
+  }, [listId])
 }
 
 export function useSubtasks(parentId: string | null): Task[] | undefined {
@@ -64,35 +64,16 @@ export function useTodayTasks(): Task[] | undefined {
   })
 }
 
-export function useInboxTasks(): Task[] | undefined {
-  return useLiveQuery(() => {
-    return db.tasks.where('status').equals('inbox').sortBy('position')
-  })
-}
+// --- List hooks ---
 
-// --- Project hooks ---
-
-export function useProjects(): Project[] | undefined {
+export function useLists(): List[] | undefined {
   return useLiveQuery(() => db.projects.orderBy('position').toArray())
 }
 
-export function useProject(id: string | null): Project | undefined {
+export function useList(id: string | null): List | undefined {
   return useLiveQuery(() => {
     if (!id) return undefined
     return db.projects.get(id)
-  }, [id])
-}
-
-// --- Area hooks ---
-
-export function useAreas(): Area[] | undefined {
-  return useLiveQuery(() => db.areas.orderBy('position').toArray())
-}
-
-export function useArea(id: string | null): Area | undefined {
-  return useLiveQuery(() => {
-    if (!id) return undefined
-    return db.areas.get(id)
   }, [id])
 }
 
@@ -106,6 +87,19 @@ export function useTags(): Tag[] | undefined {
 
 export function useSettings(): AppSettings | undefined {
   return useLiveQuery(() => db.appSettings.get('app-settings'))
+}
+
+// --- StickyNote hooks ---
+
+export function useStickyNotes(): StickyNote[] | undefined {
+  return useLiveQuery(() => db.stickyNotes.orderBy('position').toArray())
+}
+
+export function useStickyNote(id: string | null): StickyNote | undefined {
+  return useLiveQuery(() => {
+    if (!id) return undefined
+    return db.stickyNotes.get(id)
+  }, [id])
 }
 
 // --- Phase 2 hooks ---
@@ -129,11 +123,11 @@ export function useSavedFilters(): SavedFilter[] | undefined {
   return useLiveQuery(() => db.savedFilters.orderBy('position').toArray())
 }
 
-export function useProjectHeadings(projectId: string | null): ProjectHeading[] | undefined {
+export function useListHeadings(listId: string | null): ListHeading[] | undefined {
   return useLiveQuery(() => {
-    if (!projectId) return []
-    return db.projectHeadings.where('projectId').equals(projectId).sortBy('position')
-  }, [projectId])
+    if (!listId) return []
+    return db.projectHeadings.where('listId').equals(listId).sortBy('position')
+  }, [listId])
 }
 
 export function useSearchTasks(query: string): Task[] | undefined {

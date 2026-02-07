@@ -7,35 +7,22 @@ export async function seedDatabase(): Promise<void> {
 
   const now = new Date().toISOString()
 
-  // Areas
-  const workAreaId = nanoid()
-  const personalAreaId = nanoid()
-
-  await db.areas.bulkAdd([
-    { id: workAreaId, name: 'Work', position: 0, createdAt: now },
-    { id: personalAreaId, name: 'Personal', position: 1, createdAt: now },
-  ])
-
-  // Projects
-  const websiteProjectId = nanoid()
-  const fitnessProjectId = nanoid()
+  // Lists (formerly Projects)
+  const websiteListId = nanoid()
+  const fitnessListId = nanoid()
 
   await db.projects.bulkAdd([
     {
-      id: websiteProjectId,
+      id: websiteListId,
       name: 'Website Redesign',
-      color: '#6366f1',
-      emoji: '🌐',
-      areaId: workAreaId,
+      color: '#ec4899',
       position: 0,
       createdAt: now,
     },
     {
-      id: fitnessProjectId,
+      id: fitnessListId,
       name: 'Fitness Goals',
-      color: '#10b981',
-      emoji: '💪',
-      areaId: personalAreaId,
+      color: '#06b6d4',
       position: 1,
       createdAt: now,
     },
@@ -65,8 +52,7 @@ export async function seedDatabase(): Promise<void> {
       completedAt: null,
       createdAt: now,
       updatedAt: now,
-      projectId: websiteProjectId,
-      areaId: workAreaId,
+      listId: websiteListId,
       parentId: null,
       position: 0,
       tags: [designTagId],
@@ -75,10 +61,9 @@ export async function seedDatabase(): Promise<void> {
         { id: nanoid(), text: 'Mobile layout', done: false },
         { id: nanoid(), text: 'Tablet layout', done: false },
       ],
-      isEvening: false,
       recurringRule: null,
-      kanbanColumn: 'in-progress',
       duration: null,
+      timeBlockColor: null,
     },
     {
       id: nanoid(),
@@ -92,16 +77,14 @@ export async function seedDatabase(): Promise<void> {
       completedAt: null,
       createdAt: now,
       updatedAt: now,
-      projectId: websiteProjectId,
-      areaId: workAreaId,
+      listId: websiteListId,
       parentId: null,
       position: 1,
       tags: [urgentTagId],
       checklist: [],
-      isEvening: false,
       recurringRule: null,
-      kanbanColumn: 'todo',
       duration: null,
+      timeBlockColor: null,
     },
     {
       id: nanoid(),
@@ -115,22 +98,20 @@ export async function seedDatabase(): Promise<void> {
       completedAt: null,
       createdAt: now,
       updatedAt: now,
-      projectId: fitnessProjectId,
-      areaId: personalAreaId,
+      listId: fitnessListId,
       parentId: null,
       position: 0,
       tags: [],
       checklist: [],
-      isEvening: false,
       recurringRule: null,
-      kanbanColumn: null,
-      duration: null,
+      duration: 60,
+      timeBlockColor: '#06b6d4',
     },
     {
       id: nanoid(),
       title: 'Buy groceries',
       notes: 'Milk, eggs, bread, avocados, chicken',
-      status: 'inbox',
+      status: 'active',
       priority: 0,
       dueDate: null,
       dueTime: null,
@@ -138,16 +119,14 @@ export async function seedDatabase(): Promise<void> {
       completedAt: null,
       createdAt: now,
       updatedAt: now,
-      projectId: null,
-      areaId: null,
+      listId: null,
       parentId: null,
-      position: 0,
+      position: 2,
       tags: [],
       checklist: [],
-      isEvening: true,
       recurringRule: null,
-      kanbanColumn: null,
       duration: null,
+      timeBlockColor: null,
     },
     {
       id: nanoid(),
@@ -161,16 +140,14 @@ export async function seedDatabase(): Promise<void> {
       completedAt: null,
       createdAt: now,
       updatedAt: now,
-      projectId: null,
-      areaId: personalAreaId,
+      listId: null,
       parentId: null,
-      position: 1,
+      position: 3,
       tags: [],
       checklist: [],
-      isEvening: true,
       recurringRule: null,
-      kanbanColumn: null,
       duration: null,
+      timeBlockColor: null,
     },
     {
       id: nanoid(),
@@ -184,20 +161,18 @@ export async function seedDatabase(): Promise<void> {
       completedAt: null,
       createdAt: now,
       updatedAt: now,
-      projectId: websiteProjectId,
-      areaId: workAreaId,
+      listId: websiteListId,
       parentId: null,
-      position: 2,
+      position: 4,
       tags: [urgentTagId],
       checklist: [],
-      isEvening: false,
       recurringRule: JSON.stringify({
         frequency: 'weekly',
         interval: 1,
         daysOfWeek: [1],
       }),
-      kanbanColumn: null,
-      duration: null,
+      duration: 30,
+      timeBlockColor: '#ec4899',
     },
     {
       id: nanoid(),
@@ -211,41 +186,39 @@ export async function seedDatabase(): Promise<void> {
       completedAt: null,
       createdAt: now,
       updatedAt: now,
-      projectId: fitnessProjectId,
-      areaId: personalAreaId,
+      listId: fitnessListId,
       parentId: null,
-      position: 1,
+      position: 5,
       tags: [],
       checklist: [],
-      isEvening: false,
       recurringRule: JSON.stringify({
         frequency: 'daily',
         interval: 1,
       }),
-      kanbanColumn: null,
-      duration: null,
+      duration: 30,
+      timeBlockColor: '#06b6d4',
     },
   ])
 
-  // Project Headings
+  // List Headings (formerly Project Headings)
   await db.projectHeadings.bulkAdd([
     {
       id: nanoid(),
-      projectId: websiteProjectId,
+      listId: websiteListId,
       title: 'Design',
       position: 0,
       createdAt: now,
     },
     {
       id: nanoid(),
-      projectId: websiteProjectId,
+      listId: websiteListId,
       title: 'Development',
       position: 1,
       createdAt: now,
     },
     {
       id: nanoid(),
-      projectId: fitnessProjectId,
+      listId: fitnessListId,
       title: 'Cardio',
       position: 0,
       createdAt: now,
@@ -257,7 +230,7 @@ export async function seedDatabase(): Promise<void> {
     {
       id: nanoid(),
       name: 'High Priority',
-      filters: { priority: [3], status: ['active', 'inbox'] },
+      filters: { priority: [3], status: ['active'] },
       position: 0,
       createdAt: now,
     },
@@ -267,10 +240,50 @@ export async function seedDatabase(): Promise<void> {
       filters: {
         dueDateFrom: new Date().toISOString().split('T')[0],
         dueDateTo: new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0],
-        status: ['active', 'inbox'],
+        status: ['active'],
       },
       position: 1,
       createdAt: now,
+    },
+  ])
+
+  // Sticky Notes
+  await db.stickyNotes.bulkAdd([
+    {
+      id: nanoid(),
+      title: 'Design inspiration',
+      content: 'Check Dribbble for minimal todo app designs. Focus on whitespace and typography.',
+      color: 'yellow',
+      position: 0,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: nanoid(),
+      title: 'Grocery ideas',
+      content: 'Try that new pasta recipe from YouTube. Need fresh basil and mozzarella.',
+      color: 'cyan',
+      position: 1,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: nanoid(),
+      title: 'Book recommendations',
+      content: 'Atomic Habits, Deep Work, The Pragmatic Programmer',
+      color: 'pink',
+      position: 2,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: nanoid(),
+      title: 'Meeting notes',
+      content: 'Q1 review: focus on performance improvements and user onboarding flow.',
+      color: 'orange',
+      position: 3,
+      createdAt: now,
+      updatedAt: now,
     },
   ])
 
@@ -312,7 +325,7 @@ export async function seedDatabase(): Promise<void> {
     pomodoroShortBreak: 5,
     pomodoroLongBreak: 15,
     pomodoroAutoStart: false,
-    defaultView: 'inbox',
+    defaultView: 'upcoming',
     weekStartsOn: 1,
   })
 }

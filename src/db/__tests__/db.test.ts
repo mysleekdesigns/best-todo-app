@@ -13,12 +13,12 @@ describe('ZenithDB', () => {
 
     expect(task).toBeDefined()
     expect(task!.title).toBe('Test task')
-    expect(task!.status).toBe('inbox')
+    expect(task!.status).toBe('active')
     expect(task!.priority).toBe(0)
     expect(task!.notes).toBe('')
     expect(task!.tags).toEqual([])
     expect(task!.checklist).toEqual([])
-    expect(task!.isEvening).toBe(false)
+    expect(task!.timeBlockColor).toBeNull()
   })
 
   it('updates a task', async () => {

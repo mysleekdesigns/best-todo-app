@@ -86,7 +86,12 @@ export function CalendarPage() {
   }, [])
 
   return (
-    <div className="flex h-full flex-col">
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const }}
+      className="flex h-full flex-col bg-white rounded-xl border border-gray-200 m-4 overflow-hidden"
+    >
       {activeView !== 'timeline' && (
         <CalendarHeader
           currentDate={currentDate}
@@ -99,8 +104,8 @@ export function CalendarPage() {
         />
       )}
 
-      {/* View switcher tabs including Timeline */}
-      <div className="flex items-center gap-1 border-b border-border px-4 py-1.5">
+      {/* View switcher tabs */}
+      <div className="flex items-center gap-1 border-b border-gray-200 px-4 py-1.5">
         {(['month', 'week', 'day', 'timeline'] as const).map((view) => (
           <button
             key={view}
@@ -108,8 +113,8 @@ export function CalendarPage() {
             onClick={() => setActiveView(view)}
             className={
               activeView === view
-                ? 'rounded-md bg-accent px-3 py-1 text-xs font-medium text-foreground'
-                : 'rounded-md px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent/50'
+                ? 'rounded-md bg-gray-100 px-3 py-1 text-xs font-medium text-gray-900'
+                : 'rounded-md px-3 py-1 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-50'
             }
           >
             {view.charAt(0).toUpperCase() + view.slice(1)}
@@ -125,7 +130,7 @@ export function CalendarPage() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.15, ease: 'easeInOut' as const }}
+            transition={{ duration: 0.15, ease: [0.25, 0.1, 0.25, 1] as const }}
             className="flex h-full flex-col"
           >
             {activeView === 'month' && (
@@ -167,6 +172,6 @@ export function CalendarPage() {
           onClose={() => setTimeBlockTask(null)}
         />
       )}
-    </div>
+    </motion.div>
   )
 }

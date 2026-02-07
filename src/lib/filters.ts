@@ -1,7 +1,6 @@
 import type { TaskFilter, Priority, TaskStatus } from '@/types'
 
 export const STATUS_OPTIONS: { value: TaskStatus; label: string }[] = [
-  { value: 'inbox', label: 'Inbox' },
   { value: 'active', label: 'Active' },
   { value: 'completed', label: 'Completed' },
   { value: 'cancelled', label: 'Cancelled' },
@@ -21,12 +20,10 @@ export function isFilterActive(filters: TaskFilter): boolean {
     (filters.status !== undefined && filters.status.length > 0) ||
     (filters.priority !== undefined && filters.priority.length > 0) ||
     (filters.tags !== undefined && filters.tags.length > 0) ||
-    filters.projectId !== undefined ||
-    filters.areaId !== undefined ||
+    filters.listId !== undefined ||
     filters.dueDateFrom !== undefined ||
     filters.dueDateTo !== undefined ||
     filters.hasDate !== undefined ||
-    filters.isEvening !== undefined ||
     (filters.searchQuery !== undefined && filters.searchQuery.length > 0)
   )
 }
@@ -36,11 +33,9 @@ export function countActiveFilters(filters: TaskFilter): number {
   if (filters.status && filters.status.length > 0) count++
   if (filters.priority && filters.priority.length > 0) count++
   if (filters.tags && filters.tags.length > 0) count++
-  if (filters.projectId !== undefined) count++
-  if (filters.areaId !== undefined) count++
+  if (filters.listId !== undefined) count++
   if (filters.dueDateFrom || filters.dueDateTo) count++
   if (filters.hasDate !== undefined) count++
-  if (filters.isEvening !== undefined) count++
   return count
 }
 

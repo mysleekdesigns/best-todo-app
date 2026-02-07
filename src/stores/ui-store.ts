@@ -1,45 +1,37 @@
 import { create } from 'zustand'
 
-type ViewId =
-  | 'inbox'
-  | 'today'
-  | 'evening'
-  | 'upcoming'
-  | 'anytime'
-  | 'someday'
-  | 'logbook'
-  | 'calendar'
+type ViewId = 'upcoming' | 'today' | 'calendar' | 'sticky-wall'
 
 interface UIState {
   sidebarOpen: boolean
   activeView: ViewId
-  collapsedAreas: Record<string, boolean>
+  collapsedSections: Record<string, boolean>
   toggleSidebar: () => void
   setSidebarOpen: (open: boolean) => void
   setActiveView: (view: ViewId) => void
-  toggleAreaCollapsed: (areaId: string) => void
-  setAreaCollapsed: (areaId: string, collapsed: boolean) => void
+  toggleSectionCollapsed: (sectionId: string) => void
+  setSectionCollapsed: (sectionId: string, collapsed: boolean) => void
 }
 
 export const useUIStore = create<UIState>((set) => ({
   sidebarOpen: true,
-  activeView: 'inbox',
-  collapsedAreas: {},
+  activeView: 'upcoming',
+  collapsedSections: {},
   toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
   setActiveView: (view) => set({ activeView: view }),
-  toggleAreaCollapsed: (areaId) =>
+  toggleSectionCollapsed: (sectionId) =>
     set((s) => ({
-      collapsedAreas: {
-        ...s.collapsedAreas,
-        [areaId]: !s.collapsedAreas[areaId],
+      collapsedSections: {
+        ...s.collapsedSections,
+        [sectionId]: !s.collapsedSections[sectionId],
       },
     })),
-  setAreaCollapsed: (areaId, collapsed) =>
+  setSectionCollapsed: (sectionId, collapsed) =>
     set((s) => ({
-      collapsedAreas: {
-        ...s.collapsedAreas,
-        [areaId]: collapsed,
+      collapsedSections: {
+        ...s.collapsedSections,
+        [sectionId]: collapsed,
       },
     })),
 }))

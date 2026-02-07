@@ -6,15 +6,8 @@ import { cn } from '@/lib/utils'
 import type { Task } from '@/types'
 import { TaskCheckbox } from './TaskCheckbox'
 import { TagBadge } from './TagBadge'
-import { useSubtasks } from '@/hooks/useTasks'
-import { useTags } from '@/db/hooks'
-
-const priorityDot: Record<number, string> = {
-  0: '',
-  1: 'bg-blue-400',
-  2: 'bg-yellow-400',
-  3: 'bg-red-400',
-}
+import { useSubtasks } from '@/db/hooks'
+import { useTags, useLists } from '@/db/hooks'
 
 interface TaskItemProps {
   task: Task
@@ -70,7 +63,9 @@ export function TaskItem({
   }
 
   const allTags = useTags()
+  const allLists = useLists()
   const taskTags = (allTags ?? []).filter((t) => task.tags.includes(t.id))
+  const taskList = task.listId ? (allLists ?? []).find((l) => l.id === task.listId) : null
   const checklistDone = task.checklist.filter((c) => c.done).length
   const checklistTotal = task.checklist.length
   const subtaskCount = subtasks?.length ?? 0
@@ -78,18 +73,18 @@ export function TaskItem({
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, y: -4 }}
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: isCompleted ? 0.5 : 1, y: 0 }}
-      exit={{ opacity: 0, x: 20, transition: { duration: 0.3 } }}
-      transition={{ duration: 0.2 }}
+      exit={{ opacity: 0, x: 40, scale: 0.95, transition: { duration: 0.25 } }}
+      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
       onClick={onClick}
       className={cn(
-        'group flex cursor-pointer items-start gap-3 rounded-lg px-3 py-2.5 transition-colors',
+        'group flex cursor-pointer items-start gap-3 px-4 py-3.5 border-b border-gray-100 last:border-b-0 transition-colors',
         isSelected
-          ? 'bg-blue-50 dark:bg-blue-950/30'
-          : 'hover:bg-gray-50 dark:hover:bg-gray-900/50',
+          ? 'bg-gray-100 ring-1 ring-gray-300'
+          : 'hover:bg-gray-50',
       )}
-      style={{ paddingLeft: `${0.75 + depth * 1.5}rem` }}
+      style={{ paddingLeft: `${1 + depth * 1.5}rem` }}
       role="listitem"
     >
       <div className="pt-0.5" onClick={(e) => e.stopPropagation()}>
@@ -97,6 +92,7 @@ export function TaskItem({
           checked={isCompleted}
           priority={task.priority}
           onToggle={onToggle}
+          className="h-5 w-5"
         />
       </div>
 
@@ -110,46 +106,52 @@ export function TaskItem({
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
             onClick={(e) => e.stopPropagation()}
-            className="w-full bg-transparent text-sm font-medium text-gray-900 outline-none dark:text-gray-100"
+            className="w-full bg-transparent text-sm font-medium leading-snug text-gray-900 outline-none"
           />
         ) : (
           <p
             onDoubleClick={handleDoubleClick}
             className={cn(
-              'text-sm font-medium text-gray-900 dark:text-gray-100',
-              isCompleted && 'text-gray-400 line-through dark:text-gray-500',
+              'text-sm font-medium leading-snug text-gray-900',
+              isCompleted && 'text-gray-400 line-through',
             )}
           >
-            {task.priority > 0 && (
-              <span className={cn('mr-1.5 inline-block h-2 w-2 rounded-full', priorityDot[task.priority])} />
-            )}
             {task.title}
           </p>
         )}
 
         {/* Metadata row */}
-        <div className="mt-0.5 flex items-center gap-2">
+        <div className="mt-0.5 flex items-center gap-3">
           {task.dueDate && (
-            <span className="flex items-center gap-1 text-xs text-gray-400">
-              <Calendar className="h-3 w-3" />
+            <span className="flex items-center gap-1 text-xs text-gray-500">
+              <Calendar className="h-3.5 w-3.5" />
               {format(new Date(task.dueDate + 'T00:00:00'), 'MMM d')}
               {task.dueTime && ` ${task.dueTime}`}
             </span>
           )}
           {checklistTotal > 0 && (
-            <span className="flex items-center gap-1 text-xs text-gray-400">
-              <ListChecks className="h-3 w-3" />
+            <span className="flex items-center gap-1 text-xs text-gray-500">
+              <ListChecks className="h-3.5 w-3.5" />
               {checklistDone}/{checklistTotal}
             </span>
           )}
           {subtaskCount > 0 && (
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-gray-500">
               {subtaskCount} subtask{subtaskCount !== 1 && 's'}
             </span>
           )}
           {task.recurringRule && (
-            <span className="flex items-center text-xs text-gray-400" title="Recurring task">
-              <Repeat className="h-3 w-3" />
+            <span className="flex items-center text-xs text-gray-500" title="Recurring task">
+              <Repeat className="h-3.5 w-3.5" />
+            </span>
+          )}
+          {taskList && (
+            <span className="flex items-center gap-1 text-xs text-gray-500">
+              <span
+                className="h-2 w-2 rounded-full"
+                style={{ backgroundColor: taskList.color }}
+              />
+              {taskList.name}
             </span>
           )}
         </div>
@@ -162,7 +164,7 @@ export function TaskItem({
         )}
       </div>
 
-      <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-gray-300 opacity-0 transition-opacity group-hover:opacity-100" />
+      <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-gray-300 transition-colors group-hover:text-gray-500" />
     </motion.div>
   )
 }
