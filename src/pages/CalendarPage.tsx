@@ -86,11 +86,12 @@ export function CalendarPage() {
   }, [])
 
   return (
+    <div className="flex h-full flex-col p-3 md:p-4 lg:p-6">
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const }}
-      className="flex h-full flex-col bg-white rounded-xl border border-gray-200 m-3 md:m-4 lg:m-6 overflow-hidden"
+      className="flex min-h-0 flex-1 flex-col bg-white rounded-xl border border-gray-200 overflow-hidden"
     >
       {activeView !== 'timeline' && (
         <CalendarHeader
@@ -123,7 +124,7 @@ export function CalendarPage() {
       </div>
 
       {/* Calendar views */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeView}
@@ -131,7 +132,7 @@ export function CalendarPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.15, ease: [0.25, 0.1, 0.25, 1] as const }}
-            className="flex h-full flex-col"
+            className="flex min-h-0 flex-1 flex-col"
           >
             {activeView === 'month' && (
               <MonthView
@@ -173,5 +174,6 @@ export function CalendarPage() {
         />
       )}
     </motion.div>
+    </div>
   )
 }

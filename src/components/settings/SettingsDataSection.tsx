@@ -139,14 +139,14 @@ export function SettingsDataSection() {
 
   return (
     <div>
-      <h2 className="mb-1 text-sm font-semibold text-gray-900">Data Management</h2>
-      <p className="mb-3 text-xs text-gray-500">Export, import, or clear your data.</p>
+      <h2 className="mb-1 text-sm font-semibold text-foreground">Data Management</h2>
+      <p className="mb-3 text-xs text-muted-foreground">Export, import, or clear your data.</p>
 
       <div className="space-y-3">
         {/* Storage info */}
-        <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
-          <HardDrive size={16} className="shrink-0 text-gray-500" />
-          <div className="text-sm text-gray-700">
+        <div className="flex items-center gap-3 rounded-lg border border-border bg-secondary px-4 py-3">
+          <HardDrive size={16} className="shrink-0 text-muted-foreground" />
+          <div className="text-sm text-foreground">
             <span className="font-medium">{storageUsed}</span> used of{' '}
             <span className="font-medium">{storageQuota}</span>
           </div>
@@ -155,9 +155,9 @@ export function SettingsDataSection() {
         {/* Export */}
         <button
           onClick={handleExport}
-          className="flex w-full items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+          className="flex w-full items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 text-sm text-foreground transition-colors hover:bg-accent"
         >
-          <Download size={16} className="text-gray-500" />
+          <Download size={16} className="text-muted-foreground" />
           Export all data as JSON
         </button>
 
@@ -165,9 +165,9 @@ export function SettingsDataSection() {
         <button
           onClick={() => fileInputRef.current?.click()}
           disabled={importing}
-          className="flex w-full items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
+          className="flex w-full items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 text-sm text-foreground transition-colors hover:bg-accent disabled:opacity-50"
         >
-          <Upload size={16} className="text-gray-500" />
+          <Upload size={16} className="text-muted-foreground" />
           {importing ? 'Importing...' : 'Import data from JSON backup'}
         </button>
         <input
@@ -181,7 +181,7 @@ export function SettingsDataSection() {
         {/* Clear all */}
         <button
           onClick={() => setShowClearConfirm(true)}
-          className="flex w-full items-center gap-3 rounded-lg border border-red-200 bg-white px-4 py-3 text-sm text-red-600 transition-colors hover:bg-red-50"
+          className="flex w-full items-center gap-3 rounded-lg border border-destructive/30 bg-card px-4 py-3 text-sm text-destructive transition-colors hover:bg-destructive/10"
         >
           <Trash2 size={16} />
           Clear all data

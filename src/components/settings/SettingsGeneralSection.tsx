@@ -16,16 +16,16 @@ export function SettingsGeneralSection() {
 
   return (
     <div>
-      <h2 className="mb-1 text-sm font-semibold text-gray-900">General</h2>
-      <p className="mb-3 text-xs text-gray-500">Customize your default experience.</p>
+      <h2 className="mb-1 text-sm font-semibold text-foreground">General</h2>
+      <p className="mb-3 text-xs text-muted-foreground">Customize your default experience.</p>
 
       <div className="space-y-4">
         <div>
-          <label className="mb-2 block text-sm text-gray-700">Default view</label>
+          <label className="mb-2 block text-sm text-foreground">Default view</label>
           <select
             value={settings.defaultView}
             onChange={(e) => updateSettings({ defaultView: e.target.value })}
-            className="h-9 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-300"
+            className="h-9 w-full rounded-lg border border-border bg-card px-3 text-sm text-foreground outline-none focus:border-ring focus:ring-1 focus:ring-ring"
           >
             {viewOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -36,7 +36,7 @@ export function SettingsGeneralSection() {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm text-gray-700">Week starts on</label>
+          <label className="mb-2 block text-sm text-foreground">Week starts on</label>
           <div className="flex gap-2">
             {([0, 1] as const).map((day) => (
               <button
@@ -45,8 +45,8 @@ export function SettingsGeneralSection() {
                 className={cn(
                   'flex-1 rounded-lg border px-4 py-2 text-sm font-medium transition-colors',
                   settings.weekStartsOn === day
-                    ? 'border-gray-900 bg-gray-900 text-white'
-                    : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50',
+                    ? 'border-foreground bg-foreground text-background'
+                    : 'border-border bg-card text-foreground hover:bg-accent',
                 )}
               >
                 {day === 0 ? 'Sunday' : 'Monday'}

@@ -94,7 +94,7 @@ function CountBadge({ query }: { query: () => Promise<number> }) {
   const count = useLiveQuery(query)
   if (!count) return null
   return (
-    <span className="ml-auto rounded-md bg-gray-200 px-2 py-0.5 text-xs font-medium tabular-nums text-gray-600">
+    <span className="ml-auto rounded-md bg-secondary px-2 py-0.5 text-xs font-medium tabular-nums text-muted-foreground">
       {count}
     </span>
   )
@@ -109,7 +109,7 @@ function ListCount({ listId }: { listId: string }) {
   )
   if (!count) return null
   return (
-    <span className="ml-auto text-xs tabular-nums text-gray-400">
+    <span className="ml-auto text-xs tabular-nums text-muted-foreground">
       {count}
     </span>
   )
@@ -184,17 +184,17 @@ export function Sidebar() {
             exit={{ width: 0, opacity: 0 }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
             className={cn(
-              'fixed inset-y-0 left-0 z-50 flex flex-col overflow-hidden border-r border-gray-200 bg-white',
+              'fixed inset-y-0 left-0 z-50 flex flex-col overflow-hidden border-r border-sidebar-border bg-sidebar-background',
               'md:relative md:z-auto',
             )}
           >
             <div className="flex w-[280px] flex-col overflow-hidden">
               {/* Header */}
               <div className="flex h-14 shrink-0 items-center justify-between px-4">
-                <h1 className="text-lg font-bold text-gray-900">Menu</h1>
+                <h1 className="text-lg font-bold text-sidebar-primary">Menu</h1>
                 <button
                   onClick={toggleSidebar}
-                  className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+                  className="rounded-md p-1.5 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                   aria-label="Close sidebar"
                 >
                   <Menu size={18} />
@@ -204,11 +204,11 @@ export function Sidebar() {
               {/* Search */}
               <div className="px-3 pb-3">
                 <div className="relative">
-                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-sidebar-foreground" />
                   <input
                     type="text"
                     placeholder="Search"
-                    className="h-9 w-full rounded-lg border border-gray-200 bg-gray-50 pl-9 pr-3 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-gray-300 focus:ring-1 focus:ring-gray-300"
+                    className="h-9 w-full rounded-lg border border-sidebar-border bg-sidebar-accent pl-9 pr-3 text-sm text-sidebar-accent-foreground outline-none placeholder:text-sidebar-foreground focus:border-sidebar-foreground/30 focus:ring-1 focus:ring-sidebar-foreground/30"
                     onFocus={() => {
                       window.dispatchEvent(
                         new KeyboardEvent('keydown', { key: 'k', metaKey: true }),
@@ -222,7 +222,7 @@ export function Sidebar() {
               <nav className="flex-1 overflow-y-auto px-2 pb-4">
                 {/* TASKS section */}
                 <div className="mb-1 px-3 pt-2">
-                  <span className="text-xs font-medium uppercase tracking-wider text-gray-400">
+                  <span className="text-xs font-medium uppercase tracking-wider text-sidebar-foreground">
                     Tasks
                   </span>
                 </div>
@@ -238,11 +238,11 @@ export function Sidebar() {
                         className={cn(
                           'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
                           isActive
-                            ? 'border-l-2 border-gray-900 bg-gray-100 font-semibold text-gray-900'
-                            : 'text-gray-700 hover:bg-gray-100',
+                            ? 'border-l-2 border-sidebar-primary bg-sidebar-accent font-semibold text-sidebar-primary'
+                            : 'text-sidebar-foreground hover:bg-sidebar-accent',
                         )}
                       >
-                        <span className={cn('shrink-0', isActive ? 'text-gray-900' : 'text-gray-500')}>
+                        <span className={cn('shrink-0', isActive ? 'text-sidebar-primary' : 'text-sidebar-foreground')}>
                           {item.icon}
                         </span>
                         <span className="truncate">{item.label}</span>
@@ -253,13 +253,13 @@ export function Sidebar() {
                 </div>
 
                 {/* Divider */}
-                <div className="my-3 border-t border-gray-100" />
+                <div className="my-3 border-t border-sidebar-border" />
 
                 {/* LISTS section */}
                 <div className="mb-1 flex items-center justify-between px-3">
                   <button
                     onClick={() => toggleSectionCollapsed('lists')}
-                    className="flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-gray-400 hover:text-gray-500"
+                    className="flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-sidebar-foreground hover:text-sidebar-accent-foreground"
                   >
                     {listsCollapsed ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
                     Lists
@@ -269,7 +269,7 @@ export function Sidebar() {
                       setEditingList(null)
                       setListDialogOpen(true)
                     }}
-                    className="rounded p-0.5 text-gray-400 transition-colors hover:text-gray-600"
+                    className="rounded p-0.5 text-sidebar-foreground transition-colors hover:text-sidebar-accent-foreground"
                     aria-label="Add new list"
                   >
                     <Plus size={14} />
@@ -300,8 +300,8 @@ export function Sidebar() {
                               className={cn(
                                 'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
                                 isActive
-                                  ? 'bg-gray-100 font-semibold text-gray-900'
-                                  : 'text-gray-700 hover:bg-gray-100',
+                                  ? 'bg-sidebar-accent font-semibold text-sidebar-primary'
+                                  : 'text-sidebar-foreground hover:bg-sidebar-accent',
                               )}
                             >
                               <span
@@ -318,7 +318,7 @@ export function Sidebar() {
                             setEditingList(null)
                             setListDialogOpen(true)
                           }}
-                          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+                          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                         >
                           <Plus size={14} />
                           <span>Add New List</span>
@@ -329,20 +329,20 @@ export function Sidebar() {
                 </AnimatePresence>
 
                 {/* Divider */}
-                <div className="my-3 border-t border-gray-100" />
+                <div className="my-3 border-t border-sidebar-border" />
 
                 {/* TAGS section */}
                 <div className="mb-1 flex items-center justify-between px-3">
                   <button
                     onClick={() => toggleSectionCollapsed('tags')}
-                    className="flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-gray-400 hover:text-gray-500"
+                    className="flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-sidebar-foreground hover:text-sidebar-accent-foreground"
                   >
                     {tagsCollapsed ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
                     Tags
                   </button>
                   <button
                     onClick={() => setAddingTag(true)}
-                    className="rounded p-0.5 text-gray-400 transition-colors hover:text-gray-600"
+                    className="rounded p-0.5 text-sidebar-foreground transition-colors hover:text-sidebar-accent-foreground"
                     aria-label="Add tag"
                   >
                     <Plus size={14} />
@@ -392,12 +392,12 @@ export function Sidebar() {
                             }}
                             placeholder="Tag name"
                             autoFocus
-                            className="h-7 w-24 rounded-full border border-gray-200 bg-gray-50 px-3 text-xs outline-none placeholder:text-gray-400 focus:border-gray-300"
+                            className="h-7 w-24 rounded-full border border-sidebar-border bg-sidebar-accent px-3 text-xs outline-none placeholder:text-sidebar-foreground focus:border-sidebar-foreground/30"
                           />
                         ) : (
                           <button
                             onClick={() => setAddingTag(true)}
-                            className="rounded-full border border-dashed border-gray-300 px-3 py-1 text-xs text-gray-400 transition-colors hover:border-gray-400 hover:text-gray-500"
+                            className="rounded-full border border-dashed border-sidebar-border px-3 py-1 text-xs text-sidebar-foreground transition-colors hover:border-sidebar-foreground hover:text-sidebar-accent-foreground"
                           >
                             + Add Tag
                           </button>
@@ -409,7 +409,7 @@ export function Sidebar() {
               </nav>
 
               {/* Bottom section */}
-              <div className="mt-auto border-t border-gray-100 px-2 py-2">
+              <div className="mt-auto border-t border-sidebar-border px-2 py-2">
                 <button
                   onClick={() => {
                     navigate('/settings')
@@ -420,8 +420,8 @@ export function Sidebar() {
                   className={cn(
                     'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
                     location.pathname === '/settings'
-                      ? 'bg-gray-100 font-semibold text-gray-900'
-                      : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700',
+                      ? 'bg-sidebar-accent font-semibold text-sidebar-primary'
+                      : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
                   )}
                 >
                   <Settings size={16} />

@@ -80,7 +80,7 @@ function DroppableDayCell({
       ref={setNodeRef}
       onClick={() => onSelectDate(day)}
       className={cn(
-        'flex flex-col items-center gap-1 border-b border-r border-border p-2 text-sm transition-colors cursor-pointer',
+        'flex flex-col items-center gap-1 border-b border-r border-border p-2 text-sm transition-colors cursor-pointer min-h-0 overflow-hidden',
         'hover:bg-accent/50',
         !inMonth && 'text-muted-foreground/40',
         selected && 'bg-accent',
@@ -196,7 +196,7 @@ export function MonthView({
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.2 }}
-          className="flex flex-1 flex-col"
+          className="flex min-h-0 flex-1 flex-col"
         >
           {/* Day headers */}
           <div className="grid grid-cols-7 border-b border-border">
@@ -211,7 +211,7 @@ export function MonthView({
           </div>
 
           {/* Day grid */}
-          <div className="grid flex-1 grid-cols-7">
+          <div className="grid min-h-0 flex-1 grid-cols-7" style={{ gridAutoRows: '1fr' }}>
             {days.map((day) => {
               const dateStr = format(day, 'yyyy-MM-dd')
               const dayTasks = tasksByDate.get(dateStr) ?? []

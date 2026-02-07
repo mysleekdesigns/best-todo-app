@@ -10,6 +10,7 @@ import { FocusPage } from '@/pages/FocusPage'
 import { HabitsPage } from '@/pages/HabitsPage'
 import { SettingsPage } from '@/pages/SettingsPage'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
+import { ThemeProvider } from '@/components/ui/theme-provider'
 
 const pageTransition = {
   initial: { opacity: 0, y: 8 },
@@ -50,7 +51,9 @@ function App() {
   return (
     <BrowserRouter>
       <ErrorBoundary>
-        <AnimatedRoutes />
+        <ThemeProvider>
+          <AnimatedRoutes />
+        </ThemeProvider>
       </ErrorBoundary>
     </BrowserRouter>
   )

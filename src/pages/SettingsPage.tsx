@@ -14,18 +14,18 @@ export function SettingsPage() {
       className="mx-auto max-w-3xl px-4 py-6 md:px-6 lg:px-8"
     >
       <div className="mb-8">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Settings</h1>
+        <h1 className="text-4xl font-bold tracking-tight text-foreground">Settings</h1>
       </div>
 
       <div className="space-y-8">
         <SettingsThemeSection />
-        <div className="border-t border-gray-200" />
+        <div className="border-t border-border" />
         <SettingsGeneralSection />
-        <div className="border-t border-gray-200" />
+        <div className="border-t border-border" />
         <SettingsPomodoroSection />
-        <div className="border-t border-gray-200" />
+        <div className="border-t border-border" />
         <SettingsKeyboardSection />
-        <div className="border-t border-gray-200" />
+        <div className="border-t border-border" />
         <SettingsDataSection />
       </div>
     </motion.div>
