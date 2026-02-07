@@ -78,6 +78,7 @@ export async function seedDatabase(): Promise<void> {
       isEvening: false,
       recurringRule: null,
       kanbanColumn: 'in-progress',
+      duration: null,
     },
     {
       id: nanoid(),
@@ -100,6 +101,7 @@ export async function seedDatabase(): Promise<void> {
       isEvening: false,
       recurringRule: null,
       kanbanColumn: 'todo',
+      duration: null,
     },
     {
       id: nanoid(),
@@ -122,6 +124,7 @@ export async function seedDatabase(): Promise<void> {
       isEvening: false,
       recurringRule: null,
       kanbanColumn: null,
+      duration: null,
     },
     {
       id: nanoid(),
@@ -144,6 +147,7 @@ export async function seedDatabase(): Promise<void> {
       isEvening: true,
       recurringRule: null,
       kanbanColumn: null,
+      duration: null,
     },
     {
       id: nanoid(),
@@ -166,6 +170,107 @@ export async function seedDatabase(): Promise<void> {
       isEvening: true,
       recurringRule: null,
       kanbanColumn: null,
+      duration: null,
+    },
+    {
+      id: nanoid(),
+      title: 'Weekly team standup',
+      notes: 'Prepare status update for the team.',
+      status: 'active',
+      priority: 2,
+      dueDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+      dueTime: '09:00',
+      scheduledDate: null,
+      completedAt: null,
+      createdAt: now,
+      updatedAt: now,
+      projectId: websiteProjectId,
+      areaId: workAreaId,
+      parentId: null,
+      position: 2,
+      tags: [urgentTagId],
+      checklist: [],
+      isEvening: false,
+      recurringRule: JSON.stringify({
+        frequency: 'weekly',
+        interval: 1,
+        daysOfWeek: [1],
+      }),
+      kanbanColumn: null,
+      duration: null,
+    },
+    {
+      id: nanoid(),
+      title: 'Morning run',
+      notes: 'Run at least 3k every day.',
+      status: 'active',
+      priority: 1,
+      dueDate: new Date().toISOString().split('T')[0],
+      dueTime: '06:30',
+      scheduledDate: new Date().toISOString().split('T')[0],
+      completedAt: null,
+      createdAt: now,
+      updatedAt: now,
+      projectId: fitnessProjectId,
+      areaId: personalAreaId,
+      parentId: null,
+      position: 1,
+      tags: [],
+      checklist: [],
+      isEvening: false,
+      recurringRule: JSON.stringify({
+        frequency: 'daily',
+        interval: 1,
+      }),
+      kanbanColumn: null,
+      duration: null,
+    },
+  ])
+
+  // Project Headings
+  await db.projectHeadings.bulkAdd([
+    {
+      id: nanoid(),
+      projectId: websiteProjectId,
+      title: 'Design',
+      position: 0,
+      createdAt: now,
+    },
+    {
+      id: nanoid(),
+      projectId: websiteProjectId,
+      title: 'Development',
+      position: 1,
+      createdAt: now,
+    },
+    {
+      id: nanoid(),
+      projectId: fitnessProjectId,
+      title: 'Cardio',
+      position: 0,
+      createdAt: now,
+    },
+  ])
+
+  // Saved Filters
+  await db.savedFilters.bulkAdd([
+    {
+      id: nanoid(),
+      name: 'High Priority',
+      filters: { priority: [3], status: ['active', 'inbox'] },
+      position: 0,
+      createdAt: now,
+    },
+    {
+      id: nanoid(),
+      name: 'Due This Week',
+      filters: {
+        dueDateFrom: new Date().toISOString().split('T')[0],
+        dueDateTo: new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0],
+        status: ['active', 'inbox'],
+      },
+      position: 1,
+      createdAt: now,
     },
   ])
 

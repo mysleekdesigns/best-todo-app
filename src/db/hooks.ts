@@ -1,6 +1,25 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { db } from './index'
-import type { Task, Project, Area, Tag, AppSettings, TaskStatus } from '@/types'
+import {
+  db,
+  getFilteredTasks,
+  searchTasks as searchTasksFn,
+  getTasksByDateRange as getTasksByDateRangeFn,
+  getTasksForDate as getTasksForDateFn,
+  getTasksWithTimeBlocks as getTasksWithTimeBlocksFn,
+  getOverdueTasks as getOverdueTasksFn,
+  getUnscheduledActiveTasks as getUnscheduledActiveTasksFn,
+} from './index'
+import type {
+  Task,
+  Project,
+  Area,
+  Tag,
+  AppSettings,
+  TaskStatus,
+  ProjectHeading,
+  SavedFilter,
+  TaskFilter,
+} from '@/types'
 
 // --- Task hooks ---
 
@@ -87,4 +106,76 @@ export function useTags(): Tag[] | undefined {
 
 export function useSettings(): AppSettings | undefined {
   return useLiveQuery(() => db.appSettings.get('app-settings'))
+}
+
+// --- Phase 2 hooks ---
+
+export function useTasksByTag(tagId: string | null): Task[] | undefined {
+  return useLiveQuery(() => {
+    if (!tagId) return []
+    return db.tasks
+      .filter((task) => task.tags.includes(tagId))
+      .sortBy('position')
+  }, [tagId])
+}
+
+export function useFilteredTasks(filters: TaskFilter): Task[] | undefined {
+  return useLiveQuery(() => {
+    return getFilteredTasks(filters)
+  }, [JSON.stringify(filters)])
+}
+
+export function useSavedFilters(): SavedFilter[] | undefined {
+  return useLiveQuery(() => db.savedFilters.orderBy('position').toArray())
+}
+
+export function useProjectHeadings(projectId: string | null): ProjectHeading[] | undefined {
+  return useLiveQuery(() => {
+    if (!projectId) return []
+    return db.projectHeadings.where('projectId').equals(projectId).sortBy('position')
+  }, [projectId])
+}
+
+export function useSearchTasks(query: string): Task[] | undefined {
+  return useLiveQuery(() => {
+    return searchTasksFn(query)
+  }, [query])
+}
+
+// --- Phase 3: Calendar & Timeline hooks ---
+
+export function useTasksByDateRange(
+  startDate: string | null,
+  endDate: string | null,
+): Task[] | undefined {
+  return useLiveQuery(() => {
+    if (!startDate || !endDate) return []
+    return getTasksByDateRangeFn(startDate, endDate)
+  }, [startDate, endDate])
+}
+
+export function useTasksForDate(date: string | null): Task[] | undefined {
+  return useLiveQuery(() => {
+    if (!date) return []
+    return getTasksForDateFn(date)
+  }, [date])
+}
+
+export function useTasksWithTimeBlocks(date: string | null): Task[] | undefined {
+  return useLiveQuery(() => {
+    if (!date) return []
+    return getTasksWithTimeBlocksFn(date)
+  }, [date])
+}
+
+export function useOverdueTasks(): Task[] | undefined {
+  return useLiveQuery(() => {
+    return getOverdueTasksFn()
+  })
+}
+
+export function useUnscheduledTasks(): Task[] | undefined {
+  return useLiveQuery(() => {
+    return getUnscheduledActiveTasksFn()
+  })
 }

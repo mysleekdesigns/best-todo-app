@@ -17,6 +17,7 @@ export const SHORTCUTS: ShortcutDef[] = [
   // General
   { key: 'k', meta: true, description: 'Command palette', group: 'general', action: 'command-palette' },
   { key: '.', meta: true, description: 'Toggle sidebar', group: 'general', action: 'toggle-sidebar' },
+  { key: 'f', meta: true, description: 'Search', group: 'general', action: 'search' },
 
   // Tasks
   { key: 'q', description: 'Quick add task', group: 'tasks', action: 'quick-add' },

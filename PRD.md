@@ -100,61 +100,61 @@ AppSettings
 > Goal: A beautiful, functional task manager with the basics done perfectly.
 
 ### 1.1 Project Scaffolding
-- [ ] Initialize Vite + React + TypeScript project
-- [ ] Configure Tailwind CSS v4
-- [ ] Install and configure shadcn/ui
-- [ ] Set up project structure (`src/components`, `src/hooks`, `src/db`, `src/stores`, `src/lib`, `src/pages`)
-- [ ] Configure path aliases (`@/`)
-- [ ] Set up Vitest + Testing Library
-- [ ] Add ESLint + Prettier config
+- [x] Initialize Vite + React + TypeScript project
+- [x] Configure Tailwind CSS v4
+- [x] Install and configure shadcn/ui
+- [x] Set up project structure (`src/components`, `src/hooks`, `src/db`, `src/stores`, `src/lib`, `src/pages`)
+- [x] Configure path aliases (`@/`)
+- [x] Set up Vitest + Testing Library
+- [x] Add ESLint + Prettier config
 
 ### 1.2 Database Layer
-- [ ] Install Dexie.js and define schema (Tasks, Projects, Areas, Tags tables)
-- [ ] Create database service (`src/db/index.ts`) with typed tables
-- [ ] Build CRUD hooks: `useTasks()`, `useTask(id)`, `useProjects()`, `useAreas()`, `useTags()`
-- [ ] Implement `useLiveQuery` wrappers for reactive data
-- [ ] Add seed data function for development
+- [x] Install Dexie.js and define schema (Tasks, Projects, Areas, Tags tables)
+- [x] Create database service (`src/db/index.ts`) with typed tables
+- [x] Build CRUD hooks: `useTasks()`, `useTask(id)`, `useProjects()`, `useAreas()`, `useTags()`
+- [x] Implement `useLiveQuery` wrappers for reactive data
+- [x] Add seed data function for development
 
 ### 1.3 App Shell & Navigation
-- [ ] Build sidebar layout (Things 3-style: clean, collapsible)
-- [ ] Implement navigation: Inbox, Today, This Evening, Upcoming, Anytime, Someday, Logbook
-- [ ] Add task count badges on sidebar items
-- [ ] Build responsive layout (sidebar collapses on mobile)
-- [ ] Add smooth page transitions with Framer Motion
+- [x] Build sidebar layout (Things 3-style: clean, collapsible)
+- [x] Implement navigation: Inbox, Today, This Evening, Upcoming, Anytime, Someday, Logbook
+- [x] Add task count badges on sidebar items
+- [x] Build responsive layout (sidebar collapses on mobile)
+- [x] Add smooth page transitions with Framer Motion
 
 ### 1.4 Task CRUD
-- [ ] Task list view with completion checkbox (animated circle, Things 3-style)
-- [ ] Quick Add bar (always accessible, `Q` shortcut or `Cmd+N`)
-- [ ] Natural language date parsing via chrono-node ("tomorrow", "next friday 3pm")
-- [ ] Task detail panel (slide-in from right, smooth animation)
-- [ ] Inline editing of task title
-- [ ] Notes field with markdown support
-- [ ] Priority selector (color-coded dots: none, low/blue, medium/yellow, high/red)
-- [ ] Due date picker with calendar popup
-- [ ] Task completion animation (satisfying checkmark + fade)
-- [ ] Delete task with undo toast
-- [ ] Subtasks (indent under parent, collapsible)
-- [ ] Checklists within a task (multi-step items)
+- [x] Task list view with completion checkbox (animated circle, Things 3-style)
+- [x] Quick Add bar (always accessible, `Q` shortcut or `Cmd+N`)
+- [x] Natural language date parsing via chrono-node ("tomorrow", "next friday 3pm")
+- [x] Task detail panel (slide-in from right, smooth animation)
+- [x] Inline editing of task title
+- [x] Notes field with markdown support
+- [x] Priority selector (color-coded dots: none, low/blue, medium/yellow, high/red)
+- [x] Due date picker with calendar popup
+- [x] Task completion animation (satisfying checkmark + fade)
+- [x] Delete task with undo toast
+- [x] Subtasks (indent under parent, collapsible)
+- [x] Checklists within a task (multi-step items)
 
 ### 1.5 Keyboard Shortcuts
-- [ ] `Cmd+K` / `Ctrl+K` — Command palette (search tasks, projects, navigate, run actions)
-- [ ] `Q` — Quick Add task
-- [ ] `Cmd+N` — New task
-- [ ] `Enter` — Open selected task
-- [ ] `Cmd+Backspace` — Delete task
-- [ ] `↑` / `↓` — Navigate task list
-- [ ] `Cmd+1-7` — Switch views
-- [ ] `Cmd+.` — Toggle sidebar
-- [ ] `E` — Toggle evening mode on selected task
-- [ ] `T` — Schedule to Today
-- [ ] `S` — Set Someday
+- [x] `Cmd+K` / `Ctrl+K` — Command palette (search tasks, projects, navigate, run actions)
+- [x] `Q` — Quick Add task
+- [x] `Cmd+N` — New task
+- [x] `Enter` — Open selected task
+- [x] `Cmd+Backspace` — Delete task
+- [x] `↑` / `↓` — Navigate task list
+- [x] `Cmd+1-7` — Switch views
+- [x] `Cmd+.` — Toggle sidebar
+- [x] `E` — Toggle evening mode on selected task
+- [x] `T` — Schedule to Today
+- [x] `S` — Set Someday
 
 ### 1.6 Basic Theming
-- [ ] Light theme (default, Things 3-inspired: warm whites, subtle grays)
-- [ ] Dark theme (deep dark, not pure black)
-- [ ] System theme detection with manual override
-- [ ] CSS custom properties for theme tokens
-- [ ] Smooth theme transition animation
+- [x] Light theme (default, Things 3-inspired: warm whites, subtle grays)
+- [x] Dark theme (deep dark, not pure black)
+- [x] System theme detection with manual override
+- [x] CSS custom properties for theme tokens
+- [x] Smooth theme transition animation
 
 ---
 
@@ -163,49 +163,49 @@ AppSettings
 > Goal: Powerful organization without complexity.
 
 ### 2.1 Projects
-- [ ] Create / edit / delete projects
-- [ ] Project color and emoji picker
-- [ ] Project detail view showing all tasks
-- [ ] Headings within projects (section dividers, Things 3-style)
-- [ ] Progress indicator (pie chart or progress bar)
-- [ ] Drag to reorder projects in sidebar
+- [x] Create / edit / delete projects
+- [x] Project color and emoji picker
+- [x] Project detail view showing all tasks
+- [x] Headings within projects (section dividers, Things 3-style)
+- [x] Progress indicator (pie chart or progress bar)
+- [x] Drag to reorder projects in sidebar
 
 ### 2.2 Areas
-- [ ] Create / edit / delete areas (group projects under areas)
-- [ ] Area sidebar sections (collapsible)
-- [ ] Drag projects between areas
+- [x] Create / edit / delete areas (group projects under areas)
+- [x] Area sidebar sections (collapsible)
+- [x] Drag projects between areas
 
 ### 2.3 Tags
-- [ ] Create / edit / delete tags with colors
-- [ ] Tag tasks from task detail or inline
-- [ ] Filter by tag (sidebar or command palette)
-- [ ] Multi-tag filtering (AND/OR)
+- [x] Create / edit / delete tags with colors
+- [x] Tag tasks from task detail or inline
+- [x] Filter by tag (sidebar or command palette)
+- [x] Multi-tag filtering (AND/OR)
 
 ### 2.4 Smart Views
-- [ ] **Inbox** — Unprocessed tasks (no project, no date)
-- [ ] **Today** — Tasks due today + manually scheduled for today
-- [ ] **This Evening** — Today's evening subset (Things 3 concept)
-- [ ] **Upcoming** — Next 14 days, grouped by date
-- [ ] **Anytime** — All active tasks (not scheduled to Someday)
-- [ ] **Someday** — Parked tasks for later
-- [ ] **Logbook** — Completed tasks, searchable, grouped by date
+- [x] **Inbox** — Unprocessed tasks (no project, no date)
+- [x] **Today** — Tasks due today + manually scheduled for today
+- [x] **This Evening** — Today's evening subset (Things 3 concept)
+- [x] **Upcoming** — Next 14 days, grouped by date
+- [x] **Anytime** — All active tasks (not scheduled to Someday)
+- [x] **Someday** — Parked tasks for later
+- [x] **Logbook** — Completed tasks, searchable, grouped by date
 
 ### 2.5 Search & Filters
-- [ ] Full-text search across tasks, notes, projects
-- [ ] Filter panel: by status, priority, date range, tags, project
-- [ ] Save custom filters as smart lists
-- [ ] Search accessible from command palette
+- [x] Full-text search across tasks, notes, projects
+- [x] Filter panel: by status, priority, date range, tags, project
+- [x] Save custom filters as smart lists
+- [x] Search accessible from command palette
 
 ### 2.6 Drag & Drop
-- [ ] Reorder tasks within a list (dnd-kit + Framer Motion)
-- [ ] Drag tasks to sidebar items (move to project/area)
-- [ ] Multi-select tasks and batch actions (move, tag, schedule, delete)
+- [x] Reorder tasks within a list (dnd-kit + Framer Motion)
+- [x] Drag tasks to sidebar items (move to project/area)
+- [x] Multi-select tasks and batch actions (move, tag, schedule, delete)
 
 ### 2.7 Recurring Tasks
-- [ ] Recurring rules: daily, weekly, monthly, yearly, custom
-- [ ] Natural language: "every monday", "every 2 weeks"
-- [ ] Generate next occurrence on completion
-- [ ] Visual indicator for recurring tasks
+- [x] Recurring rules: daily, weekly, monthly, yearly, custom
+- [x] Natural language: "every monday", "every 2 weeks"
+- [x] Generate next occurrence on completion
+- [x] Visual indicator for recurring tasks
 
 ---
 
@@ -214,25 +214,25 @@ AppSettings
 > Goal: See your tasks in time — plan your day and week visually.
 
 ### 3.1 Calendar View
-- [ ] Month view with task dots on dates
-- [ ] Week view with tasks as time blocks
-- [ ] Day view with hour-by-hour layout
-- [ ] Click date to see/create tasks
-- [ ] Drag tasks to reschedule to different dates
-- [ ] Today indicator and current time line
+- [x] Month view with task dots on dates
+- [x] Week view with tasks as time blocks
+- [x] Day view with hour-by-hour layout
+- [x] Click date to see/create tasks
+- [x] Drag tasks to reschedule to different dates
+- [x] Today indicator and current time line
 
 ### 3.2 Timeline / Upcoming Enhanced
-- [ ] Scrollable timeline view (vertical, grouped by day)
-- [ ] Overdue section at top (highlighted)
-- [ ] Unscheduled section at bottom
-- [ ] Drag tasks from unscheduled onto dates
-- [ ] Week number indicators
+- [x] Scrollable timeline view (vertical, grouped by day)
+- [x] Overdue section at top (highlighted)
+- [x] Unscheduled section at bottom
+- [x] Drag tasks from unscheduled onto dates
+- [x] Week number indicators
 
 ### 3.3 Time Blocking
-- [ ] Assign time slots to tasks (start time + duration)
-- [ ] Visual time blocks in day/week view
-- [ ] Drag to resize time blocks
-- [ ] Conflict indicators when tasks overlap
+- [x] Assign time slots to tasks (start time + duration)
+- [x] Visual time blocks in day/week view
+- [x] Drag to resize time blocks
+- [x] Conflict indicators when tasks overlap
 
 ---
 

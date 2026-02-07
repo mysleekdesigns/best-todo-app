@@ -4,6 +4,7 @@ import {
   updateTask,
   deleteTask,
   completeTask,
+  createRecurringInstance,
 } from '@/db'
 import type { Task, Priority, ChecklistItem } from '@/types'
 import { nanoid } from 'nanoid'
@@ -75,6 +76,9 @@ export function useTaskActions() {
       await updateTask(task.id, { status: 'active', completedAt: null })
     } else {
       await completeTask(task.id)
+      if (task.recurringRule) {
+        await createRecurringInstance(task.id)
+      }
     }
   }, [])
 
@@ -149,6 +153,17 @@ export function useTaskActions() {
     return createTask({ title, parentId, status: 'active' })
   }, [])
 
+  const toggleTaskTag = useCallback(async (taskId: string, tagId: string, currentTags: string[]) => {
+    const newTags = currentTags.includes(tagId)
+      ? currentTags.filter((t) => t !== tagId)
+      : [...currentTags, tagId]
+    await updateTask(taskId, { tags: newTags })
+  }, [])
+
+  const setTaskRecurrence = useCallback(async (taskId: string, rule: string | null) => {
+    await updateTask(taskId, { recurringRule: rule })
+  }, [])
+
   return {
     addTask,
     toggleComplete,
@@ -161,5 +176,7 @@ export function useTaskActions() {
     toggleChecklistItem,
     removeChecklistItem,
     addSubtask,
+    toggleTaskTag,
+    setTaskRecurrence,
   }
 }

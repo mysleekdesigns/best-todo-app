@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { format } from 'date-fns'
-import { Calendar, ChevronRight, ListChecks } from 'lucide-react'
+import { Calendar, ChevronRight, ListChecks, Repeat } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Task } from '@/types'
 import { TaskCheckbox } from './TaskCheckbox'
+import { TagBadge } from './TagBadge'
 import { useSubtasks } from '@/hooks/useTasks'
+import { useTags } from '@/db/hooks'
 
 const priorityDot: Record<number, string> = {
   0: '',
@@ -67,6 +69,8 @@ export function TaskItem({
     }
   }
 
+  const allTags = useTags()
+  const taskTags = (allTags ?? []).filter((t) => task.tags.includes(t.id))
   const checklistDone = task.checklist.filter((c) => c.done).length
   const checklistTotal = task.checklist.length
   const subtaskCount = subtasks?.length ?? 0
@@ -143,7 +147,19 @@ export function TaskItem({
               {subtaskCount} subtask{subtaskCount !== 1 && 's'}
             </span>
           )}
+          {task.recurringRule && (
+            <span className="flex items-center text-xs text-gray-400" title="Recurring task">
+              <Repeat className="h-3 w-3" />
+            </span>
+          )}
         </div>
+        {taskTags.length > 0 && (
+          <div className="mt-1 flex flex-wrap gap-1">
+            {taskTags.map((tag) => (
+              <TagBadge key={tag.id} name={tag.name} color={tag.color} />
+            ))}
+          </div>
+        )}
       </div>
 
       <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-gray-300 opacity-0 transition-opacity group-hover:opacity-100" />

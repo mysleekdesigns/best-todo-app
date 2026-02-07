@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { format } from 'date-fns'
-import { X, Trash2, ListChecks, StickyNote } from 'lucide-react'
+import { X, Trash2, ListChecks, StickyNote, Tag as TagIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Task } from '@/types'
 import { useTask, useSubtasks } from '@/hooks/useTasks'
@@ -11,6 +11,8 @@ import { PrioritySelector } from './PrioritySelector'
 import { DueDatePicker } from './DueDatePicker'
 import { ChecklistEditor } from './ChecklistEditor'
 import { SubtaskList } from './SubtaskList'
+import { TagSelector } from './TagSelector'
+import { RecurrenceSelector } from './RecurrenceSelector'
 
 interface TaskDetailProps {
   taskId: string | null
@@ -31,6 +33,8 @@ export function TaskDetail({ taskId, onClose, onDelete }: TaskDetailProps) {
     toggleChecklistItem,
     removeChecklistItem,
     addSubtask,
+    toggleTaskTag,
+    setTaskRecurrence,
   } = useTaskActions()
 
   const [isEditingTitle, setIsEditingTitle] = useState(false)
@@ -170,6 +174,26 @@ export function TaskDetail({ taskId, onClose, onDelete }: TaskDetailProps) {
                 <DueDatePicker
                   value={task.dueDate}
                   onChange={(date) => setTaskDueDate(task.id, date)}
+                />
+              </div>
+
+              {/* Recurrence */}
+              <div className="mt-2">
+                <RecurrenceSelector
+                  value={task.recurringRule}
+                  onChange={(rule) => setTaskRecurrence(task.id, rule)}
+                />
+              </div>
+
+              {/* Tags */}
+              <div className="mt-4">
+                <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-gray-400">
+                  <TagIcon className="h-3.5 w-3.5" />
+                  Tags
+                </div>
+                <TagSelector
+                  selectedTagIds={task.tags}
+                  onToggleTag={(tagId) => toggleTaskTag(task.id, tagId, task.tags)}
                 />
               </div>
 

@@ -9,6 +9,8 @@ import {
   BookOpen,
   Plus,
   Palette,
+  FileText,
+  FolderOpen,
 } from 'lucide-react'
 import {
   CommandDialog,
@@ -17,15 +19,33 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandSeparator,
   CommandShortcut,
 } from '@/components/ui/command'
 import { useTheme } from '@/components/ui/theme-provider'
 import { MOD_LABEL } from '@/lib/keyboard-shortcuts'
+import { useSearchTasks } from '@/db/hooks'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { db } from '@/db'
 
 export function CommandPalette() {
   const [open, setOpen] = useState(false)
+  const [search, setSearch] = useState('')
   const navigate = useNavigate()
   const { cycleTheme, mode } = useTheme()
+
+  const debouncedSearch = useDebounce(search, 150)
+  const searchResults = useSearchTasks(debouncedSearch) ?? []
+  const projects = useLiveQuery(() => db.projects.toArray(), []) ?? []
+
+  const hasSearch = debouncedSearch.trim().length > 0
+
+  // Filter projects by search query
+  const matchingProjects = hasSearch
+    ? projects.filter((p) =>
+        p.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
+      )
+    : []
 
   // Listen for Cmd+K / Ctrl+K
   useEffect(() => {
@@ -39,6 +59,11 @@ export function CommandPalette() {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
 
+  // Clear search when closing
+  useEffect(() => {
+    if (!open) setSearch('')
+  }, [open])
+
   const runAction = useCallback(
     (action: () => void) => {
       setOpen(false)
@@ -49,9 +74,66 @@ export function CommandPalette() {
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen} showCloseButton={false}>
-      <CommandInput placeholder="Type a command or search..." />
+      <CommandInput
+        placeholder="Type a command or search..."
+        value={search}
+        onValueChange={setSearch}
+      />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
+
+        {/* Search results — tasks */}
+        {hasSearch && searchResults.length > 0 && (
+          <>
+            <CommandGroup heading="Tasks">
+              {searchResults.slice(0, 8).map((task) => (
+                <CommandItem
+                  key={task.id}
+                  value={`task-${task.id}-${task.title}`}
+                  onSelect={() =>
+                    runAction(() => {
+                      window.dispatchEvent(
+                        new CustomEvent('zenith:select-task', {
+                          detail: { taskId: task.id },
+                        }),
+                      )
+                    })
+                  }
+                >
+                  <FileText className="size-4" />
+                  <span className="flex-1 truncate">{task.title}</span>
+                  <span className="text-muted-foreground text-xs capitalize">
+                    {task.status}
+                  </span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+            <CommandSeparator />
+          </>
+        )}
+
+        {/* Search results — projects */}
+        {hasSearch && matchingProjects.length > 0 && (
+          <>
+            <CommandGroup heading="Projects">
+              {matchingProjects.map((project) => (
+                <CommandItem
+                  key={project.id}
+                  value={`project-${project.id}-${project.name}`}
+                  onSelect={() =>
+                    runAction(() => navigate(`/project/${project.id}`))
+                  }
+                >
+                  <FolderOpen className="size-4" />
+                  <span>
+                    {project.emoji} {project.name}
+                  </span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+            <CommandSeparator />
+          </>
+        )}
 
         <CommandGroup heading="Navigation">
           <CommandItem onSelect={() => runAction(() => navigate('/inbox'))}>
@@ -88,7 +170,6 @@ export function CommandPalette() {
 
         <CommandGroup heading="Actions">
           <CommandItem onSelect={() => runAction(() => {
-            // Dispatch custom event for quick-add — task-ui teammate will handle the UI
             window.dispatchEvent(new CustomEvent('zenith:quick-add'))
           })}>
             <Plus className="size-4" />
@@ -106,4 +187,16 @@ export function CommandPalette() {
       </CommandList>
     </CommandDialog>
   )
+}
+
+/**
+ * Simple debounce hook for search input.
+ */
+function useDebounce(value: string, delay: number): string {
+  const [debounced, setDebounced] = useState(value)
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delay)
+    return () => clearTimeout(timer)
+  }, [value, delay])
+  return debounced
 }

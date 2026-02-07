@@ -1,5 +1,6 @@
 import Dexie, { type EntityTable } from 'dexie'
 import { nanoid } from 'nanoid'
+import { addDays, addWeeks, addMonths, addYears } from 'date-fns'
 import type {
   Task,
   Project,
@@ -11,6 +12,10 @@ import type {
   TaskStatus,
   Priority,
   ChecklistItem,
+  ProjectHeading,
+  SavedFilter,
+  TaskFilter,
+  RecurringRule,
 } from '@/types'
 
 export class ZenithDB extends Dexie {
@@ -21,6 +26,8 @@ export class ZenithDB extends Dexie {
   focusSessions!: EntityTable<FocusSession, 'id'>
   habits!: EntityTable<Habit, 'id'>
   appSettings!: EntityTable<AppSettings, 'id'>
+  projectHeadings!: EntityTable<ProjectHeading, 'id'>
+  savedFilters!: EntityTable<SavedFilter, 'id'>
 
   constructor() {
     super('zenith')
@@ -34,6 +41,38 @@ export class ZenithDB extends Dexie {
       focusSessions: 'id, taskId, startTime, type, completed',
       habits: 'id, name, frequency',
       appSettings: 'id',
+    })
+
+    this.version(2).stores({
+      tasks:
+        'id, title, status, priority, dueDate, scheduledDate, projectId, areaId, parentId, position, kanbanColumn, createdAt, updatedAt, *tags',
+      projects: 'id, name, areaId, position',
+      areas: 'id, name, position',
+      tags: 'id, name',
+      focusSessions: 'id, taskId, startTime, type, completed',
+      habits: 'id, name, frequency',
+      appSettings: 'id',
+      projectHeadings: 'id, projectId, position',
+      savedFilters: 'id, name, position',
+    })
+
+    this.version(3).stores({
+      tasks:
+        'id, title, status, priority, dueDate, dueTime, scheduledDate, projectId, areaId, parentId, position, kanbanColumn, createdAt, updatedAt, *tags',
+      projects: 'id, name, areaId, position',
+      areas: 'id, name, position',
+      tags: 'id, name',
+      focusSessions: 'id, taskId, startTime, type, completed',
+      habits: 'id, name, frequency',
+      appSettings: 'id',
+      projectHeadings: 'id, projectId, position',
+      savedFilters: 'id, name, position',
+    }).upgrade(tx => {
+      return tx.table('tasks').toCollection().modify(task => {
+        if (task.duration === undefined) {
+          task.duration = null
+        }
+      })
     })
   }
 }
@@ -68,6 +107,7 @@ export async function createTask(
     isEvening: data.isEvening ?? false,
     recurringRule: data.recurringRule ?? null,
     kanbanColumn: data.kanbanColumn ?? null,
+    duration: data.duration ?? null,
   })
   return id
 }
@@ -251,6 +291,296 @@ export async function updateSettings(changes: Partial<Omit<AppSettings, 'id'>>):
   await db.appSettings.update(SETTINGS_ID, changes)
 }
 
+// --- ProjectHeading CRUD ---
+
+export async function createProjectHeading(
+  data: Partial<Omit<ProjectHeading, 'id' | 'createdAt'>>,
+): Promise<string> {
+  const id = nanoid()
+  await db.projectHeadings.add({
+    id,
+    projectId: data.projectId ?? '',
+    title: data.title ?? '',
+    position: data.position ?? 0,
+    createdAt: new Date().toISOString(),
+  })
+  return id
+}
+
+export async function updateProjectHeading(
+  id: string,
+  changes: Partial<ProjectHeading>,
+): Promise<void> {
+  await db.projectHeadings.update(id, changes)
+}
+
+export async function deleteProjectHeading(id: string): Promise<void> {
+  await db.projectHeadings.delete(id)
+}
+
+export async function getProjectHeadings(projectId: string): Promise<ProjectHeading[]> {
+  return db.projectHeadings.where('projectId').equals(projectId).sortBy('position')
+}
+
+// --- SavedFilter CRUD ---
+
+export async function createSavedFilter(
+  data: Partial<Omit<SavedFilter, 'id' | 'createdAt'>>,
+): Promise<string> {
+  const id = nanoid()
+  await db.savedFilters.add({
+    id,
+    name: data.name ?? '',
+    filters: data.filters ?? {},
+    position: data.position ?? 0,
+    createdAt: new Date().toISOString(),
+  })
+  return id
+}
+
+export async function updateSavedFilter(
+  id: string,
+  changes: Partial<SavedFilter>,
+): Promise<void> {
+  await db.savedFilters.update(id, changes)
+}
+
+export async function deleteSavedFilter(id: string): Promise<void> {
+  await db.savedFilters.delete(id)
+}
+
+// --- Recurring Task Support ---
+
+export function computeNextOccurrence(
+  rule: RecurringRule,
+  fromDate: Date,
+): Date {
+  const { frequency, interval } = rule
+
+  switch (frequency) {
+    case 'daily':
+      return addDays(fromDate, interval)
+    case 'weekly': {
+      if (rule.daysOfWeek && rule.daysOfWeek.length > 0) {
+        const currentDay = fromDate.getDay()
+        const sortedDays = [...rule.daysOfWeek].sort((a, b) => a - b)
+        const nextDay = sortedDays.find((d) => d > currentDay)
+        if (nextDay !== undefined) {
+          return addDays(fromDate, nextDay - currentDay)
+        }
+        // Wrap to first day of next week cycle
+        const daysUntilNextCycle = 7 * interval - currentDay + sortedDays[0]
+        return addDays(fromDate, daysUntilNextCycle)
+      }
+      return addWeeks(fromDate, interval)
+    }
+    case 'monthly':
+      return addMonths(fromDate, interval)
+    case 'yearly':
+      return addYears(fromDate, interval)
+  }
+}
+
+export async function createRecurringInstance(taskId: string): Promise<string | null> {
+  const task = await db.tasks.get(taskId)
+  if (!task || !task.recurringRule) return null
+
+  let rule: RecurringRule
+  try {
+    rule = JSON.parse(task.recurringRule) as RecurringRule
+  } catch {
+    return null
+  }
+
+  const baseDate = task.dueDate ? new Date(task.dueDate) : new Date()
+  const nextDate = computeNextOccurrence(rule, baseDate)
+  const nextDateStr = nextDate.toISOString().split('T')[0]
+
+  return createTask({
+    title: task.title,
+    notes: task.notes,
+    status: 'active',
+    priority: task.priority,
+    dueDate: nextDateStr,
+    dueTime: task.dueTime,
+    projectId: task.projectId,
+    areaId: task.areaId,
+    tags: [...task.tags],
+    checklist: task.checklist.map((item) => ({
+      id: nanoid(),
+      text: item.text,
+      done: false,
+    })),
+    isEvening: task.isEvening,
+    recurringRule: task.recurringRule,
+    kanbanColumn: task.kanbanColumn,
+    duration: task.duration,
+  })
+}
+
+// --- Full-text Search ---
+
+export async function searchTasks(query: string): Promise<Task[]> {
+  if (!query.trim()) return []
+  const lowerQuery = query.toLowerCase()
+  return db.tasks
+    .filter(
+      (task) =>
+        task.title.toLowerCase().includes(lowerQuery) ||
+        task.notes.toLowerCase().includes(lowerQuery),
+    )
+    .toArray()
+}
+
+// --- Filtered Tasks ---
+
+export async function getFilteredTasks(filters: TaskFilter): Promise<Task[]> {
+  return db.tasks.toCollection().filter((task) => {
+    if (filters.status && filters.status.length > 0) {
+      if (!filters.status.includes(task.status)) return false
+    }
+    if (filters.priority && filters.priority.length > 0) {
+      if (!filters.priority.includes(task.priority)) return false
+    }
+    if (filters.projectId !== undefined) {
+      if (task.projectId !== filters.projectId) return false
+    }
+    if (filters.areaId !== undefined) {
+      if (task.areaId !== filters.areaId) return false
+    }
+    if (filters.tags && filters.tags.length > 0) {
+      if (!filters.tags.some((t) => task.tags.includes(t))) return false
+    }
+    if (filters.dueDateFrom) {
+      if (!task.dueDate || task.dueDate < filters.dueDateFrom) return false
+    }
+    if (filters.dueDateTo) {
+      if (!task.dueDate || task.dueDate > filters.dueDateTo) return false
+    }
+    if (filters.hasDate === true) {
+      if (!task.dueDate && !task.scheduledDate) return false
+    }
+    if (filters.hasDate === false) {
+      if (task.dueDate || task.scheduledDate) return false
+    }
+    if (filters.isEvening !== undefined) {
+      if (task.isEvening !== filters.isEvening) return false
+    }
+    if (filters.searchQuery) {
+      const q = filters.searchQuery.toLowerCase()
+      if (
+        !task.title.toLowerCase().includes(q) &&
+        !task.notes.toLowerCase().includes(q)
+      ) {
+        return false
+      }
+    }
+    return true
+  }).toArray()
+}
+
+// --- Batch Operations ---
+
+export async function batchMoveTasks(
+  ids: string[],
+  targetProjectId: string | null,
+): Promise<void> {
+  const now = new Date().toISOString()
+  await db.transaction('rw', db.tasks, async () => {
+    for (const id of ids) {
+      await db.tasks.update(id, { projectId: targetProjectId, updatedAt: now })
+    }
+  })
+}
+
+export async function batchTagTasks(ids: string[], tagIds: string[]): Promise<void> {
+  const now = new Date().toISOString()
+  await db.transaction('rw', db.tasks, async () => {
+    for (const id of ids) {
+      const task = await db.tasks.get(id)
+      if (task) {
+        const mergedTags = [...new Set([...task.tags, ...tagIds])]
+        await db.tasks.update(id, { tags: mergedTags, updatedAt: now })
+      }
+    }
+  })
+}
+
+export async function batchDeleteTasks(ids: string[]): Promise<void> {
+  await db.transaction('rw', db.tasks, async () => {
+    await db.tasks.bulkDelete(ids)
+  })
+}
+
+export async function batchScheduleTasks(
+  ids: string[],
+  date: string | null,
+): Promise<void> {
+  const now = new Date().toISOString()
+  await db.transaction('rw', db.tasks, async () => {
+    for (const id of ids) {
+      await db.tasks.update(id, { scheduledDate: date, updatedAt: now })
+    }
+  })
+}
+
+// --- Calendar & Timeline Queries ---
+
+export async function getTasksByDateRange(
+  startDate: string,
+  endDate: string,
+): Promise<Task[]> {
+  return db.tasks
+    .where('dueDate')
+    .between(startDate, endDate, true, true)
+    .or('scheduledDate')
+    .between(startDate, endDate, true, true)
+    .filter((task) => task.status !== 'completed' && task.status !== 'cancelled')
+    .sortBy('dueDate')
+}
+
+export async function getTasksForDate(date: string): Promise<Task[]> {
+  return db.tasks
+    .filter(
+      (task) =>
+        (task.dueDate === date || task.scheduledDate === date) &&
+        task.status !== 'completed' &&
+        task.status !== 'cancelled',
+    )
+    .sortBy('position')
+}
+
+export async function getTasksWithTimeBlocks(date: string): Promise<Task[]> {
+  return db.tasks
+    .filter(
+      (task) =>
+        task.dueDate === date &&
+        task.dueTime !== null &&
+        task.duration !== null &&
+        task.status !== 'completed' &&
+        task.status !== 'cancelled',
+    )
+    .sortBy('dueTime')
+}
+
+export async function getOverdueTasks(): Promise<Task[]> {
+  const today = new Date().toISOString().split('T')[0]
+  return db.tasks
+    .where('status')
+    .anyOf('inbox', 'active')
+    .filter((task) => task.dueDate !== null && task.dueDate < today)
+    .sortBy('dueDate')
+}
+
+export async function getUnscheduledActiveTasks(): Promise<Task[]> {
+  return db.tasks
+    .where('status')
+    .anyOf('inbox', 'active')
+    .filter((task) => task.dueDate === null && task.scheduledDate === null)
+    .sortBy('position')
+}
+
 // Re-export types for convenience
 export type { Task, Project, Area, Tag, FocusSession, Habit, AppSettings }
 export type { TaskStatus, Priority, ChecklistItem }
+export type { ProjectHeading, SavedFilter, TaskFilter, RecurringRule }

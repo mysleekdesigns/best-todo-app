@@ -13,7 +13,7 @@ interface SubtaskListProps {
   className?: string
 }
 
-export function SubtaskList({ parentId, subtasks, onAddSubtask, className }: SubtaskListProps) {
+export function SubtaskList({ subtasks, onAddSubtask, className }: SubtaskListProps) {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [newTitle, setNewTitle] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)

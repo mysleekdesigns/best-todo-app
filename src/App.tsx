@@ -9,12 +9,14 @@ import { AnytimePage } from '@/pages/AnytimePage'
 import { SomedayPage } from '@/pages/SomedayPage'
 import { LogbookPage } from '@/pages/LogbookPage'
 import { ProjectPage } from '@/pages/ProjectPage'
+import { AreaPage } from '@/pages/AreaPage'
+import { CalendarPage } from '@/pages/CalendarPage'
 
 const pageTransition = {
   initial: { opacity: 0, y: 8 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -8 },
-  transition: { duration: 0.15, ease: 'easeInOut' },
+  transition: { duration: 0.15, ease: 'easeInOut' as const },
 }
 
 function AnimatedPage({ children }: { children: React.ReactNode }) {
@@ -97,6 +99,22 @@ function AnimatedRoutes() {
             element={
               <AnimatedPage>
                 <ProjectPage />
+              </AnimatedPage>
+            }
+          />
+          <Route
+            path="/calendar"
+            element={
+              <AnimatedPage>
+                <CalendarPage />
+              </AnimatedPage>
+            }
+          />
+          <Route
+            path="/area/:id"
+            element={
+              <AnimatedPage>
+                <AreaPage />
               </AnimatedPage>
             }
           />

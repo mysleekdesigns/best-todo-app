@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay, isToday, isSameDay, startOfWeek, endOfWeek } from 'date-fns'
+import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval, isToday, isSameDay, startOfWeek, endOfWeek } from 'date-fns'
 import { Calendar, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 

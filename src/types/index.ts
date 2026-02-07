@@ -28,6 +28,7 @@ export interface Task {
   isEvening: boolean
   recurringRule: string | null
   kanbanColumn: string | null
+  duration: number | null
 }
 
 export interface Project {
@@ -86,6 +87,51 @@ export interface Habit {
   streakBest: number
   createdAt: string
   entries: HabitEntry[]
+}
+
+// --- Project Headings (section dividers within projects) ---
+
+export interface ProjectHeading {
+  id: string
+  projectId: string
+  title: string
+  position: number
+  createdAt: string
+}
+
+// --- Saved Filters (custom smart lists) ---
+
+export interface TaskFilter {
+  status?: TaskStatus[]
+  priority?: Priority[]
+  tags?: string[]
+  projectId?: string | null
+  areaId?: string | null
+  dueDateFrom?: string | null
+  dueDateTo?: string | null
+  hasDate?: boolean
+  isEvening?: boolean
+  searchQuery?: string
+}
+
+export interface SavedFilter {
+  id: string
+  name: string
+  filters: TaskFilter
+  position: number
+  createdAt: string
+}
+
+// --- Recurring Rule (structured recurring config) ---
+
+export type RecurringFrequency = 'daily' | 'weekly' | 'monthly' | 'yearly'
+
+export interface RecurringRule {
+  frequency: RecurringFrequency
+  interval: number // every N days/weeks/months/years
+  daysOfWeek?: number[] // 0=Sun..6=Sat (for weekly)
+  dayOfMonth?: number // 1-31 (for monthly)
+  monthOfYear?: number // 1-12 (for yearly)
 }
 
 export type ThemeMode = 'light' | 'dark' | 'system'
