@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   Light Theme — Things 3-inspired warm whites & subtle grays
+   ============================================================ */
+@theme {
+  /* Core surfaces */
+  --color-background: hsl(40 33% 99%);
+  --color-foreground: hsl(20 15% 15%);
+  --color-card: hsl(40 33% 99%);
+  --color-card-foreground: hsl(20 15% 15%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(20 15% 15%);
+
+  /* Primary — deep warm slate */
+  --color-primary: hsl(220 13% 18%);
+  --color-primary-foreground: hsl(40 33% 99%);
+
+  /* Secondary — warm light gray */
+  --color-secondary: hsl(30 15% 95%);
+  --color-secondary-foreground: hsl(20 15% 15%);
+
+  /* Muted — subtle warm gray for disabled/secondary text */
+  --color-muted: hsl(30 10% 95%);
+  --color-muted-foreground: hsl(20 5% 50%);
+
+  /* Accent — warm highlight */
+  --color-accent: hsl(30 15% 94%);
+  --color-accent-foreground: hsl(20 15% 15%);
+
+  /* Destructive */
+  --color-destructive: hsl(0 72% 51%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+
+  /* Borders & inputs */
+  --color-border: hsl(30 10% 90%);
+  --color-input: hsl(30 10% 90%);
+  --color-ring: hsl(220 13% 18%);
+
+  /* Sidebar — slightly tinted background */
+  --color-sidebar-background: hsl(30 15% 97%);
+  --color-sidebar-foreground: hsl(20 10% 30%);
+  --color-sidebar-primary: hsl(220 13% 18%);
+  --color-sidebar-primary-foreground: hsl(40 33% 99%);
+  --color-sidebar-accent: hsl(30 15% 94%);
+  --color-sidebar-accent-foreground: hsl(20 15% 15%);
+  --color-sidebar-border: hsl(30 10% 91%);
+  --color-sidebar-ring: hsl(217 91% 60%);
+
+  /* Radius */
+  --radius: 0.5rem;
+
+  /* Priority indicators */
+  --color-priority-none: hsl(20 5% 72%);
+  --color-priority-low: hsl(217 91% 60%);
+  --color-priority-medium: hsl(42 96% 56%);
+  --color-priority-high: hsl(0 84% 60%);
+
+  /* Chart colors */
+  --color-chart-1: hsl(217 91% 60%);
+  --color-chart-2: hsl(160 60% 45%);
+  --color-chart-3: hsl(42 96% 56%);
+  --color-chart-4: hsl(280 65% 60%);
+  --color-chart-5: hsl(0 84% 60%);
+}
+
+/* ============================================================
+   Dark Theme — deep dark, not pure black, slightly warm
+   ============================================================ */
+.dark {
+  --color-background: hsl(225 15% 10%);
+  --color-foreground: hsl(30 15% 93%);
+  --color-card: hsl(225 15% 12%);
+  --color-card-foreground: hsl(30 15% 93%);
+  --color-popover: hsl(225 15% 12%);
+  --color-popover-foreground: hsl(30 15% 93%);
+
+  --color-primary: hsl(30 15% 93%);
+  --color-primary-foreground: hsl(225 15% 10%);
+
+  --color-secondary: hsl(225 12% 17%);
+  --color-secondary-foreground: hsl(30 15% 93%);
+
+  --color-muted: hsl(225 12% 17%);
+  --color-muted-foreground: hsl(225 10% 55%);
+
+  --color-accent: hsl(225 12% 17%);
+  --color-accent-foreground: hsl(30 15% 93%);
+
+  --color-destructive: hsl(0 62% 30%);
+  --color-destructive-foreground: hsl(0 0% 98%);
+
+  --color-border: hsl(225 12% 18%);
+  --color-input: hsl(225 12% 18%);
+  --color-ring: hsl(225 10% 70%);
+
+  --color-sidebar-background: hsl(225 18% 8%);
+  --color-sidebar-foreground: hsl(30 10% 85%);
+  --color-sidebar-primary: hsl(217 91% 60%);
+  --color-sidebar-primary-foreground: hsl(0 0% 100%);
+  --color-sidebar-accent: hsl(225 12% 15%);
+  --color-sidebar-accent-foreground: hsl(30 10% 85%);
+  --color-sidebar-border: hsl(225 12% 15%);
+  --color-sidebar-ring: hsl(217 91% 60%);
+
+  --color-priority-none: hsl(225 10% 40%);
+  --color-priority-low: hsl(217 91% 60%);
+  --color-priority-medium: hsl(42 96% 56%);
+  --color-priority-high: hsl(0 84% 60%);
+
+  --color-chart-1: hsl(217 91% 60%);
+  --color-chart-2: hsl(160 60% 45%);
+  --color-chart-3: hsl(42 96% 56%);
+  --color-chart-4: hsl(280 65% 60%);
+  --color-chart-5: hsl(0 84% 60%);
+}
+
+/* ============================================================
+   Base styles
+   ============================================================ */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Smooth theme transition animation */
+  .theme-transitioning,
+  .theme-transitioning *,
+  .theme-transitioning *::before,
+  .theme-transitioning *::after {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease,
+      box-shadow 0.3s ease, fill 0.3s ease, stroke 0.3s ease !important;
+  }
+}
