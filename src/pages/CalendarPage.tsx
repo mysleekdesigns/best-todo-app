@@ -90,7 +90,7 @@ export function CalendarPage() {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const }}
-      className="flex h-full flex-col bg-white rounded-xl border border-gray-200 m-4 overflow-hidden"
+      className="flex h-full flex-col bg-white rounded-xl border border-gray-200 m-3 md:m-4 lg:m-6 overflow-hidden"
     >
       {activeView !== 'timeline' && (
         <CalendarHeader

@@ -15,7 +15,7 @@ export function TodayPage() {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const }}
-      className="mx-auto max-w-4xl p-8"
+      className="mx-auto max-w-5xl px-4 py-6 md:px-6 lg:px-8"
     >
       <div className="mb-6">
         <div className="flex items-center gap-3">
