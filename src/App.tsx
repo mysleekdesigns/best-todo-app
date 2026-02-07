@@ -6,6 +6,10 @@ import { UpcomingPage } from '@/pages/UpcomingPage'
 import { CalendarPage } from '@/pages/CalendarPage'
 import { StickyWallPage } from '@/pages/StickyWallPage'
 import { ListPage } from '@/pages/ListPage'
+import { FocusPage } from '@/pages/FocusPage'
+import { HabitsPage } from '@/pages/HabitsPage'
+import { SettingsPage } from '@/pages/SettingsPage'
+import { ErrorBoundary } from '@/components/ui/error-boundary'
 
 const pageTransition = {
   initial: { opacity: 0, y: 8 },
@@ -66,6 +70,30 @@ function AnimatedRoutes() {
             }
           />
           <Route
+            path="/focus"
+            element={
+              <AnimatedPage>
+                <FocusPage />
+              </AnimatedPage>
+            }
+          />
+          <Route
+            path="/habits"
+            element={
+              <AnimatedPage>
+                <HabitsPage />
+              </AnimatedPage>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <AnimatedPage>
+                <SettingsPage />
+              </AnimatedPage>
+            }
+          />
+          <Route
             path="/list/:id"
             element={
               <AnimatedPage>
@@ -82,7 +110,9 @@ function AnimatedRoutes() {
 function App() {
   return (
     <BrowserRouter>
-      <AnimatedRoutes />
+      <ErrorBoundary>
+        <AnimatedRoutes />
+      </ErrorBoundary>
     </BrowserRouter>
   )
 }

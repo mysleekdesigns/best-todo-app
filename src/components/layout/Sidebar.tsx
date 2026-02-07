@@ -7,11 +7,12 @@ import {
   CalendarDays,
   Sun,
   StickyNote,
+  Timer,
+  Target,
   Menu,
   Search,
   Plus,
   Settings,
-  LogOut,
   ChevronDown,
   ChevronRight,
 } from 'lucide-react'
@@ -72,6 +73,18 @@ const navItems: NavItem[] = [
     label: 'Sticky Wall',
     icon: <StickyNote size={18} />,
     path: '/sticky-wall',
+  },
+  {
+    id: 'focus',
+    label: 'Focus',
+    icon: <Timer size={18} />,
+    path: '/focus',
+  },
+  {
+    id: 'habits',
+    label: 'Habits',
+    icon: <Target size={18} />,
+    path: '/habits',
   },
 ]
 
@@ -397,13 +410,22 @@ export function Sidebar() {
 
               {/* Bottom section */}
               <div className="mt-auto border-t border-gray-100 px-2 py-2">
-                <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700">
+                <button
+                  onClick={() => {
+                    navigate('/settings')
+                    if (window.innerWidth < 768) {
+                      useUIStore.getState().setSidebarOpen(false)
+                    }
+                  }}
+                  className={cn(
+                    'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
+                    location.pathname === '/settings'
+                      ? 'bg-gray-100 font-semibold text-gray-900'
+                      : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700',
+                  )}
+                >
                   <Settings size={16} />
                   <span>Settings</span>
-                </button>
-                <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700">
-                  <LogOut size={16} />
-                  <span>Sign out</span>
                 </button>
               </div>
             </div>

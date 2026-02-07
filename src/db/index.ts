@@ -1,6 +1,6 @@
 import Dexie, { type EntityTable } from 'dexie'
 import { nanoid } from 'nanoid'
-import { addDays, addWeeks, addMonths, addYears } from 'date-fns'
+import { addDays, addWeeks, addMonths, addYears, getDay } from 'date-fns'
 import type {
   Task,
   List,
@@ -290,6 +290,28 @@ export async function updateFocusSession(
   await db.focusSessions.update(id, changes)
 }
 
+export async function deleteFocusSession(id: string): Promise<void> {
+  await db.focusSessions.delete(id)
+}
+
+export async function getFocusSessionsByDate(date: string): Promise<FocusSession[]> {
+  return db.focusSessions
+    .filter((session) => session.startTime.startsWith(date))
+    .sortBy('startTime')
+}
+
+export async function getFocusSessionsInRange(
+  startDate: string,
+  endDate: string,
+): Promise<FocusSession[]> {
+  return db.focusSessions
+    .filter((session) => {
+      const sessionDate = session.startTime.slice(0, 10)
+      return sessionDate >= startDate && sessionDate <= endDate
+    })
+    .sortBy('startTime')
+}
+
 // --- Habit CRUD ---
 
 export async function createHabit(data: Partial<Omit<Habit, 'id' | 'createdAt'>>): Promise<string> {
@@ -316,6 +338,35 @@ export async function updateHabit(id: string, changes: Partial<Habit>): Promise<
 
 export async function deleteHabit(id: string): Promise<void> {
   await db.habits.delete(id)
+}
+
+export async function completeHabitEntry(habitId: string, date: string): Promise<void> {
+  const habit = await db.habits.get(habitId)
+  if (!habit) return
+
+  const entries = [...habit.entries]
+  const existingIndex = entries.findIndex((e) => e.date === date)
+
+  if (existingIndex >= 0) {
+    entries[existingIndex] = { ...entries[existingIndex], completed: !entries[existingIndex].completed }
+  } else {
+    entries.push({ date, completed: true })
+  }
+
+  await db.habits.update(habitId, { entries })
+}
+
+export async function getHabitsDueToday(): Promise<Habit[]> {
+  const todayDow = getDay(new Date()) // 0=Sun..6=Sat
+  return db.habits
+    .filter((habit) => {
+      if (habit.frequency === 'daily') return true
+      if (habit.frequency === 'weekly' || habit.frequency === 'custom') {
+        return habit.frequencyDays.includes(todayDow)
+      }
+      return false
+    })
+    .toArray()
 }
 
 // --- AppSettings ---
@@ -630,3 +681,4 @@ export type { Task, List, Tag, FocusSession, Habit, AppSettings }
 export type { TaskStatus, Priority, ChecklistItem }
 export type { ListHeading, SavedFilter, TaskFilter, RecurringRule }
 export type { StickyNote, StickyNoteColor } from '@/types'
+export type { FocusSessionType, HabitEntry, HabitFrequency } from '@/types'

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-type ViewId = 'upcoming' | 'today' | 'calendar' | 'sticky-wall'
+type ViewId = 'upcoming' | 'today' | 'calendar' | 'sticky-wall' | 'focus' | 'habits'
 
 interface UIState {
   sidebarOpen: boolean

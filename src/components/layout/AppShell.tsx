@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import { Menu } from 'lucide-react'
 import { Sidebar } from './Sidebar'
+import { OfflineBanner } from './OfflineBanner'
 import { useUIStore } from '@/stores/ui-store'
 
 export function AppShell() {
@@ -28,6 +29,8 @@ export function AppShell() {
           <Outlet />
         </main>
       </div>
+
+      <OfflineBanner />
     </div>
   )
 }
