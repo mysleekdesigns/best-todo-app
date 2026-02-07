@@ -32,8 +32,8 @@ export function FocusPage() {
     >
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Focus</h1>
-        <p className="mt-1 text-sm text-gray-500">Deep work, one session at a time.</p>
+        <h1 className="text-4xl font-bold tracking-tight text-foreground">Focus</h1>
+        <p className="mt-1 text-sm text-muted-foreground">Deep work, one session at a time.</p>
       </div>
 
       <div className="flex flex-col items-center gap-6">
@@ -46,7 +46,7 @@ export function FocusPage() {
         </div>
 
         {/* Timer */}
-        <div className="rounded-xl border border-gray-200 bg-white px-8 py-10">
+        <div className="rounded-xl border border-border bg-card px-8 py-10">
           <PomodoroTimer
             timeRemaining={timer.timeRemaining}
             totalTime={timer.totalTime}

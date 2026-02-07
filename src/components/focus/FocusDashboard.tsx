@@ -62,30 +62,30 @@ export function FocusDashboard() {
   const todayWorkSessions = todaySessions?.filter((s) => s.completed && s.type === 'work') ?? []
 
   return (
-    <div className="w-full rounded-lg border border-gray-200 bg-white p-5">
-      <h3 className="mb-4 text-xs font-medium uppercase tracking-wider text-gray-400">
+    <div className="w-full rounded-lg border border-border bg-card p-5">
+      <h3 className="mb-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">
         Focus Stats
       </h3>
 
       {/* Stats row */}
       <div className="mb-5 grid grid-cols-3 gap-4">
         <div className="text-center">
-          <p className="text-2xl font-semibold tabular-nums text-gray-900">
+          <p className="text-2xl font-semibold tabular-nums text-foreground">
             {todayWorkSessions.length}
           </p>
-          <p className="mt-0.5 text-xs text-gray-500">Sessions</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">Sessions</p>
         </div>
         <div className="text-center">
-          <p className="text-2xl font-semibold tabular-nums text-gray-900">
+          <p className="text-2xl font-semibold tabular-nums text-foreground">
             {formatFocusTime(stats?.totalMinutes ?? 0)}
           </p>
-          <p className="mt-0.5 text-xs text-gray-500">Focus Time</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">Focus Time</p>
         </div>
         <div className="text-center">
-          <p className="text-2xl font-semibold tabular-nums text-gray-900">
+          <p className="text-2xl font-semibold tabular-nums text-foreground">
             {stats?.streak ?? 0}
           </p>
-          <p className="mt-0.5 text-xs text-gray-500">Day Streak</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">Day Streak</p>
         </div>
       </div>
 
@@ -98,13 +98,13 @@ export function FocusDashboard() {
           return (
             <div key={day.date} className="flex flex-1 flex-col items-center gap-1">
               <motion.div
-                className={isToday ? 'rounded-sm bg-gray-900' : 'rounded-sm bg-gray-200'}
+                className={isToday ? 'rounded-sm bg-foreground' : 'rounded-sm bg-secondary'}
                 style={{ width: '100%', maxWidth: 32 }}
                 initial={{ height: 0 }}
                 animate={{ height: Math.max(height, 2) }}
                 transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] as const }}
               />
-              <span className={`text-[10px] ${isToday ? 'font-medium text-gray-900' : 'text-gray-400'}`}>
+              <span className={`text-[10px] ${isToday ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
                 {day.label}
               </span>
             </div>

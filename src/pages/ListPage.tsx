@@ -38,7 +38,7 @@ function ProgressRing({
           fill="none"
           stroke="currentColor"
           strokeWidth={stroke}
-          className="text-gray-200"
+          className="text-border"
         />
         <circle
           cx={size / 2}
@@ -53,7 +53,7 @@ function ProgressRing({
           className="transition-all duration-500"
         />
       </svg>
-      <span className="absolute text-[9px] font-semibold text-gray-500">
+      <span className="absolute text-[9px] font-semibold text-muted-foreground">
         {total > 0 ? Math.round(progress * 100) : 0}
       </span>
     </div>
@@ -81,7 +81,7 @@ function HeadingItem({ heading, onRename, onDelete }: HeadingItemProps) {
   }
 
   return (
-    <div className="group mt-6 mb-2 flex items-center gap-2 border-b border-gray-200 pb-1">
+    <div className="group mt-6 mb-2 flex items-center gap-2 border-b border-border pb-1">
       {editing ? (
         <input
           type="text"
@@ -96,11 +96,11 @@ function HeadingItem({ heading, onRename, onDelete }: HeadingItemProps) {
             }
           }}
           autoFocus
-          className="flex-1 border-none bg-transparent text-sm font-semibold text-gray-800 outline-none"
+          className="flex-1 border-none bg-transparent text-sm font-semibold text-foreground outline-none"
         />
       ) : (
         <span
-          className="flex-1 cursor-pointer text-sm font-semibold uppercase tracking-wide text-gray-400"
+          className="flex-1 cursor-pointer text-sm font-semibold uppercase tracking-wide text-muted-foreground"
           onDoubleClick={() => setEditing(true)}
         >
           {heading.title}
@@ -109,14 +109,14 @@ function HeadingItem({ heading, onRename, onDelete }: HeadingItemProps) {
       <div className="flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
         <button
           onClick={() => setEditing(true)}
-          className="rounded p-1 text-gray-400 hover:text-gray-700"
+          className="rounded p-1 text-muted-foreground hover:text-foreground"
           aria-label="Rename heading"
         >
           <Pencil size={12} />
         </button>
         <button
           onClick={() => onDelete(heading.id)}
-          className="rounded p-1 text-gray-400 hover:text-red-500"
+          className="rounded p-1 text-muted-foreground hover:text-red-500"
           aria-label="Delete heading"
         >
           <Trash2 size={12} />
@@ -221,9 +221,9 @@ export function ListPage() {
     return (
       <div className="mx-auto max-w-5xl px-4 py-6 md:px-6 lg:px-8">
         <div className="space-y-3">
-          <div className="h-8 w-48 animate-pulse rounded bg-gray-200" />
+          <div className="h-8 w-48 animate-pulse rounded bg-secondary" />
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-12 animate-pulse rounded-xl bg-gray-200" />
+            <div key={i} className="h-12 animate-pulse rounded-xl bg-secondary" />
           ))}
         </div>
       </div>
@@ -243,7 +243,7 @@ export function ListPage() {
           className="flex h-3 w-3 rounded-full"
           style={{ backgroundColor: list.color }}
         />
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+        <h1 className="text-4xl font-bold tracking-tight text-foreground">
           {list.name}
         </h1>
 
@@ -254,7 +254,7 @@ export function ListPage() {
         <div className="ml-auto flex items-center gap-1">
           <button
             onClick={() => setAddingHeading(true)}
-            className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
+            className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             aria-label="Add heading"
             title="Add section heading"
           >
@@ -279,12 +279,12 @@ export function ListPage() {
             }}
             placeholder="Heading name"
             autoFocus
-            className="h-8 flex-1 rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
+            className="h-8 flex-1 rounded-md border border-border bg-card px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-1 focus:ring-ring"
           />
           <button
             onClick={handleAddHeading}
             disabled={!newHeadingTitle.trim()}
-            className="rounded-md bg-gray-900 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-gray-800 disabled:opacity-50"
+            className="rounded-md bg-foreground px-3 py-1.5 text-xs font-medium text-background transition-colors hover:bg-foreground/90 disabled:opacity-50"
           >
             Add
           </button>
@@ -293,7 +293,7 @@ export function ListPage() {
               setAddingHeading(false)
               setNewHeadingTitle('')
             }}
-            className="rounded-md px-3 py-1.5 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-100"
+            className="rounded-md px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent"
           >
             Cancel
           </button>
@@ -301,23 +301,23 @@ export function ListPage() {
       )}
 
       {/* Content */}
-      <div className="bg-white rounded-xl border border-gray-200">
+      <div className="bg-card rounded-xl border border-border">
         <QuickAdd listId={id} />
         {tasks === undefined ? (
           <div className="space-y-3 p-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-12 animate-pulse rounded-lg bg-gray-100" />
+              <div key={i} className="h-12 animate-pulse rounded-lg bg-accent" />
             ))}
           </div>
         ) : tasks.length === 0 && (!headings || headings.length === 0) ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
-            <div className="rounded-2xl bg-gray-100 p-4 mb-4">
-              <FolderOpen className="h-8 w-8 text-gray-400" />
+            <div className="rounded-2xl bg-accent p-4 mb-4">
+              <FolderOpen className="h-8 w-8 text-muted-foreground" />
             </div>
-            <h3 className="text-lg font-medium text-gray-500 mb-1">
+            <h3 className="text-lg font-medium text-muted-foreground mb-1">
               No tasks in this list
             </h3>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted-foreground/70">
               Add tasks to get started.
             </p>
           </div>

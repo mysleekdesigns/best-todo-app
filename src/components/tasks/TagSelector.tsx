@@ -85,7 +85,7 @@ export function TagSelector({ selectedTagIds, onToggleTag, className }: TagSelec
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-1 rounded-md px-2 py-1 text-sm text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800"
+          className="flex items-center gap-1 rounded-md px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
         >
           <TagIcon className="h-3.5 w-3.5" />
           {selectedTags.length === 0 && 'Add tag'}
@@ -94,18 +94,18 @@ export function TagSelector({ selectedTagIds, onToggleTag, className }: TagSelec
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 z-50 mt-1 w-56 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+        <div className="absolute top-full left-0 z-50 mt-1 w-56 rounded-lg border border-border bg-card shadow-lg">
           {!isCreating ? (
             <>
               {/* Search */}
-              <div className="border-b border-gray-100 p-2 dark:border-gray-800">
+              <div className="border-b border-border p-2">
                 <input
                   ref={searchRef}
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search tags..."
-                  className="w-full bg-transparent text-sm text-gray-700 placeholder-gray-400 outline-none dark:text-gray-300"
+                  className="w-full bg-transparent text-sm text-foreground placeholder-muted-foreground outline-none"
                 />
               </div>
 
@@ -118,7 +118,7 @@ export function TagSelector({ selectedTagIds, onToggleTag, className }: TagSelec
                       key={tag.id}
                       type="button"
                       onClick={() => onToggleTag(tag.id)}
-                      className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
+                      className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-foreground transition-colors hover:bg-accent"
                     >
                       <span
                         className="h-2.5 w-2.5 rounded-full"
@@ -130,16 +130,16 @@ export function TagSelector({ selectedTagIds, onToggleTag, className }: TagSelec
                   )
                 })}
                 {filteredTags.length === 0 && (
-                  <p className="px-2 py-3 text-center text-xs text-gray-400">No tags found</p>
+                  <p className="px-2 py-3 text-center text-xs text-muted-foreground">No tags found</p>
                 )}
               </div>
 
               {/* Create new */}
-              <div className="border-t border-gray-100 p-1 dark:border-gray-800">
+              <div className="border-t border-border p-1">
                 <button
                   type="button"
                   onClick={() => setIsCreating(true)}
-                  className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-gray-500 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
+                  className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   Create new tag
@@ -150,14 +150,14 @@ export function TagSelector({ selectedTagIds, onToggleTag, className }: TagSelec
             /* Create tag form */
             <div className="p-3">
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-xs font-medium text-gray-500">New Tag</span>
+                <span className="text-xs font-medium text-muted-foreground">New Tag</span>
                 <button
                   type="button"
                   onClick={() => {
                     setIsCreating(false)
                     setNewTagName('')
                   }}
-                  className="rounded p-0.5 text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="rounded p-0.5 text-muted-foreground hover:bg-accent"
                 >
                   <X className="h-3.5 w-3.5" />
                 </button>
@@ -175,7 +175,7 @@ export function TagSelector({ selectedTagIds, onToggleTag, className }: TagSelec
                 }}
                 placeholder="Tag name"
                 autoFocus
-                className="mb-2 w-full rounded-md border border-gray-200 bg-transparent px-2 py-1.5 text-sm text-gray-700 outline-none focus:border-blue-400 dark:border-gray-700 dark:text-gray-300"
+                className="mb-2 w-full rounded-md border border-border bg-transparent px-2 py-1.5 text-sm text-foreground outline-none focus:border-ring"
               />
               <div className="mb-3 flex flex-wrap gap-1.5">
                 {TAG_COLORS.map((color) => (
@@ -185,7 +185,7 @@ export function TagSelector({ selectedTagIds, onToggleTag, className }: TagSelec
                     onClick={() => setNewTagColor(color)}
                     className={cn(
                       'h-5 w-5 rounded-full transition-all',
-                      newTagColor === color && 'ring-2 ring-offset-2 ring-gray-400 dark:ring-offset-gray-900',
+                      newTagColor === color && 'ring-2 ring-offset-2 ring-ring ring-offset-card',
                     )}
                     style={{ backgroundColor: color }}
                     aria-label={`Select color ${color}`}

@@ -52,16 +52,16 @@ export function HabitsPage() {
             {/* Header */}
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+                <h1 className="text-4xl font-bold tracking-tight text-foreground">
                   Habits
                 </h1>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-muted-foreground">
                   {format(new Date(), 'EEEE, MMMM d')}
                 </p>
               </div>
               <Button
                 onClick={() => setFormOpen(true)}
-                className="bg-gray-900 text-white hover:bg-gray-800"
+                className="bg-foreground text-background hover:bg-foreground/90"
               >
                 <Plus size={16} />
                 Add Habit
@@ -71,10 +71,10 @@ export function HabitsPage() {
             {/* Today's habits */}
             {todayHabits && todayHabits.length > 0 && (
               <div className="mb-6">
-                <h2 className="mb-3 text-xs font-medium uppercase tracking-wider text-gray-400">
+                <h2 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                   Today's Habits
                   {todayNotDone && todayNotDone.length > 0 && (
-                    <span className="ml-2 rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium tabular-nums text-gray-600">
+                    <span className="ml-2 rounded-full bg-secondary px-2 py-0.5 text-xs font-medium tabular-nums text-muted-foreground">
                       {todayNotDone.length} remaining
                     </span>
                   )}
@@ -90,7 +90,7 @@ export function HabitsPage() {
             {/* Other habits (not due today) */}
             {otherHabits && otherHabits.length > 0 && (
               <div>
-                <h2 className="mb-3 text-xs font-medium uppercase tracking-wider text-gray-400">
+                <h2 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                   Other Habits
                 </h2>
                 <HabitList

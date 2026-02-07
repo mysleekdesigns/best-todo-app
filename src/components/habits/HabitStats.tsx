@@ -78,32 +78,32 @@ export function HabitStats({ habit }: HabitStatsProps) {
 
   return (
     <div className="grid grid-cols-2 gap-3">
-      <div className="flex items-center gap-2 rounded-lg bg-orange-50 p-3">
+      <div className="flex items-center gap-2 rounded-lg bg-orange-50 p-3 dark:bg-orange-950/30">
         <Flame size={18} className="text-orange-500" />
         <div>
-          <p className="text-lg font-bold text-gray-900">{stats.currentStreak}</p>
-          <p className="text-xs text-gray-500">Current streak</p>
+          <p className="text-lg font-bold text-foreground">{stats.currentStreak}</p>
+          <p className="text-xs text-muted-foreground">Current streak</p>
         </div>
       </div>
-      <div className="flex items-center gap-2 rounded-lg bg-yellow-50 p-3">
+      <div className="flex items-center gap-2 rounded-lg bg-yellow-50 p-3 dark:bg-yellow-950/30">
         <Trophy size={18} className="text-yellow-500" />
         <div>
-          <p className="text-lg font-bold text-gray-900">{stats.bestStreak}</p>
-          <p className="text-xs text-gray-500">Best streak</p>
+          <p className="text-lg font-bold text-foreground">{stats.bestStreak}</p>
+          <p className="text-xs text-muted-foreground">Best streak</p>
         </div>
       </div>
-      <div className="flex items-center gap-2 rounded-lg bg-blue-50 p-3">
+      <div className="flex items-center gap-2 rounded-lg bg-blue-50 p-3 dark:bg-blue-950/30">
         <CalendarCheck size={18} className="text-blue-500" />
         <div>
-          <p className="text-lg font-bold text-gray-900">{stats.weekCompletions}/7</p>
-          <p className="text-xs text-gray-500">This week</p>
+          <p className="text-lg font-bold text-foreground">{stats.weekCompletions}/7</p>
+          <p className="text-xs text-muted-foreground">This week</p>
         </div>
       </div>
-      <div className="flex items-center gap-2 rounded-lg bg-green-50 p-3">
+      <div className="flex items-center gap-2 rounded-lg bg-green-50 p-3 dark:bg-green-950/30">
         <CalendarCheck size={18} className="text-green-500" />
         <div>
-          <p className="text-lg font-bold text-gray-900">{stats.totalCompletions}</p>
-          <p className="text-xs text-gray-500">Total completions</p>
+          <p className="text-lg font-bold text-foreground">{stats.totalCompletions}</p>
+          <p className="text-xs text-muted-foreground">Total completions</p>
         </div>
       </div>
     </div>

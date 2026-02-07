@@ -26,7 +26,7 @@ function DraggableUnscheduledTask({ task }: { task: Task }) {
       {...listeners}
       {...attributes}
       className={cn(
-        'group flex cursor-grab items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-gray-50 dark:hover:bg-gray-900/50',
+        'group flex cursor-grab items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-accent/50',
         isDragging && 'opacity-50',
       )}
     >
@@ -37,7 +37,7 @@ function DraggableUnscheduledTask({ task }: { task: Task }) {
           onToggle={() => completeTask(task.id)}
         />
       </div>
-      <p className="min-w-0 flex-1 truncate text-sm font-medium text-gray-900 dark:text-gray-100">
+      <p className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
         {task.title}
       </p>
     </div>
@@ -51,20 +51,20 @@ export function UnscheduledSection() {
   if (!tasks || tasks.length === 0) return null
 
   return (
-    <div className="border-t border-dashed border-gray-200 bg-gray-50/50 dark:border-gray-700 dark:bg-gray-900/30">
+    <div className="border-t border-dashed border-border bg-accent/30">
       <button
         type="button"
         onClick={() => setCollapsed(!collapsed)}
-        className="flex w-full items-center gap-2 px-3 py-2.5 text-left transition-colors hover:bg-gray-100/50 dark:hover:bg-gray-800/50"
+        className="flex w-full items-center gap-2 px-3 py-2.5 text-left transition-colors hover:bg-accent/50"
       >
         {collapsed ? (
-          <ChevronRight className="h-4 w-4 text-gray-400" />
+          <ChevronRight className="h-4 w-4 text-muted-foreground" />
         ) : (
-          <ChevronDown className="h-4 w-4 text-gray-400" />
+          <ChevronDown className="h-4 w-4 text-muted-foreground" />
         )}
-        <CalendarOff className="h-4 w-4 text-gray-400" />
-        <span className="text-sm font-semibold text-gray-500 dark:text-gray-400">No Date</span>
-        <span className="rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+        <CalendarOff className="h-4 w-4 text-muted-foreground" />
+        <span className="text-sm font-semibold text-muted-foreground">No Date</span>
+        <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-muted-foreground">
           {tasks.length}
         </span>
       </button>

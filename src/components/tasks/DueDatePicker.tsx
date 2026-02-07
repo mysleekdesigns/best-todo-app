@@ -59,8 +59,8 @@ export function DueDatePicker({ value, onChange, className }: DueDatePickerProps
         className={cn(
           'flex items-center gap-1.5 rounded-md px-2 py-1 text-sm transition-colors',
           value
-            ? 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-            : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800',
+            ? 'text-foreground hover:bg-accent'
+            : 'text-muted-foreground hover:text-foreground hover:bg-accent',
         )}
       >
         <Calendar className="h-3.5 w-3.5" />
@@ -71,7 +71,7 @@ export function DueDatePicker({ value, onChange, className }: DueDatePickerProps
             tabIndex={0}
             onClick={handleClear}
             onKeyDown={(e) => { if (e.key === 'Enter') handleClear(e as unknown as React.MouseEvent) }}
-            className="ml-0.5 rounded-full p-0.5 hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="ml-0.5 rounded-full p-0.5 hover:bg-secondary"
           >
             <X className="h-3 w-3" />
           </span>
@@ -79,7 +79,7 @@ export function DueDatePicker({ value, onChange, className }: DueDatePickerProps
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 z-50 mt-1 w-64 rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-900">
+        <div className="absolute top-full left-0 z-50 mt-1 w-64 rounded-lg border border-border bg-card p-3 shadow-lg">
           {/* Quick dates */}
           <div className="mb-2 flex gap-1">
             {quickDates.map((q) => (
@@ -87,7 +87,7 @@ export function DueDatePicker({ value, onChange, className }: DueDatePickerProps
                 key={q.label}
                 type="button"
                 onClick={() => handleSelect(q.date)}
-                className="rounded-md px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                className="rounded-md px-2 py-1 text-xs text-muted-foreground hover:bg-accent"
               >
                 {q.label}
               </button>
@@ -99,24 +99,24 @@ export function DueDatePicker({ value, onChange, className }: DueDatePickerProps
             <button
               type="button"
               onClick={() => setViewDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1))}
-              className="rounded p-1 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="rounded p-1 text-muted-foreground hover:bg-accent"
             >
               &lt;
             </button>
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <span className="text-sm font-medium text-foreground">
               {format(viewDate, 'MMMM yyyy')}
             </span>
             <button
               type="button"
               onClick={() => setViewDate((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1))}
-              className="rounded p-1 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="rounded p-1 text-muted-foreground hover:bg-accent"
             >
               &gt;
             </button>
           </div>
 
           {/* Day headers */}
-          <div className="mb-1 grid grid-cols-7 text-center text-xs text-gray-400">
+          <div className="mb-1 grid grid-cols-7 text-center text-xs text-muted-foreground">
             {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((d) => (
               <div key={d} className="py-1">{d}</div>
             ))}
@@ -136,8 +136,8 @@ export function DueDatePicker({ value, onChange, className }: DueDatePickerProps
                   onClick={() => handleSelect(day)}
                   className={cn(
                     'rounded-md py-1 text-xs transition-colors',
-                    !inMonth && 'text-gray-300 dark:text-gray-700',
-                    inMonth && !selected && 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800',
+                    !inMonth && 'text-muted-foreground/40',
+                    inMonth && !selected && 'text-foreground hover:bg-accent',
                     today && !selected && 'font-bold text-blue-500',
                     selected && 'bg-blue-500 font-bold text-white',
                   )}

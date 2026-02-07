@@ -8,7 +8,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const toggleSidebar = useUIStore((s) => s.toggleSidebar)
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100">
+    <div className="flex h-screen overflow-hidden bg-background">
       <Sidebar />
 
       <div className="relative flex flex-1 flex-col overflow-hidden">
@@ -16,7 +16,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {!sidebarOpen && (
           <button
             onClick={toggleSidebar}
-            className="absolute left-4 top-4 z-10 rounded-md p-1.5 text-gray-400 transition-colors hover:bg-white hover:text-gray-600"
+            className="absolute left-4 top-4 z-10 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-card hover:text-foreground"
             aria-label="Open sidebar"
           >
             <Menu size={18} />

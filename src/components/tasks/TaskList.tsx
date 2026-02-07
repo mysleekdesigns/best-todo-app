@@ -33,10 +33,10 @@ export function TaskList({
             transition={{ delay: i * 0.1 }}
             className="flex items-start gap-3 px-4 py-3.5"
           >
-            <div className="h-5 w-5 shrink-0 animate-pulse rounded-full bg-gray-200" />
+            <div className="h-5 w-5 shrink-0 animate-pulse rounded-full bg-secondary" />
             <div className="flex-1 space-y-2">
-              <div className="h-4 w-3/4 animate-pulse rounded-md bg-gray-200" />
-              <div className="h-3 w-1/3 animate-pulse rounded-md bg-gray-200" />
+              <div className="h-4 w-3/4 animate-pulse rounded-md bg-secondary" />
+              <div className="h-3 w-1/3 animate-pulse rounded-md bg-secondary" />
             </div>
           </motion.div>
         ))}
@@ -47,8 +47,8 @@ export function TaskList({
   if (tasks.length === 0) {
     return (
       <div className={cn('flex flex-col items-center justify-center py-12', className)}>
-        <CircleCheckBig className="mb-3 h-8 w-8 text-gray-300" />
-        <p className="text-sm text-gray-400">{emptyMessage}</p>
+        <CircleCheckBig className="mb-3 h-8 w-8 text-muted-foreground/40" />
+        <p className="text-sm text-muted-foreground">{emptyMessage}</p>
       </div>
     )
   }

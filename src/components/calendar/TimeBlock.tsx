@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils'
 import type { Task } from '@/types'
 
 const priorityBg: Record<number, string> = {
-  0: 'bg-gray-100 border-gray-300 text-gray-700 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200',
+  0: 'bg-accent border-border text-foreground',
   1: 'bg-blue-50 border-blue-300 text-blue-800 dark:bg-blue-950 dark:border-blue-700 dark:text-blue-200',
   2: 'bg-yellow-50 border-yellow-300 text-yellow-800 dark:bg-yellow-950 dark:border-yellow-700 dark:text-yellow-200',
   3: 'bg-red-50 border-red-300 text-red-800 dark:bg-red-950 dark:border-red-700 dark:text-red-200',

@@ -146,7 +146,7 @@ function SortableStickyCard({ note, onUpdate, onRequestDelete }: StickyCardProps
         {/* Drag handle */}
         <div
           {...listeners}
-          className="absolute top-2 left-2 cursor-grab rounded p-1 text-gray-400 opacity-0 transition-opacity group-hover:opacity-60 hover:opacity-100 active:cursor-grabbing"
+          className="absolute top-2 left-2 cursor-grab rounded p-1 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-60 hover:opacity-100 active:cursor-grabbing"
           aria-label="Drag to reorder"
         >
           <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
@@ -163,14 +163,14 @@ function SortableStickyCard({ note, onUpdate, onRequestDelete }: StickyCardProps
         <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
           <button
             onClick={() => setShowColorPicker(!showColorPicker)}
-            className="rounded p-1 text-gray-500 hover:text-gray-700"
+            className="rounded p-1 text-muted-foreground hover:text-foreground"
             aria-label="Change color"
           >
             <div className={`h-4 w-4 rounded-full ${colorDotMap[note.color]}`} />
           </button>
           <button
             onClick={() => onRequestDelete(note.id)}
-            className="rounded p-1 text-gray-500 hover:text-red-500"
+            className="rounded p-1 text-muted-foreground hover:text-red-500"
             aria-label="Delete note"
           >
             <Trash2 size={14} />
@@ -184,7 +184,7 @@ function SortableStickyCard({ note, onUpdate, onRequestDelete }: StickyCardProps
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
-              className="absolute top-10 right-2 z-10 flex gap-1 rounded-lg bg-white p-2 shadow-lg border border-gray-200"
+              className="absolute top-10 right-2 z-10 flex gap-1 rounded-lg bg-card p-2 shadow-lg border border-border"
             >
               {colorOptions.map((c) => (
                 <button
@@ -194,7 +194,7 @@ function SortableStickyCard({ note, onUpdate, onRequestDelete }: StickyCardProps
                     setShowColorPicker(false)
                   }}
                   className={`h-6 w-6 rounded-full ${colorDotMap[c]} transition-transform hover:scale-110 ${
-                    c === note.color ? 'ring-2 ring-gray-900 ring-offset-1' : ''
+                    c === note.color ? 'ring-2 ring-foreground ring-offset-1 ring-offset-card' : ''
                   }`}
                   aria-label={`Set color to ${c}`}
                 />
@@ -221,11 +221,11 @@ function SortableStickyCard({ note, onUpdate, onRequestDelete }: StickyCardProps
                 setEditingTitle(false)
               }
             }}
-            className="w-full bg-transparent text-base font-bold text-gray-900 mb-2 outline-none"
+            className="w-full bg-transparent text-base font-bold text-foreground mb-2 outline-none"
           />
         ) : (
           <h3
-            className="text-base font-bold text-gray-900 mb-2 cursor-text"
+            className="text-base font-bold text-foreground mb-2 cursor-text"
             onClick={() => setEditingTitle(true)}
           >
             {note.title || 'Untitled'}
@@ -248,11 +248,11 @@ function SortableStickyCard({ note, onUpdate, onRequestDelete }: StickyCardProps
                 setEditingContent(false)
               }
             }}
-            className="w-full bg-transparent text-sm text-gray-700 leading-relaxed outline-none resize-none min-h-[80px]"
+            className="w-full bg-transparent text-sm text-foreground/80 leading-relaxed outline-none resize-none min-h-[80px]"
           />
         ) : (
           <p
-            className="text-sm text-gray-700 leading-relaxed cursor-text whitespace-pre-wrap"
+            className="text-sm text-foreground/80 leading-relaxed cursor-text whitespace-pre-wrap"
             onClick={() => setEditingContent(true)}
           >
             {note.content || 'Click to add content...'}
@@ -318,7 +318,7 @@ export function StickyWallPage() {
       className="px-4 py-6 md:px-6 lg:px-8"
     >
       <div className="mb-6">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Sticky Wall</h1>
+        <h1 className="text-4xl font-bold tracking-tight text-foreground">Sticky Wall</h1>
       </div>
 
       {!hasNotes && notes !== undefined ? (
@@ -354,7 +354,7 @@ export function StickyWallPage() {
               {/* Add card */}
               <button
                 onClick={handleAdd}
-                className="rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center min-h-[180px] text-gray-400 hover:border-gray-400 hover:text-gray-500 hover:bg-gray-100 transition-colors"
+                className="rounded-xl border-2 border-dashed border-border bg-accent/50 flex items-center justify-center min-h-[180px] text-muted-foreground hover:border-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
                 aria-label="Add sticky note"
               >
                 <Plus size={32} />

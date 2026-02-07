@@ -29,8 +29,8 @@ export function ChecklistEditor({ items, onToggle, onAdd, onRemove, className }:
   return (
     <div className={cn('space-y-1', className)}>
       {items.length > 0 && (
-        <div className="mb-2 flex items-center gap-2 text-xs text-gray-400">
-          <div className="h-1 flex-1 rounded-full bg-gray-100 dark:bg-gray-800">
+        <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
+          <div className="h-1 flex-1 rounded-full bg-accent">
             <div
               className="h-1 rounded-full bg-blue-400 transition-all duration-300"
               style={{ width: `${items.length > 0 ? (doneCount / items.length) * 100 : 0}%` }}
@@ -57,7 +57,7 @@ export function ChecklistEditor({ items, onToggle, onAdd, onRemove, className }:
                 'flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-colors',
                 item.done
                   ? 'border-blue-400 bg-blue-400 text-white'
-                  : 'border-gray-300 hover:border-gray-400 dark:border-gray-600',
+                  : 'border-border hover:border-muted-foreground',
               )}
               aria-label={item.done ? 'Uncheck item' : 'Check item'}
             >
@@ -70,7 +70,7 @@ export function ChecklistEditor({ items, onToggle, onAdd, onRemove, className }:
             <span
               className={cn(
                 'flex-1 text-sm',
-                item.done && 'text-gray-400 line-through',
+                item.done && 'text-muted-foreground line-through',
               )}
             >
               {item.text}
@@ -78,7 +78,7 @@ export function ChecklistEditor({ items, onToggle, onAdd, onRemove, className }:
             <button
               type="button"
               onClick={() => onRemove(item.id)}
-              className="rounded p-0.5 text-gray-300 opacity-0 transition-opacity hover:text-gray-500 group-hover:opacity-100"
+              className="rounded p-0.5 text-muted-foreground/50 opacity-0 transition-opacity hover:text-muted-foreground group-hover:opacity-100"
               aria-label="Remove checklist item"
             >
               <X className="h-3.5 w-3.5" />
@@ -88,7 +88,7 @@ export function ChecklistEditor({ items, onToggle, onAdd, onRemove, className }:
       </AnimatePresence>
 
       <div className="flex items-center gap-2 pt-1">
-        <Plus className="h-4 w-4 text-gray-300" />
+        <Plus className="h-4 w-4 text-muted-foreground/50" />
         <input
           ref={inputRef}
           type="text"
@@ -101,7 +101,7 @@ export function ChecklistEditor({ items, onToggle, onAdd, onRemove, className }:
             }
           }}
           placeholder="Add item..."
-          className="flex-1 bg-transparent text-sm text-gray-700 placeholder-gray-300 outline-none dark:text-gray-300 dark:placeholder-gray-600"
+          className="flex-1 bg-transparent text-sm text-foreground placeholder-muted-foreground/50 outline-none"
         />
       </div>
     </div>

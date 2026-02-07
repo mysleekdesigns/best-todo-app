@@ -44,8 +44,8 @@ export function HabitCard({ habit, onSelect, selected }: HabitCardProps) {
       layout
       onClick={() => onSelect(habit.id)}
       className={cn(
-        'flex w-full items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 text-left transition-colors hover:bg-gray-50',
-        selected && 'ring-2 ring-gray-300',
+        'flex w-full items-center gap-3 rounded-xl border border-border bg-card p-4 text-left transition-colors hover:bg-accent/50',
+        selected && 'ring-2 ring-ring',
       )}
     >
       {/* Checkbox */}
@@ -59,7 +59,7 @@ export function HabitCard({ habit, onSelect, selected }: HabitCardProps) {
             'flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors',
             isDoneToday
               ? 'border-transparent'
-              : 'border-gray-300 hover:border-gray-400',
+              : 'border-border hover:border-muted-foreground',
           )}
           style={{
             backgroundColor: isDoneToday ? habit.color : 'transparent',
@@ -97,8 +97,8 @@ export function HabitCard({ habit, onSelect, selected }: HabitCardProps) {
         />
         <span
           className={cn(
-            'truncate text-sm font-medium text-gray-900',
-            isDoneToday && 'text-gray-400 line-through',
+            'truncate text-sm font-medium text-foreground',
+            isDoneToday && 'text-muted-foreground line-through',
           )}
         >
           {habit.name}
@@ -115,7 +115,7 @@ export function HabitCard({ habit, onSelect, selected }: HabitCardProps) {
         </div>
       )}
 
-      <ChevronRight size={16} className="shrink-0 text-gray-300" />
+      <ChevronRight size={16} className="shrink-0 text-muted-foreground/50" />
     </motion.button>
   )
 }

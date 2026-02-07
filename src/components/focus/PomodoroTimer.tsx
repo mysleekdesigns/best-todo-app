@@ -62,10 +62,10 @@ export function PomodoroTimer({
     <div className="flex flex-col items-center gap-6">
       {/* Session type label */}
       <div className="text-center">
-        <p className="text-sm font-medium uppercase tracking-wider text-gray-500">
+        <p className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
           {getSessionLabel(sessionType)}
         </p>
-        <p className="mt-0.5 text-xs text-gray-400">
+        <p className="mt-0.5 text-xs text-muted-foreground">
           Session {Math.min(sessionNumber, maxSessions)} of {maxSessions}
         </p>
       </div>
@@ -85,7 +85,7 @@ export function PomodoroTimer({
             fill="none"
             stroke="currentColor"
             strokeWidth={STROKE_WIDTH}
-            className="text-gray-100"
+            className="text-secondary"
           />
           {/* Progress circle */}
           <motion.circle
@@ -100,8 +100,8 @@ export function PomodoroTimer({
             strokeDashoffset={dashOffset}
             className={
               sessionType === 'work'
-                ? 'text-gray-900'
-                : 'text-gray-400'
+                ? 'text-foreground'
+                : 'text-muted-foreground'
             }
             initial={false}
             animate={{ strokeDashoffset: dashOffset }}
@@ -110,7 +110,7 @@ export function PomodoroTimer({
         </svg>
         {/* Time display */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-5xl font-light tabular-nums tracking-tight text-gray-900">
+          <span className="text-5xl font-light tabular-nums tracking-tight text-foreground">
             {formatTime(timeRemaining)}
           </span>
         </div>
@@ -123,7 +123,7 @@ export function PomodoroTimer({
           size="icon"
           onClick={onReset}
           disabled={!isRunning && !isPaused}
-          className="text-gray-500 hover:text-gray-700"
+          className="text-muted-foreground hover:text-foreground"
         >
           <RotateCcw size={18} />
         </Button>
@@ -131,7 +131,7 @@ export function PomodoroTimer({
         {!isRunning ? (
           <Button
             onClick={onStart}
-            className="h-12 w-12 rounded-full bg-gray-900 text-white hover:bg-gray-800"
+            className="h-12 w-12 rounded-full bg-foreground text-background hover:bg-foreground/90"
             size="icon"
           >
             <Play size={20} className="ml-0.5" />
@@ -139,7 +139,7 @@ export function PomodoroTimer({
         ) : isPaused ? (
           <Button
             onClick={onResume}
-            className="h-12 w-12 rounded-full bg-gray-900 text-white hover:bg-gray-800"
+            className="h-12 w-12 rounded-full bg-foreground text-background hover:bg-foreground/90"
             size="icon"
           >
             <Play size={20} className="ml-0.5" />
@@ -147,7 +147,7 @@ export function PomodoroTimer({
         ) : (
           <Button
             onClick={onPause}
-            className="h-12 w-12 rounded-full bg-gray-900 text-white hover:bg-gray-800"
+            className="h-12 w-12 rounded-full bg-foreground text-background hover:bg-foreground/90"
             size="icon"
           >
             <Pause size={20} />
@@ -158,7 +158,7 @@ export function PomodoroTimer({
           variant="ghost"
           size="icon"
           onClick={onSkip}
-          className="text-gray-500 hover:text-gray-700"
+          className="text-muted-foreground hover:text-foreground"
         >
           <SkipForward size={18} />
         </Button>

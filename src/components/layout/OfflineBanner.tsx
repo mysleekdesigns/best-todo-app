@@ -26,7 +26,7 @@ export function OfflineBanner() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 60, opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center gap-2 bg-gray-900 px-4 py-3 text-sm text-white"
+          className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center gap-2 bg-foreground px-4 py-3 text-sm text-background"
         >
           <WifiOff size={16} />
           <span>You're offline. Changes will sync when reconnected.</span>

@@ -59,7 +59,7 @@ export function QuickAdd({ listId, className }: QuickAddProps) {
   }
 
   return (
-    <div className={cn('border-b border-gray-100', className)}>
+    <div className={cn('border-b border-border', className)}>
       <AnimatePresence>
         {isOpen ? (
           <motion.div
@@ -70,7 +70,7 @@ export function QuickAdd({ listId, className }: QuickAddProps) {
             className="overflow-hidden"
           >
             <div className="flex items-center gap-2 px-4 py-3">
-              <Plus className="h-4 w-4 shrink-0 text-gray-400" />
+              <Plus className="h-4 w-4 shrink-0 text-muted-foreground" />
               <input
                 ref={inputRef}
                 type="text"
@@ -81,9 +81,9 @@ export function QuickAdd({ listId, className }: QuickAddProps) {
                   if (!value.trim()) setIsOpen(false)
                 }}
                 placeholder='Add a task... (try "Buy milk tomorrow !2")'
-                className="flex-1 bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none"
+                className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none"
               />
-              <span className="text-xs text-gray-300">Enter</span>
+              <span className="text-xs text-muted-foreground/50">Enter</span>
             </div>
           </motion.div>
         ) : (
@@ -92,7 +92,7 @@ export function QuickAdd({ listId, className }: QuickAddProps) {
             animate={{ opacity: 1 }}
             type="button"
             onClick={() => setIsOpen(true)}
-            className="flex w-full items-center gap-2 px-4 py-3 text-sm text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-600"
+            className="flex w-full items-center gap-2 px-4 py-3 text-sm text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground"
           >
             <Plus className="h-4 w-4" />
             Add New Task

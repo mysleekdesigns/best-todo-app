@@ -101,12 +101,12 @@ export function TaskDetail({ taskId, onClose, onDelete }: TaskDetailProps) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="fixed top-0 right-0 z-50 flex h-full w-full max-w-md flex-col border-l border-gray-200 bg-white shadow-xl dark:border-gray-800 dark:bg-gray-950"
+            className="fixed top-0 right-0 z-50 flex h-full w-full max-w-md flex-col border-l border-border bg-card shadow-xl"
             role="dialog"
             aria-label="Task details"
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-gray-800">
+            <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <div className="flex items-center gap-2">
                 <TaskCheckbox
                   checked={task.status === 'completed'}
@@ -122,7 +122,7 @@ export function TaskDetail({ taskId, onClose, onDelete }: TaskDetailProps) {
                 <button
                   type="button"
                   onClick={() => onDelete(task)}
-                  className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950/30"
+                  className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
                   aria-label="Delete task"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -130,7 +130,7 @@ export function TaskDetail({ taskId, onClose, onDelete }: TaskDetailProps) {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent"
                   aria-label="Close"
                 >
                   <X className="h-4 w-4" />
@@ -155,14 +155,14 @@ export function TaskDetail({ taskId, onClose, onDelete }: TaskDetailProps) {
                       setIsEditingTitle(false)
                     }
                   }}
-                  className="w-full bg-transparent text-lg font-semibold text-gray-900 outline-none dark:text-gray-100"
+                  className="w-full bg-transparent text-lg font-semibold text-foreground outline-none"
                 />
               ) : (
                 <h2
                   onClick={() => setIsEditingTitle(true)}
                   className={cn(
-                    'cursor-text text-lg font-semibold text-gray-900 dark:text-gray-100',
-                    task.status === 'completed' && 'text-gray-400 line-through',
+                    'cursor-text text-lg font-semibold text-foreground',
+                    task.status === 'completed' && 'text-muted-foreground line-through',
                   )}
                 >
                   {task.title}
@@ -187,7 +187,7 @@ export function TaskDetail({ taskId, onClose, onDelete }: TaskDetailProps) {
 
               {/* Tags */}
               <div className="mt-4">
-                <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-gray-400">
+                <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                   <TagIcon className="h-3.5 w-3.5" />
                   Tags
                 </div>
@@ -199,7 +199,7 @@ export function TaskDetail({ taskId, onClose, onDelete }: TaskDetailProps) {
 
               {/* Notes */}
               <div className="mt-6">
-                <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-gray-400">
+                <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                   <StickyNote className="h-3.5 w-3.5" />
                   Notes
                 </div>
@@ -208,13 +208,13 @@ export function TaskDetail({ taskId, onClose, onDelete }: TaskDetailProps) {
                   onChange={(e) => handleNotesChange(e.target.value)}
                   placeholder="Add notes (supports markdown)..."
                   rows={4}
-                  className="w-full resize-none rounded-md border border-gray-100 bg-gray-50/50 px-3 py-2 text-sm text-gray-700 placeholder-gray-300 outline-none transition-colors focus:border-gray-200 focus:bg-white dark:border-gray-800 dark:bg-gray-900/50 dark:text-gray-300 dark:placeholder-gray-600 dark:focus:border-gray-700 dark:focus:bg-gray-900"
+                  className="w-full resize-none rounded-md border border-border bg-accent/30 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none transition-colors focus:border-ring focus:bg-card"
                 />
               </div>
 
               {/* Checklist */}
               <div className="mt-6">
-                <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-gray-400">
+                <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                   <ListChecks className="h-3.5 w-3.5" />
                   Checklist
                 </div>
@@ -236,7 +236,7 @@ export function TaskDetail({ taskId, onClose, onDelete }: TaskDetailProps) {
               </div>
 
               {/* Metadata */}
-              <div className="mt-8 space-y-1 text-xs text-gray-300 dark:text-gray-600">
+              <div className="mt-8 space-y-1 text-xs text-muted-foreground/50">
                 <p>Created {format(new Date(task.createdAt), 'MMM d, yyyy h:mm a')}</p>
                 <p>Updated {format(new Date(task.updatedAt), 'MMM d, yyyy h:mm a')}</p>
                 {task.completedAt && (

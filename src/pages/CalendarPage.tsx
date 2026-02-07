@@ -91,7 +91,7 @@ export function CalendarPage() {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] as const }}
-      className="flex min-h-0 flex-1 flex-col bg-white rounded-xl border border-gray-200 overflow-hidden"
+      className="flex min-h-0 flex-1 flex-col bg-card rounded-xl border border-border overflow-hidden"
     >
       {activeView !== 'timeline' && (
         <CalendarHeader
@@ -106,7 +106,7 @@ export function CalendarPage() {
       )}
 
       {/* View switcher tabs */}
-      <div className="flex items-center gap-1 border-b border-gray-200 px-4 py-1.5">
+      <div className="flex items-center gap-1 border-b border-border px-4 py-1.5">
         {(['month', 'week', 'day', 'timeline'] as const).map((view) => (
           <button
             key={view}
@@ -114,8 +114,8 @@ export function CalendarPage() {
             onClick={() => setActiveView(view)}
             className={
               activeView === view
-                ? 'rounded-md bg-gray-100 px-3 py-1 text-xs font-medium text-gray-900'
-                : 'rounded-md px-3 py-1 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-50'
+                ? 'rounded-md bg-accent px-3 py-1 text-xs font-medium text-foreground'
+                : 'rounded-md px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent/50'
             }
           >
             {view.charAt(0).toUpperCase() + view.slice(1)}

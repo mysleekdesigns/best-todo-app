@@ -13,13 +13,13 @@ export function HabitList({ habits, selectedId, onSelect }: HabitListProps) {
   if (!habits || habits.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
-        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
-          <Target size={28} className="text-gray-400" />
+        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-accent">
+          <Target size={28} className="text-muted-foreground" />
         </div>
-        <h3 className="mb-1 text-base font-medium text-gray-900">
+        <h3 className="mb-1 text-base font-medium text-foreground">
           No habits yet
         </h3>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           Create your first habit to start tracking
         </p>
       </div>

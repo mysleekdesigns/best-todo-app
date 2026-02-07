@@ -33,7 +33,7 @@ function DraggableTimelineTask({ task }: { task: Task }) {
       {...listeners}
       {...attributes}
       className={cn(
-        'group flex cursor-grab items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-gray-50 dark:hover:bg-gray-900/50',
+        'group flex cursor-grab items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-accent/50',
         isDragging && 'opacity-50',
       )}
     >
@@ -45,11 +45,11 @@ function DraggableTimelineTask({ task }: { task: Task }) {
         />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">
+        <p className="truncate text-sm font-medium text-foreground">
           {task.title}
         </p>
         {task.dueTime && (
-          <span className="flex items-center gap-1 text-xs text-gray-400">
+          <span className="flex items-center gap-1 text-xs text-muted-foreground">
             <Clock className="h-3 w-3" />
             {task.dueTime}
             {task.duration && ` (${task.duration}m)`}
@@ -62,9 +62,9 @@ function DraggableTimelineTask({ task }: { task: Task }) {
 
 function DragGhost({ task }: { task: Task }) {
   return (
-    <div className="flex items-center gap-3 rounded-lg border border-blue-200 bg-white px-3 py-2.5 shadow-lg dark:border-blue-800 dark:bg-gray-900">
-      <div className="h-5 w-5 shrink-0 rounded-full border-2 border-blue-400" />
-      <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">
+    <div className="flex items-center gap-3 rounded-lg border border-primary/30 bg-card px-3 py-2.5 shadow-lg">
+      <div className="h-5 w-5 shrink-0 rounded-full border-2 border-primary" />
+      <p className="truncate text-sm font-medium text-foreground">
         {task.title}
       </p>
     </div>
@@ -135,7 +135,7 @@ export function TimelineView() {
         {tasks === undefined ? (
           <div className="space-y-3 px-6 py-8">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-12 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
+              <div key={i} className="h-12 animate-pulse rounded-lg bg-accent" />
             ))}
           </div>
         ) : (
@@ -158,7 +158,7 @@ export function TimelineView() {
                       </motion.div>
                     ))
                   ) : (
-                    <div className="px-3 py-3 text-center text-xs text-gray-300 dark:text-gray-600">
+                    <div className="px-3 py-3 text-center text-xs text-muted-foreground/50">
                       No tasks
                     </div>
                   )}

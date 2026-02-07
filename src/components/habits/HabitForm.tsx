@@ -104,7 +104,7 @@ export function HabitForm({ open, onOpenChange, habit }: HabitFormProps) {
         <div className="space-y-4 py-2">
           {/* Name */}
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-foreground/80">
               Name
             </label>
             <input
@@ -113,7 +113,7 @@ export function HabitForm({ open, onOpenChange, habit }: HabitFormProps) {
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., Morning meditation"
               autoFocus
-              className="h-9 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-300 focus:ring-1 focus:ring-gray-300"
+              className="h-9 w-full rounded-lg border border-border bg-card px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-1 focus:ring-ring"
               onKeyDown={(e) => {
                 if (e.key === 'Enter') handleSave()
               }}
@@ -122,7 +122,7 @@ export function HabitForm({ open, onOpenChange, habit }: HabitFormProps) {
 
           {/* Description */}
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-foreground/80">
               Description
             </label>
             <textarea
@@ -130,19 +130,19 @@ export function HabitForm({ open, onOpenChange, habit }: HabitFormProps) {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Optional description..."
               rows={2}
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-300 focus:ring-1 focus:ring-gray-300 resize-none"
+              className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-1 focus:ring-ring resize-none"
             />
           </div>
 
           {/* Frequency */}
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-foreground/80">
               Frequency
             </label>
             <select
               value={frequency}
               onChange={(e) => setFrequency(e.target.value as HabitFrequency)}
-              className="h-9 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-300"
+              className="h-9 w-full rounded-lg border border-border bg-card px-3 text-sm text-foreground outline-none focus:border-ring focus:ring-1 focus:ring-ring"
             >
               <option value="daily">Every day</option>
               <option value="weekly">Weekly</option>
@@ -153,7 +153,7 @@ export function HabitForm({ open, onOpenChange, habit }: HabitFormProps) {
           {/* Day selector for weekly/custom */}
           {(frequency === 'weekly' || frequency === 'custom') && (
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
+              <label className="mb-2 block text-sm font-medium text-foreground/80">
                 On these days
               </label>
               <div className="flex gap-1.5">
@@ -165,8 +165,8 @@ export function HabitForm({ open, onOpenChange, habit }: HabitFormProps) {
                     className={cn(
                       'flex h-9 w-9 items-center justify-center rounded-lg text-xs font-medium transition-colors',
                       frequencyDays.includes(day.value)
-                        ? 'bg-gray-900 text-white'
-                        : 'border border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100',
+                        ? 'bg-foreground text-background'
+                        : 'border border-border bg-accent/50 text-muted-foreground hover:bg-accent',
                     )}
                   >
                     {day.label}
@@ -178,7 +178,7 @@ export function HabitForm({ open, onOpenChange, habit }: HabitFormProps) {
 
           {/* Color picker */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">
+            <label className="mb-2 block text-sm font-medium text-foreground/80">
               Color
             </label>
             <div className="flex gap-2">
@@ -189,7 +189,7 @@ export function HabitForm({ open, onOpenChange, habit }: HabitFormProps) {
                   onClick={() => setColor(c)}
                   className={cn(
                     'h-7 w-7 rounded-full transition-transform hover:scale-110',
-                    c === color && 'ring-2 ring-gray-900 ring-offset-2',
+                    c === color && 'ring-2 ring-foreground ring-offset-2',
                   )}
                   style={{ backgroundColor: c }}
                   aria-label={`Select color ${c}`}
@@ -206,7 +206,7 @@ export function HabitForm({ open, onOpenChange, habit }: HabitFormProps) {
           <Button
             onClick={handleSave}
             disabled={!name.trim()}
-            className="bg-gray-900 text-white hover:bg-gray-800"
+            className="bg-foreground text-background hover:bg-foreground/90"
           >
             {isEditing ? 'Save Changes' : 'Create Habit'}
           </Button>

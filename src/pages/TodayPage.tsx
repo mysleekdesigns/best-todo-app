@@ -19,17 +19,17 @@ export function TodayPage() {
     >
       <div className="mb-6">
         <div className="flex items-center gap-3">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900">Today</h1>
+          <h1 className="text-4xl font-bold tracking-tight text-foreground">Today</h1>
           {tasks && tasks.length > 0 && (
-            <span className="rounded-full bg-gray-200 px-2.5 py-0.5 text-sm font-medium text-gray-600">
+            <span className="rounded-full bg-secondary px-2.5 py-0.5 text-sm font-medium text-muted-foreground">
               {tasks.length}
             </span>
           )}
         </div>
-        <p className="mt-1 text-sm text-gray-500">{todayLabel}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{todayLabel}</p>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200">
+      <div className="bg-card rounded-xl border border-border">
         <QuickAdd />
         <TaskList
           tasks={tasks}

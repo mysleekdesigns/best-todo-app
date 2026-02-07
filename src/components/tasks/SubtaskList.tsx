@@ -34,12 +34,12 @@ export function SubtaskList({ subtasks, onAddSubtask, className }: SubtaskListPr
       <button
         type="button"
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-gray-400"
+        className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-muted-foreground"
       >
         <GitBranch className="h-3.5 w-3.5" />
         Subtasks
         {subtasks.length > 0 && (
-          <span className="text-gray-300">
+          <span className="text-muted-foreground/50">
             ({completedCount}/{subtasks.length})
           </span>
         )}
@@ -74,8 +74,8 @@ export function SubtaskList({ subtasks, onAddSubtask, className }: SubtaskListPr
                 />
                 <span
                   className={cn(
-                    'flex-1 text-sm text-gray-700 dark:text-gray-300',
-                    subtask.status === 'completed' && 'text-gray-400 line-through',
+                    'flex-1 text-sm text-foreground',
+                    subtask.status === 'completed' && 'text-muted-foreground line-through',
                   )}
                 >
                   {subtask.title}
@@ -85,7 +85,7 @@ export function SubtaskList({ subtasks, onAddSubtask, className }: SubtaskListPr
 
             {/* Add subtask input */}
             <div className="flex items-center gap-2 px-1 py-1">
-              <Plus className="h-4 w-4 text-gray-300" />
+              <Plus className="h-4 w-4 text-muted-foreground/50" />
               <input
                 ref={inputRef}
                 type="text"
@@ -98,7 +98,7 @@ export function SubtaskList({ subtasks, onAddSubtask, className }: SubtaskListPr
                   }
                 }}
                 placeholder="Add subtask..."
-                className="flex-1 bg-transparent text-sm text-gray-700 placeholder-gray-300 outline-none dark:text-gray-300 dark:placeholder-gray-600"
+                className="flex-1 bg-transparent text-sm text-foreground placeholder-muted-foreground/50 outline-none"
               />
             </div>
           </motion.div>

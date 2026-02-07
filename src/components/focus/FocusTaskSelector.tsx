@@ -59,22 +59,22 @@ export function FocusTaskSelector({ selectedTaskId, onSelectTask }: FocusTaskSel
       <button
         onClick={() => setOpen(!open)}
         className={cn(
-          'flex w-full items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-3 text-left transition-colors hover:border-gray-300',
-          open && 'border-gray-300 ring-1 ring-gray-300',
+          'flex w-full items-center gap-2 rounded-lg border border-border bg-card px-4 py-3 text-left transition-colors hover:border-ring',
+          open && 'border-ring ring-1 ring-ring',
         )}
       >
-        <span className={cn('flex-1 truncate text-sm', selectedTask ? 'text-gray-900' : 'text-gray-400')}>
+        <span className={cn('flex-1 truncate text-sm', selectedTask ? 'text-foreground' : 'text-muted-foreground')}>
           {selectedTask ? selectedTask.title : 'Select a task to focus on...'}
         </span>
         {selectedTask && (
           <button
             onClick={handleClear}
-            className="rounded p-0.5 text-gray-400 hover:text-gray-600"
+            className="rounded p-0.5 text-muted-foreground hover:text-foreground"
           >
             <X size={14} />
           </button>
         )}
-        <ChevronDown size={16} className={cn('text-gray-400 transition-transform', open && 'rotate-180')} />
+        <ChevronDown size={16} className={cn('text-muted-foreground transition-transform', open && 'rotate-180')} />
       </button>
 
       {/* Dropdown */}
@@ -85,19 +85,19 @@ export function FocusTaskSelector({ selectedTaskId, onSelectTask }: FocusTaskSel
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
-            className="absolute left-0 right-0 top-full z-20 mt-1 rounded-lg border border-gray-200 bg-white shadow-lg"
+            className="absolute left-0 right-0 top-full z-20 mt-1 rounded-lg border border-border bg-card shadow-lg"
           >
             {/* Search */}
-            <div className="border-b border-gray-100 p-2">
+            <div className="border-b border-border p-2">
               <div className="relative">
-                <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
                   ref={inputRef}
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search tasks..."
-                  className="h-8 w-full rounded-md border-0 bg-gray-50 pl-8 pr-3 text-sm text-gray-700 outline-none placeholder:text-gray-400"
+                  className="h-8 w-full rounded-md border-0 bg-accent pl-8 pr-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                 />
               </div>
             </div>
@@ -112,8 +112,8 @@ export function FocusTaskSelector({ selectedTaskId, onSelectTask }: FocusTaskSel
                   setSearch('')
                 }}
                 className={cn(
-                  'flex w-full items-center rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-50',
-                  !selectedTaskId ? 'bg-gray-50 font-medium text-gray-900' : 'text-gray-500',
+                  'flex w-full items-center rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent/50',
+                  !selectedTaskId ? 'bg-accent font-medium text-foreground' : 'text-muted-foreground',
                 )}
               >
                 No task (free focus)
@@ -124,8 +124,8 @@ export function FocusTaskSelector({ selectedTaskId, onSelectTask }: FocusTaskSel
                   key={task.id}
                   onClick={() => handleSelect(task)}
                   className={cn(
-                    'flex w-full items-center rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-50',
-                    task.id === selectedTaskId ? 'bg-gray-50 font-medium text-gray-900' : 'text-gray-700',
+                    'flex w-full items-center rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent/50',
+                    task.id === selectedTaskId ? 'bg-accent font-medium text-foreground' : 'text-foreground/80',
                   )}
                 >
                   <span className="truncate">{task.title}</span>
@@ -133,7 +133,7 @@ export function FocusTaskSelector({ selectedTaskId, onSelectTask }: FocusTaskSel
               ))}
 
               {filtered?.length === 0 && (
-                <p className="px-3 py-4 text-center text-sm text-gray-400">No tasks found</p>
+                <p className="px-3 py-4 text-center text-sm text-muted-foreground">No tasks found</p>
               )}
             </div>
           </motion.div>

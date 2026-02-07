@@ -55,7 +55,7 @@ export function HabitCalendarHeatmap({
         {dayLabels.map((label, i) => (
           <div
             key={i}
-            className="h-3 w-6 text-[10px] leading-3 text-gray-400 text-right"
+            className="h-3 w-6 text-[10px] leading-3 text-muted-foreground text-right"
           >
             {label}
           </div>
@@ -74,12 +74,13 @@ export function HabitCalendarHeatmap({
                   title={`${format(day.date, 'MMM d, yyyy')} - ${day.completed ? 'Done' : 'Not done'}`}
                   className={cn(
                     'h-3 w-3 rounded-sm transition-colors',
-                    isToday && 'ring-1 ring-gray-400',
+                    isToday && 'ring-1 ring-ring',
+                    !day.completed && 'bg-accent',
                   )}
-                  style={{
-                    backgroundColor: day.completed ? color : '#f3f4f6',
-                    opacity: day.completed ? 0.85 : 1,
-                  }}
+                  style={day.completed ? {
+                    backgroundColor: color,
+                    opacity: 0.85,
+                  } : undefined}
                 />
               )
             })}

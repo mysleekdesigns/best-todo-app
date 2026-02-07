@@ -79,10 +79,10 @@ export function TaskItem({
       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
       onClick={onClick}
       className={cn(
-        'group flex cursor-pointer items-start gap-3 px-4 py-3.5 border-b border-gray-100 last:border-b-0 transition-colors',
+        'group flex cursor-pointer items-start gap-3 px-4 py-3.5 border-b border-border last:border-b-0 transition-colors',
         isSelected
-          ? 'bg-gray-100 ring-1 ring-gray-300'
-          : 'hover:bg-gray-50',
+          ? 'bg-accent ring-1 ring-ring'
+          : 'hover:bg-accent/50',
       )}
       style={{ paddingLeft: `${1 + depth * 1.5}rem` }}
       role="listitem"
@@ -106,14 +106,14 @@ export function TaskItem({
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
             onClick={(e) => e.stopPropagation()}
-            className="w-full bg-transparent text-sm font-medium leading-snug text-gray-900 outline-none"
+            className="w-full bg-transparent text-sm font-medium leading-snug text-foreground outline-none"
           />
         ) : (
           <p
             onDoubleClick={handleDoubleClick}
             className={cn(
-              'text-sm font-medium leading-snug text-gray-900',
-              isCompleted && 'text-gray-400 line-through',
+              'text-sm font-medium leading-snug text-foreground',
+              isCompleted && 'text-muted-foreground line-through',
             )}
           >
             {task.title}
@@ -123,30 +123,30 @@ export function TaskItem({
         {/* Metadata row */}
         <div className="mt-0.5 flex items-center gap-3">
           {task.dueDate && (
-            <span className="flex items-center gap-1 text-xs text-gray-500">
+            <span className="flex items-center gap-1 text-xs text-muted-foreground">
               <Calendar className="h-3.5 w-3.5" />
               {format(new Date(task.dueDate + 'T00:00:00'), 'MMM d')}
               {task.dueTime && ` ${task.dueTime}`}
             </span>
           )}
           {checklistTotal > 0 && (
-            <span className="flex items-center gap-1 text-xs text-gray-500">
+            <span className="flex items-center gap-1 text-xs text-muted-foreground">
               <ListChecks className="h-3.5 w-3.5" />
               {checklistDone}/{checklistTotal}
             </span>
           )}
           {subtaskCount > 0 && (
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-muted-foreground">
               {subtaskCount} subtask{subtaskCount !== 1 && 's'}
             </span>
           )}
           {task.recurringRule && (
-            <span className="flex items-center text-xs text-gray-500" title="Recurring task">
+            <span className="flex items-center text-xs text-muted-foreground" title="Recurring task">
               <Repeat className="h-3.5 w-3.5" />
             </span>
           )}
           {taskList && (
-            <span className="flex items-center gap-1 text-xs text-gray-500">
+            <span className="flex items-center gap-1 text-xs text-muted-foreground">
               <span
                 className="h-2 w-2 rounded-full"
                 style={{ backgroundColor: taskList.color }}
@@ -164,7 +164,7 @@ export function TaskItem({
         )}
       </div>
 
-      <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-gray-300 transition-colors group-hover:text-gray-500" />
+      <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-muted-foreground/50 transition-colors group-hover:text-muted-foreground" />
     </motion.div>
   )
 }

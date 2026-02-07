@@ -49,7 +49,7 @@ export function HabitDetail({ habit, onBack }: HabitDetailProps) {
       <div className="mb-6 flex items-center gap-3">
         <button
           onClick={onBack}
-          className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+          className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
           aria-label="Back to habits"
         >
           <ArrowLeft size={20} />
@@ -59,7 +59,7 @@ export function HabitDetail({ habit, onBack }: HabitDetailProps) {
             className="h-3 w-3 shrink-0 rounded-full"
             style={{ backgroundColor: habit.color }}
           />
-          <h2 className="truncate text-xl font-bold text-gray-900">
+          <h2 className="truncate text-xl font-bold text-foreground">
             {habit.name}
           </h2>
         </div>
@@ -76,7 +76,7 @@ export function HabitDetail({ habit, onBack }: HabitDetailProps) {
             variant="ghost"
             size="icon-sm"
             onClick={() => setDeleteOpen(true)}
-            className="text-gray-500 hover:text-red-500"
+            className="text-muted-foreground hover:text-red-500"
             aria-label="Delete habit"
           >
             <Trash2 size={16} />
@@ -86,13 +86,13 @@ export function HabitDetail({ habit, onBack }: HabitDetailProps) {
 
       {/* Info */}
       {habit.description && (
-        <p className="mb-4 text-sm text-gray-600">{habit.description}</p>
+        <p className="mb-4 text-sm text-muted-foreground">{habit.description}</p>
       )}
-      <div className="mb-6 flex items-center gap-2 text-sm text-gray-500">
+      <div className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
         <span>{FREQUENCY_LABELS[habit.frequency] ?? habit.frequency}</span>
         {habit.frequencyDays.length > 0 && (
           <>
-            <span className="text-gray-300">-</span>
+            <span className="text-muted-foreground/50">-</span>
             <span>
               {habit.frequencyDays
                 .sort((a, b) => a - b)
@@ -105,13 +105,13 @@ export function HabitDetail({ habit, onBack }: HabitDetailProps) {
 
       {/* Stats */}
       <div className="mb-6">
-        <h3 className="mb-3 text-sm font-medium text-gray-500">Statistics</h3>
+        <h3 className="mb-3 text-sm font-medium text-muted-foreground">Statistics</h3>
         <HabitStats habit={habit} />
       </div>
 
       {/* Heatmap */}
-      <div className="rounded-xl border border-gray-200 bg-white p-4">
-        <h3 className="mb-3 text-sm font-medium text-gray-500">
+      <div className="rounded-xl border border-border bg-card p-4">
+        <h3 className="mb-3 text-sm font-medium text-muted-foreground">
           Last 12 weeks
         </h3>
         <HabitCalendarHeatmap entries={habit.entries} color={habit.color} />
@@ -126,7 +126,7 @@ export function HabitDetail({ habit, onBack }: HabitDetailProps) {
           <DialogHeader>
             <DialogTitle>Delete Habit</DialogTitle>
           </DialogHeader>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             Are you sure you want to delete "{habit.name}"? This will remove all
             history and cannot be undone.
           </p>

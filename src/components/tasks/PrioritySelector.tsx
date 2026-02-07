@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils'
 import type { Priority } from '@/types'
 
 const priorities: { value: Priority; label: string; color: string; activeColor: string }[] = [
-  { value: 0, label: 'None', color: 'bg-gray-300 dark:bg-gray-600', activeColor: 'ring-gray-400' },
+  { value: 0, label: 'None', color: 'bg-muted-foreground/40', activeColor: 'ring-muted-foreground' },
   { value: 1, label: 'Low', color: 'bg-blue-400', activeColor: 'ring-blue-400' },
   { value: 2, label: 'Medium', color: 'bg-yellow-400', activeColor: 'ring-yellow-400' },
   { value: 3, label: 'High', color: 'bg-red-400', activeColor: 'ring-red-400' },

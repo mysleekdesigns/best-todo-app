@@ -106,8 +106,8 @@ export function RecurrenceSelector({ value, onChange, className }: RecurrenceSel
         className={cn(
           'flex items-center gap-1.5 rounded-md px-2 py-1 text-sm transition-colors',
           currentRule
-            ? 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-            : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800',
+            ? 'text-foreground hover:bg-accent'
+            : 'text-muted-foreground hover:text-foreground hover:bg-accent',
         )}
       >
         <Repeat className="h-3.5 w-3.5" />
@@ -118,7 +118,7 @@ export function RecurrenceSelector({ value, onChange, className }: RecurrenceSel
             tabIndex={0}
             onClick={handleClear}
             onKeyDown={(e) => { if (e.key === 'Enter') handleClear(e as unknown as React.MouseEvent) }}
-            className="ml-0.5 rounded-full p-0.5 hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="ml-0.5 rounded-full p-0.5 hover:bg-secondary"
           >
             <X className="h-3 w-3" />
           </span>
@@ -126,7 +126,7 @@ export function RecurrenceSelector({ value, onChange, className }: RecurrenceSel
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 z-50 mt-1 w-60 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+        <div className="absolute top-full left-0 z-50 mt-1 w-60 rounded-lg border border-border bg-card shadow-lg">
           {!isCustom ? (
             <>
               <div className="p-1">
@@ -135,18 +135,18 @@ export function RecurrenceSelector({ value, onChange, className }: RecurrenceSel
                     key={preset.label}
                     type="button"
                     onClick={() => handlePreset(preset.rule)}
-                    className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
+                    className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-foreground transition-colors hover:bg-accent"
                   >
-                    <Repeat className="h-3.5 w-3.5 text-gray-400" />
+                    <Repeat className="h-3.5 w-3.5 text-muted-foreground" />
                     {preset.label}
                   </button>
                 ))}
               </div>
-              <div className="border-t border-gray-100 p-1 dark:border-gray-800">
+              <div className="border-t border-border p-1">
                 <button
                   type="button"
                   onClick={() => setIsCustom(true)}
-                  className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-gray-500 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
+                  className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent"
                 >
                   Custom...
                 </button>
@@ -164,11 +164,11 @@ export function RecurrenceSelector({ value, onChange, className }: RecurrenceSel
           ) : (
             <div className="p-3">
               <div className="mb-3 flex items-center justify-between">
-                <span className="text-xs font-medium text-gray-500">Custom Recurrence</span>
+                <span className="text-xs font-medium text-muted-foreground">Custom Recurrence</span>
                 <button
                   type="button"
                   onClick={() => setIsCustom(false)}
-                  className="rounded p-0.5 text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="rounded p-0.5 text-muted-foreground hover:bg-accent"
                 >
                   <X className="h-3.5 w-3.5" />
                 </button>
@@ -176,20 +176,20 @@ export function RecurrenceSelector({ value, onChange, className }: RecurrenceSel
 
               {/* Interval + frequency */}
               <div className="mb-3 flex items-center gap-2">
-                <span className="text-sm text-gray-500">Every</span>
+                <span className="text-sm text-muted-foreground">Every</span>
                 <input
                   type="number"
                   min={1}
                   max={99}
                   value={interval}
                   onChange={(e) => setInterval(Math.max(1, parseInt(e.target.value, 10) || 1))}
-                  className="w-14 rounded-md border border-gray-200 bg-transparent px-2 py-1 text-center text-sm text-gray-700 outline-none focus:border-blue-400 dark:border-gray-700 dark:text-gray-300"
+                  className="w-14 rounded-md border border-border bg-transparent px-2 py-1 text-center text-sm text-foreground outline-none focus:border-ring"
                 />
                 <div className="relative">
                   <select
                     value={frequency}
                     onChange={(e) => setFrequency(e.target.value as RecurringFrequency)}
-                    className="appearance-none rounded-md border border-gray-200 bg-transparent py-1 pr-7 pl-2 text-sm text-gray-700 outline-none focus:border-blue-400 dark:border-gray-700 dark:text-gray-300"
+                    className="appearance-none rounded-md border border-border bg-transparent py-1 pr-7 pl-2 text-sm text-foreground outline-none focus:border-ring"
                   >
                     {(Object.entries(FREQUENCY_LABELS) as [RecurringFrequency, string][]).map(([key, label]) => (
                       <option key={key} value={key}>
@@ -197,14 +197,14 @@ export function RecurrenceSelector({ value, onChange, className }: RecurrenceSel
                       </option>
                     ))}
                   </select>
-                  <ChevronDown className="pointer-events-none absolute top-1/2 right-1.5 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
+                  <ChevronDown className="pointer-events-none absolute top-1/2 right-1.5 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
                 </div>
               </div>
 
               {/* Day of week picker for weekly */}
               {frequency === 'weekly' && (
                 <div className="mb-3">
-                  <span className="mb-1.5 block text-xs text-gray-400">On days</span>
+                  <span className="mb-1.5 block text-xs text-muted-foreground">On days</span>
                   <div className="flex gap-1">
                     {DAY_LABELS.map((label, idx) => (
                       <button
@@ -215,7 +215,7 @@ export function RecurrenceSelector({ value, onChange, className }: RecurrenceSel
                           'flex h-7 w-7 items-center justify-center rounded-full text-xs font-medium transition-colors',
                           daysOfWeek.includes(idx)
                             ? 'bg-blue-500 text-white'
-                            : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800',
+                            : 'text-muted-foreground hover:bg-accent',
                         )}
                       >
                         {label.charAt(0)}

@@ -37,9 +37,9 @@ export function UpcomingPage() {
       className="mx-auto max-w-5xl px-4 py-6 md:px-6 lg:px-8"
     >
       <div className="mb-6 flex items-center gap-3">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Upcoming</h1>
+        <h1 className="text-4xl font-bold tracking-tight text-foreground">Upcoming</h1>
         {totalCount > 0 && (
-          <span className="rounded-full bg-gray-200 px-2.5 py-0.5 text-sm font-medium text-gray-600">
+          <span className="rounded-full bg-secondary px-2.5 py-0.5 text-sm font-medium text-muted-foreground">
             {totalCount}
           </span>
         )}
@@ -48,14 +48,14 @@ export function UpcomingPage() {
       {tasks === undefined ? (
         <div className="space-y-3">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-12 animate-pulse rounded-xl bg-gray-200" />
+            <div key={i} className="h-12 animate-pulse rounded-xl bg-secondary" />
           ))}
         </div>
       ) : (
         <div className="space-y-4">
           {/* Today — full width */}
-          <div className="bg-white rounded-xl border border-gray-200 p-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">Today</h2>
+          <div className="bg-card rounded-xl border border-border p-4">
+            <h2 className="text-lg font-semibold text-foreground mb-3">Today</h2>
             <QuickAdd />
             <TaskList
               tasks={todayTasks}
@@ -67,8 +67,8 @@ export function UpcomingPage() {
 
           {/* Tomorrow + This Week — 2 col grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-white rounded-xl border border-gray-200 p-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">Tomorrow</h2>
+            <div className="bg-card rounded-xl border border-border p-4">
+              <h2 className="text-lg font-semibold text-foreground mb-3">Tomorrow</h2>
               <QuickAdd />
               <TaskList
                 tasks={tomorrowTasks}
@@ -78,8 +78,8 @@ export function UpcomingPage() {
               />
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200 p-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">This Week</h2>
+            <div className="bg-card rounded-xl border border-border p-4">
+              <h2 className="text-lg font-semibold text-foreground mb-3">This Week</h2>
               <QuickAdd />
               <TaskList
                 tasks={thisWeekTasks}
